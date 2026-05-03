@@ -23,22 +23,29 @@ Odhaczamy taski sukcesywnie w kolejnych sesjach. Status fazy: `[ ]` w toku / `[x
 
 ---
 
-## [ ] Faza 1 — Bootstrap Sylius 2.x + Docker — 7-10h
+## [x] Faza 1 — Bootstrap Sylius 2.x + Docker — 7-10h
 **Cel:** działający szkielet Sylius 2.x w kontenerze, panel admina i shop frontend dostępne lokalnie.
 
-- [ ] 1.0 — **Plugin compat gate:** dla każdego planowanego pluginu (lista w PLAN.md sekcja 1) sprawdzić `composer.json` w jego repo na compat z `sylius/sylius:^2.0`. Jeśli krytyczny plugin nie ma 2.x → decyzja: czekać / forkować / zostać na 1.13 LTS (zaktualizować PLAN.md sekcja 1)
-- [ ] 1.1 — `composer create-project sylius/sylius-standard:^2.0 watra` (lub `:^1.13` jeśli 1.0 wskazało na 1.13 LTS) w pustym katalogu
-- [ ] 1.2 — Repo już istnieje (`git status`); stworzyć branch `feat/bootstrap-sylius` i commit "chore: bootstrap sylius 2.x"
-- [ ] 1.3 — Stworzyć `.docker/php/Dockerfile` (PHP 8.3-fpm + extensions + composer)
-- [ ] 1.4 — Stworzyć `.docker/nginx/default.conf` (proxy do php-fpm, root `public/`)
-- [ ] 1.5 — Stworzyć `compose.yaml` z usługami: `php`, `nginx`, `postgres:16`, `mailpit`, `redis`
-- [ ] 1.6 — Zaktualizować `.env` / `.env.local.dist`: `DATABASE_URL` (postgres), `MAILER_DSN` (mailpit), `MESSENGER_TRANSPORT_DSN` (doctrine)
-- [ ] 1.7 — Stworzyć `Makefile` z taskami: `up`, `down`, `bash`, `install`, `migrate`, `fixtures`, `test`, `cs-fix`, `phpstan`
-- [ ] 1.8 — `make up && make install` (composer install w kontenerze) → zielono
-- [ ] 1.9 — `make migrate && make fixtures` (Sylius default fixtures) → zielono
-- [ ] 1.10 — Smoke test: `/admin/login`, `/`, `/api/v2/docs` zwracają 200
-- [ ] 1.11 — **Discovery konwencji 2.x:** `grep -r "products:" vendor/sylius/sylius/src/Sylius/Bundle/*/translations/messages.en.yaml` → udokumentować w `docs/SYLIUS_OVERRIDES.md` rzeczywiste klucze translation domain (do użycia w Fazie 2). Analogicznie `grep -rn "ux_hooks" vendor/sylius/sylius/src/Sylius/Bundle/AdminBundle/Resources/views/` → lista hooków sidebara (do użycia w Fazie 3)
-- [ ] 1.12 — Commit "chore: docker compose dev environment"
+- [x] 1.0 — **Plugin compat gate:** Sylius Standard 2.2.0 dostępny, MVP nie używa zewnętrznych pluginów → PASS
+- [x] 1.1 — `composer create-project sylius/sylius-standard:^2.0` → v2.2.0
+- [x] 1.2 — Branch `feat/bootstrap-sylius` → zmergowany na `main`
+- [x] 1.3 — `.docker/php/Dockerfile` (PHP 8.3-fpm-alpine + pdo_pgsql, intl, gd, zip, opcache, mbstring, xml, bcmath, sockets, apcu)
+- [x] 1.4 — `.docker/nginx/default.conf` (proxy do php-fpm, root `public/`)
+- [x] 1.5 — `compose.yaml` z usługami: `php`, `nginx`, `postgres:16`, `mailpit`, `redis`, `nodejs`
+- [x] 1.6 — `.env` (postgres DSN, mailpit MAILER_DSN) + `.env.local.dist`
+- [x] 1.7 — `Makefile` z taskami: `up`, `down`, `bash`, `install`, `migrate`, `fixtures`, `test`, `cs-fix`, `phpstan`
+- [x] 1.8 — `make up` + composer install → wszystkie 5 kontenerów UP
+- [x] 1.9 — `make migrate && make fixtures` (Sylius default fixtures) → OK
+- [x] 1.10 — Smoke test: `/admin/login` 200, `/` 302→200, `/api/v2/docs` 200 ✓
+- [x] 1.11 — Discovery konwencji 2.x → udokumentowane w `docs/SYLIUS_OVERRIDES.md`
+  - Menu admina: KNP Menu via event `sylius.menu.admin.main` (nie Twig Hooks!)
+  - Sidebar hook: `sylius_admin.common.component.sidebar`
+  - Ukrywanie menu: EventListener na `sylius.menu.admin.main`
+- [x] 1.12 — Commit "feat(phase-1): bootstrap Sylius 2.x with PostgreSQL Docker stack"
+
+> **Uwagi po realizacji:**
+> - Dockerfile wymaga `linux-headers`, `autoconf`, `g++`, `make` dla rozszerzenia `sockets` i APCu
+> - Assety npm: przy `make up` nodejs container wymaga `npm install` przed `npm run build` — Makefile ma target `build-assets`
 
 **DoD:** `make up` od zera startuje pełen stack, panel admina działa pod `http://localhost/admin`.
 
