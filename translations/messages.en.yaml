@@ -1,0 +1,23 @@
+sylius:
+    menu:
+        admin:
+            main:
+                catalog:
+                    products: 'Events'
+                    taxons: 'Tags'
+                sales:
+                    orders: 'Bookings'
+                customers:
+                    customers: 'Attendees'
+    ui:
+        products: 'Events'
+        product_variants: 'Sessions'
+        variants: 'Sessions'
+        orders: 'Bookings'
+        customers: 'Attendees'
+        taxons: 'Tags'
+        manage_products: 'Manage Events'
+        manage_orders: 'Manage Bookings'
+        manage_customers: 'Manage Attendees'
+        manage_taxons: 'Manage Tags'
+        manage_variants: 'Manage Sessions'

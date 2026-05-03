@@ -1,0 +1,23 @@
+sylius:
+    menu:
+        admin:
+            main:
+                catalog:
+                    products: 'Wydarzenia'
+                    taxons: 'Tagi'
+                sales:
+                    orders: 'Rezerwacje'
+                customers:
+                    customers: 'Uczestnicy'
+    ui:
+        products: 'Wydarzenia'
+        product_variants: 'Terminy'
+        variants: 'Terminy'
+        orders: 'Rezerwacje'
+        customers: 'Uczestnicy'
+        taxons: 'Tagi'
+        manage_products: 'Zarządzaj Wydarzeniami'
+        manage_orders: 'Zarządzaj Rezerwacjami'
+        manage_customers: 'Zarządzaj Uczestnikami'
+        manage_taxons: 'Zarządzaj Tagami'
+        manage_variants: 'Zarządzaj Terminami'
