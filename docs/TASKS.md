@@ -74,7 +74,7 @@ Odhaczamy taski sukcesywnie w kolejnych sesjach. Status fazy: `[ ]` w toku / `[x
 ## [ ] Faza 3 — Wyłączenie sekcji niepotrzebnych w MVP — 4-5h
 **Cel:** ukryć Shipping/Tax/Zones/Exchange Rates z UX, pozostawić jako działający backend.
 
-- [ ] 3.1 — Override sidebara — użyj rzeczywistych nazw hooków zinwentaryzowanych w task 1.11 (Sylius 2.x preferuje Twig Hooks, ale fallback to override `templates/bundles/SyliusAdminBundle/_menu.html.twig`). Usunąć linki: Shipping Methods, Shipping Categories, Tax Categories, Tax Rates, Zones, Exchange Rates
+- [x] 3.1 — Override sidebara — `src/EventListener/AdminMenuListener.php` z `#[AsEventListener]` na `MainMenuBuilder::EVENT_NAME`; usuwa: shipping_methods, shipping_categories, tax_categories, tax_rates, zones, exchange_rates z podmenu `configuration`
 - [ ] 3.2 — Sylius'owe `_sylius.yaml`: stworzyć domyślny ShippingMethod `no_shipping` (calculator: flat_rate 0)
 - [ ] 3.3 — Stworzyć domyślny PaymentMethod `free` (gateway: offline) — fixture
 - [ ] 3.4 — Stworzyć domyślną Zone (Polska) i TaxCategory `default` z 0% — fixture
