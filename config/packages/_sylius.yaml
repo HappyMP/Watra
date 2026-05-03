@@ -288,27 +288,17 @@ sylius_resource:
 
 sylius_twig_hooks:
     hooks:
-        # Product create — WATRA section in form
-        'sylius_admin.product.create.content.form.side_navigation':
-            watra_event:
-                template: 'admin/product/form/side_navigation/watra_event.html.twig'
-                priority: 850
-
-        'sylius_admin.product.create.content.form.sections':
+        # Product create — WATRA fields inside Ogólne tab
+        'sylius_admin.product.create.content.form.sections.general':
             watra_event:
                 template: 'admin/product/form/sections/watra_event.html.twig'
-                priority: 850
+                priority: 450
 
-        # Product update — WATRA section in form
-        'sylius_admin.product.update.content.form.side_navigation':
-            watra_event:
-                template: 'admin/product/form/side_navigation/watra_event.html.twig'
-                priority: 850
-
-        'sylius_admin.product.update.content.form.sections':
+        # Product update — WATRA fields inside Ogólne tab
+        'sylius_admin.product.update.content.form.sections.general':
             watra_event:
                 template: 'admin/product/form/sections/watra_event.html.twig'
-                priority: 850
+                priority: 450
 
         # Product show — WATRA section
         'sylius_admin.product.show.content.page_body':
