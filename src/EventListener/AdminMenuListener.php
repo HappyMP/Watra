@@ -28,7 +28,12 @@ final class AdminMenuListener
             $marketing->removeChild('catalog_promotions');
         }
 
+        if ($sales = $menu->getChild('sales')) {
+            $sales->removeChild('mollie_subscriptions');
+        }
+
         $menu->removeChild('official_support');
+        $menu->removeChild('sylius.ui.administration');
     }
 
     public function addWatraMenuItems(MenuBuilderEvent $event): void
