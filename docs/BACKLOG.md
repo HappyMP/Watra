@@ -107,6 +107,45 @@ Funkcje świadomie odłożone poza MVP. Każda pozycja ma krótkie uzasadnienie 
 
 ---
 
+## Compliance / RODO (GDPR)
+
+### Cookie consent
+- Twig component / lekki JS banner z opt-in dla cookies
+- Kategorie: niezbędne (zawsze on), analityczne (opt-in), marketingowe (opt-in)
+- Integracja z Plausible/Matomo (po opt-in)
+
+### Eksport danych usera (art. 20 RODO — prawo do przenoszenia danych)
+- Endpoint `/account/export-data` zwracający JSON / ZIP z wszystkimi danymi customer'a
+- Zawiera: profil, orders, interests, audit log
+- Async przez Messenger (mail z linkiem do pobrania, ważnym 24h)
+
+### Right to erasure (art. 17 RODO — prawo do bycia zapomnianym)
+- Endpoint `/account/delete-account` z 7-dniowym soft-delete (cooldown na undo)
+- Anonymizacja zamiast hard-delete dla customer'ów z historycznymi orderami (księgowość)
+- Audit log akcji erasure (kto, kiedy, jaki user_id)
+
+### Polityka prywatności + regulamin
+- Wersjonowanie (każda zmiana = nowa wersja, customer akceptuje przy rejestracji i przy update'cie)
+- Tabela `consent_log` (user_id, version, accepted_at, ip)
+
+---
+
+## Security hardening
+
+### Rate limiting (rozszerzenia poza MVP)
+- `symfony/rate-limiter` na endpointach: `/login` (5/min/IP), `/register` (3/min/IP), `/reset-password` (3/min/IP), API booking POST (10/min/customer)
+- W MVP mamy bundle zainstalowany, ale konfiguracja per-route — w backlogu
+
+### CAPTCHA / anti-bot
+- hCaptcha lub Turnstile na rejestracji i reset-password
+- Honeypot field jako pierwsza linia obrony
+
+### 2FA dla admin'ów
+- `scheb/2fa-bundle` — TOTP (Google Authenticator)
+- Wymuszone dla ról z `isSuperAdmin` lub permission `admin_user:edit`
+
+---
+
 ## Inne pomysły (parking lot)
 
 - Newsletter z polecanymi wydarzeniami (Mautic / Mailcoach integracja)

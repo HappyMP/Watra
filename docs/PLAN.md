@@ -43,7 +43,10 @@ WATRA to platforma do organizacji wydarzeń (na start w Krakowie, docelowo wiele
 - `liip/imagine-bundle` (już w Sylius)
 - `vich/uploader-bundle` (już w Sylius)
 - `nelmio/cors-bundle` (API)
+- `symfony/rate-limiter` (ochrona endpointów rejestracji/loginu przed botami)
 - Dev: `phpunit/phpunit`, `phpstan/phpstan`, `friendsofphp/php-cs-fixer`, `behat/behat`
+
+**Weryfikacja wersji przed startem (Faza 1):** Sylius 2.0 GA jest świeży (Q4 2024), część pluginów społeczności trzyma się 1.13 LTS. Przed `composer create-project` sprawdzamy compat zainstalowanych pluginów; jeśli krytyczny plugin nie ma 2.x, decyzja: czekać / forkować / zostać na 1.13 LTS.
 
 **Pluginy / community do rozważenia (poza MVP, pod backlog):**
 - `bitbag/wishlist-plugin` (gdyby Interest miał dorastać)
@@ -60,7 +63,7 @@ WATRA to platforma do organizacji wydarzeń (na start w Krakowie, docelowo wiele
 | Termin wydarzenia | `ProductVariant` | + pola: `startsAt`, `endsAt`, `venue`; `capacity` = `onHand` |
 | Tag/kategoria | `Taxon` | natywne, translatable |
 | Booking | `Order` | natywne; `OrderItem` = pojedynczy bilet |
-| Uczestnik | `Customer` | natywne |
+| Uczestnik | `Customer` | override od dnia 1 (pusty extends), choć w MVP bez nowych pól — patrz sekcja 3 |
 | Zainteresowany | `Interest` (custom encja) | proste M2M Customer ↔ Product |
 | Miasto | `City` (custom encja) | translatable (PL/EN) |
 | Miejsce / lokal | `Venue` (custom encja) | translatable, FK do `City` |
@@ -100,6 +103,10 @@ ProductVariant (Sylius extended)
   - + venue → Venue (nullable, override z Product)
   - capacity = używa natywnego `onHand` + `tracked = true`
 
+Customer (Sylius extended — pusty override od dnia 1)
+  - extends BaseCustomer, brak nowych pól w MVP
+  - powód: dodanie override później = migracja FK ze wszystkich tabel referencujących sylius_customer
+
 Interest
   - id, customer → Customer, product → Product, createdAt
   - UNIQUE (customer, product)
@@ -128,6 +135,7 @@ AdminUser (Sylius extended)
 - **Capacity = `ProductVariant.onHand`.** Sylius z pudełka pilnuje, że nie sprzedasz więcej niż jest w "stocku". To darmowy check overbookingu.
 - **Cykl/seria wydarzeń = Product z N variantami.** Pojedyncze wydarzenie = Product z 1 variantem. Brak osobnej encji `EventSeries`.
 - **Interest jest custom** (nie wishlist plugin) — chcemy proste UX i kontrolę nad UI Live Component'em.
+- **Customer override od dnia 1.** Mimo że MVP nie dodaje pól, robimy `extends BaseCustomer` od początku — późniejszy override wymaga migracji FK we wszystkich tabelach `sylius_customer`-references.
 
 ---
 
@@ -284,13 +292,13 @@ Pełen rozpis na atomowe taski (~85 sztuk) znajduje się w [TASKS.md](TASKS.md).
 | # | Faza | Czas | Cel |
 |---|---|---|---|
 | 0 | Weryfikacja środowiska (Linux) | 2-4h | Toolchain działa |
-| 1 | Bootstrap Sylius 2.x + Docker | 6-8h | `make up` startuje stack |
+| 1 | Bootstrap Sylius 2.x + Docker | 7-10h | `make up` startuje stack, plugin compat zweryfikowany |
 | 2 | Lokalizacja PL/EN i naming WATRY | 3-4h | Polski admin |
 | 3 | Wyłączenie sekcji niepotrzebnych | 4-5h | Bez Shipping/Tax w UX |
 | 4 | Custom encje: City, Venue, AdministrationRole | 8-10h | CRUD w admin |
 | 5 | Rozszerzenie Product / ProductVariant / AdminUser | 8-10h | Wydarzenie + termin |
 | 6 | RBAC: Permission enum + Voter | 8-10h | Granularne uprawnienia |
-| 7 | Konfiguracja "wydarzenia bez płatności" | 5-7h | Free checkout |
+| 7 | Konfiguracja "wydarzenia bez płatności" | 6-8h | Free checkout + race condition test |
 | 8 | Custom encja Interest + UI | 4-5h | "Zainteresowany" |
 | 9 | Frontend shop: home + lista + szczegóły | 12-16h | Publiczna strona |
 | 10 | Email transactional | 4-5h | Maile w brand WATRA |
@@ -299,7 +307,7 @@ Pełen rozpis na atomowe taski (~85 sztuk) znajduje się w [TASKS.md](TASKS.md).
 | 13 | Testy (PHPUnit + Behat) | 6-8h | `make test` zielony |
 | 14 | Polish + dokumentacja + verification | 4-6h | MVP gotowy |
 
-**Łączny szacunek MVP:** 75-95h pracy developera (1 osoba, ~2-3 tygodnie pełnowymiarowo).
+**Łączny szacunek MVP:** 80-100h pracy developera (1 osoba, ~2-3 tygodnie pełnowymiarowo). Dla developera bez wcześniejszego doświadczenia z Sylius'em: doliczyć +20-30% na naukę konwencji ResourceBundle/GridBundle/Twig Hooks.
 
 ---
 
@@ -351,6 +359,8 @@ Pełna lista w [BACKLOG.md](BACKLOG.md). Najważniejsze:
 - Multi-organizer / marketplace, multi-tenant / białe etykiety
 - QR ticket / check-in app
 - Rozbudowane SEO
+- **Compliance / RODO**: cookie consent, eksport danych, right-to-erasure, wersjonowanie regulaminu
+- **Security hardening**: rate-limiting per-route (bundle w MVP), CAPTCHA, 2FA dla adminów
 
 ---
 
@@ -359,8 +369,11 @@ Pełna lista w [BACKLOG.md](BACKLOG.md). Najważniejsze:
 | Ryzyko | Mitigation |
 |---|---|
 | Naginanie Product/Order na wydarzenia myli developerów | Słowniczek w README + translations w UI + cienkie wrappery `EventService`/`BookingService` |
-| Sylius 2.x jest nowszy, niektóre pluginy nie zaktualizowane | MVP nie używa pluginów spoza `sylius-standard`. Pluginy dorzucamy świadomie w backlogu. |
+| Sylius 2.x jest nowszy, niektóre pluginy nie zaktualizowane | MVP nie używa pluginów spoza `sylius-standard`. Pluginy dorzucamy świadomie w backlogu. Faza 1 ma explicit gate na compat check zainstalowanych pluginów. |
+| Doctrine ORM 3.x w Sylius 2.x ma breaking changes (Embeddables, lifecycle callbacks) vs 2.x | Trzymamy się dokumentowanych extension pointów, weryfikujemy `doctrine:schema:validate` po każdej migracji, czytamy [UPGRADE-3.0.md](https://github.com/doctrine/orm/blob/3.0.x/UPGRADE.md) Doctrine ORM przed override'ami |
 | Override Product entity → ryzyko upgrade pain | Używamy dokumentowanego Sylius extension pointu (`extends BaseProduct` + resource override w yaml), nie hackujemy klas vendor |
 | RBAC własny → bug w voter = security issue | Testy jednostkowe `PermissionVoter`, fixture'a z różnymi rolami, manualne smoke testy |
-| Capacity race condition (dwóch userów rezerwuje ostatnie miejsce) | Sylius `inventory_tracker` używa transakcji DB; pessimistic lock w `BookingService` |
+| Capacity race condition (dwóch userów rezerwuje ostatnie miejsce) | Sylius `inventory_tracker` używa transakcji DB; pessimistic lock w `BookingService`; integration test dwóch równoległych bookingów na ostatni slot (Faza 7 task 7.7) |
 | Wyłączone moduły Shipping/Tax mogą wracać przy upgradzie Sylius'a | Override w jednym miejscu (Twig hook + security routes), regression test sprawdza brak linków w sidebarze |
+| Twig Hook names mogą się różnić od planowanych w Sylius 2.x | Faza 1 weryfikuje rzeczywiste nazwy hooków w `vendor/sylius/sylius/src/Sylius/Bundle/AdminBundle/` przed pisaniem override'ów |
+| API Platform operations Sylius'a 2.x są preconfigured — override security wymaga reconfiguracji całej operation | Faza 12 zaczyna od `bin/console debug:router | grep api_platform` żeby zobaczyć stan defaultowy, dopiero potem decyzja per-resource vs global policy |

@@ -1,6 +1,6 @@
 # WATRA — taski MVP
 
-Szczegółowy rozpis prac z [PLAN.md](PLAN.md) sekcja 8. Każda faza ma listę atomowych tasków (1-4h każdy), oszacowanie i Definition of Done. Numeracja `X.Y` = task `Y` w fazie `X`. Łącznie ~85 tasków, **75-95h pracy** (~2-3 tygodnie full-time).
+Szczegółowy rozpis prac z [PLAN.md](PLAN.md) sekcja 8. Każda faza ma listę atomowych tasków (1-4h każdy), oszacowanie i Definition of Done. Numeracja `X.Y` = task `Y` w fazie `X`. Łącznie ~90 tasków, **80-100h pracy** (~2-3 tygodnie full-time). Dla developera bez wcześniejszego doświadczenia z Sylius'em: dodać +20-30% na naukę konwencji.
 
 Odhaczamy taski sukcesywnie w kolejnych sesjach. Status fazy: `[ ]` w toku / `[x]` zakończona.
 
@@ -19,11 +19,12 @@ Odhaczamy taski sukcesywnie w kolejnych sesjach. Status fazy: `[ ]` w toku / `[x
 
 ---
 
-## [ ] Faza 1 — Bootstrap Sylius 2.x + Docker — 6-8h
+## [ ] Faza 1 — Bootstrap Sylius 2.x + Docker — 7-10h
 **Cel:** działający szkielet Sylius 2.x w kontenerze, panel admina i shop frontend dostępne lokalnie.
 
-- [ ] 1.1 — `composer create-project sylius/sylius-standard:^2.0 watra` w pustym katalogu
-- [ ] 1.2 — `git init` + `git add` + initial commit "chore: bootstrap sylius 2.x"
+- [ ] 1.0 — **Plugin compat gate:** dla każdego planowanego pluginu (lista w PLAN.md sekcja 1) sprawdzić `composer.json` w jego repo na compat z `sylius/sylius:^2.0`. Jeśli krytyczny plugin nie ma 2.x → decyzja: czekać / forkować / zostać na 1.13 LTS (zaktualizować PLAN.md sekcja 1)
+- [ ] 1.1 — `composer create-project sylius/sylius-standard:^2.0 watra` (lub `:^1.13` jeśli 1.0 wskazało na 1.13 LTS) w pustym katalogu
+- [ ] 1.2 — Repo już istnieje (`git status`); stworzyć branch `feat/bootstrap-sylius` i commit "chore: bootstrap sylius 2.x"
 - [ ] 1.3 — Stworzyć `.docker/php/Dockerfile` (PHP 8.3-fpm + extensions + composer)
 - [ ] 1.4 — Stworzyć `.docker/nginx/default.conf` (proxy do php-fpm, root `public/`)
 - [ ] 1.5 — Stworzyć `compose.yaml` z usługami: `php`, `nginx`, `postgres:16`, `mailpit`, `redis`
@@ -32,7 +33,8 @@ Odhaczamy taski sukcesywnie w kolejnych sesjach. Status fazy: `[ ]` w toku / `[x
 - [ ] 1.8 — `make up && make install` (composer install w kontenerze) → zielono
 - [ ] 1.9 — `make migrate && make fixtures` (Sylius default fixtures) → zielono
 - [ ] 1.10 — Smoke test: `/admin/login`, `/`, `/api/v2/docs` zwracają 200
-- [ ] 1.11 — Commit "chore: docker compose dev environment"
+- [ ] 1.11 — **Discovery konwencji 2.x:** `grep -r "products:" vendor/sylius/sylius/src/Sylius/Bundle/*/translations/messages.en.yaml` → udokumentować w `docs/SYLIUS_OVERRIDES.md` rzeczywiste klucze translation domain (do użycia w Fazie 2). Analogicznie `grep -rn "ux_hooks" vendor/sylius/sylius/src/Sylius/Bundle/AdminBundle/Resources/views/` → lista hooków sidebara (do użycia w Fazie 3)
+- [ ] 1.12 — Commit "chore: docker compose dev environment"
 
 **DoD:** `make up` od zera startuje pełen stack, panel admina działa pod `http://localhost/admin`.
 
@@ -43,7 +45,7 @@ Odhaczamy taski sukcesywnie w kolejnych sesjach. Status fazy: `[ ]` w toku / `[x
 
 - [ ] 2.1 — `config/packages/_sylius.yaml`: `default_locale: pl`, `available_locales: [pl, en]`, `currency: PLN`
 - [ ] 2.2 — Skonfigurować channel `watra` (hostname `localhost`, locale `pl`, currency `PLN`) — fixture lub migracja
-- [ ] 2.3 — Stworzyć `translations/messages.pl.yaml` z override dla `sylius_ui.products → Wydarzenia`, `product_variants → Terminy`, `orders → Rezerwacje`, `customers → Uczestnicy`, `taxons → Tagi`
+- [ ] 2.3 — Stworzyć `translations/messages.pl.yaml` z override translation keys (rzeczywiste klucze i domain — z grep'a w task 1.11) → "Wydarzenia", "Terminy", "Rezerwacje", "Uczestnicy", "Tagi"
 - [ ] 2.4 — Stworzyć `translations/messages.en.yaml` z analogicznymi override (Events, Sessions, Bookings, Attendees, Tags)
 - [ ] 2.5 — Twig templates breadcrumbs / page titles — sprawdzić, że używają translation keys (jeśli hardcoded — override szablony)
 - [ ] 2.6 — Smoke test: panel admin po polsku pokazuje "Wydarzenia"
@@ -55,7 +57,7 @@ Odhaczamy taski sukcesywnie w kolejnych sesjach. Status fazy: `[ ]` w toku / `[x
 ## [ ] Faza 3 — Wyłączenie sekcji niepotrzebnych w MVP — 4-5h
 **Cel:** ukryć Shipping/Tax/Zones/Exchange Rates z UX, pozostawić jako działający backend.
 
-- [ ] 3.1 — Override `templates/bundles/SyliusAdminBundle/_menu.html.twig` (lub Twig Hook na `sylius_admin.layout.sidebar`) — usunąć linki: Shipping Methods, Shipping Categories, Tax Categories, Tax Rates, Zones, Exchange Rates
+- [ ] 3.1 — Override sidebara — użyj rzeczywistych nazw hooków zinwentaryzowanych w task 1.11 (Sylius 2.x preferuje Twig Hooks, ale fallback to override `templates/bundles/SyliusAdminBundle/_menu.html.twig`). Usunąć linki: Shipping Methods, Shipping Categories, Tax Categories, Tax Rates, Zones, Exchange Rates
 - [ ] 3.2 — Sylius'owe `_sylius.yaml`: stworzyć domyślny ShippingMethod `no_shipping` (calculator: flat_rate 0)
 - [ ] 3.3 — Stworzyć domyślny PaymentMethod `free` (gateway: offline) — fixture
 - [ ] 3.4 — Stworzyć domyślną Zone (Polska) i TaxCategory `default` z 0% — fixture
@@ -91,7 +93,8 @@ Odhaczamy taski sukcesywnie w kolejnych sesjach. Status fazy: `[ ]` w toku / `[x
 - [ ] 5.1 — Stworzyć `App\Entity\Catalog\Product extends Sylius\Component\Core\Model\Product` z polami: `city → City`, `defaultVenue → Venue`, `isOnline: bool`, `eventStatus: enum`, `eventType: enum`
 - [ ] 5.2 — Stworzyć `App\Entity\Catalog\ProductVariant extends BaseProductVariant` z polami: `startsAt`, `endsAt`, `venue → Venue` (nullable, override)
 - [ ] 5.3 — Stworzyć `App\Entity\Admin\AdminUser extends BaseAdminUser` z relacją M2M do `AdministrationRole`
-- [ ] 5.4 — Override w `_sylius.yaml`: `sylius_product.product` na nasz Product, `sylius_admin_user` na nasz AdminUser
+- [ ] 5.3a — Stworzyć `App\Entity\Customer\Customer extends BaseCustomer` (pusty extends, brak nowych pól w MVP). Powód: późniejszy override = migracja FK we wszystkich tabelach referencujących `sylius_customer`
+- [ ] 5.4 — Override w `_sylius.yaml`: `sylius_product.product` na nasz Product, `sylius_admin_user` na nasz AdminUser, `sylius_customer.customer` na nasz Customer
 - [ ] 5.5 — Stworzyć enumy `EventStatus` (DRAFT/PUBLISHED/CANCELLED/COMPLETED) i `EventType` (WORKSHOP/MEETUP/PARTY/CONFERENCE/OTHER)
 - [ ] 5.6 — Migracja schema (dodanie nowych kolumn)
 - [ ] 5.7 — `App\Form\Extension\ProductTypeExtension` dodający pola wydarzeniowe do form'a Product w admin'ie
@@ -118,13 +121,15 @@ Odhaczamy taski sukcesywnie w kolejnych sesjach. Status fazy: `[ ]` w toku / `[x
 - [ ] 6.8 — Dekoracja admin controllerów: `#[IsGranted(Permission::EVENT_CREATE->value)]` (na każdym route admin'a)
 - [ ] 6.9 — Twig macro `{% if has_permission('event:create') %}` używana w sidebarze admin'a
 - [ ] 6.10 — Test integracyjny: zaloguj jako Front Desk → próba GET `/admin/products/new` → 403; próba GET `/admin/orders` → 200
+- [ ] 6.10a — Test functional render Twig: jako Front Desk renderuj sidebar → asercja że link "Wydarzenia → Nowe" NIE jest w HTML (potwierdza że `is_granted('event:create')` w Twigu działa, nie tylko w controllerze)
 - [ ] 6.11 — API Platform operations: `security: "is_granted('event:create')"` na admin operations
+- [ ] 6.12 — Zweryfikować `PermissionVoter::supports($attribute)` rozpoznaje wszystkie permission stringi (`event:*`, `booking:*`, ...) — najlepiej przez prefix matching listy z enuma
 
 **DoD:** super admin może wszystko, Front Desk widzi tylko Rezerwacje + Uczestnicy w menu, próba dostępu do innych route'ów daje 403.
 
 ---
 
-## [ ] Faza 7 — Konfiguracja "wydarzenia bez płatności" — 5-7h
+## [ ] Faza 7 — Konfiguracja "wydarzenia bez płatności" — 6-8h
 **Cel:** checkout dla wydarzenia darmowego (total = 0) działa bez wpisywania danych płatności i adresu wysyłki.
 
 - [ ] 7.1 — `PaymentMethod` `free_payment` z gateway'em Payum `offline` — fixture (weryfikacja z fazy 3)
@@ -133,8 +138,9 @@ Odhaczamy taski sukcesywnie w kolejnych sesjach. Status fazy: `[ ]` w toku / `[x
 - [ ] 7.4 — Override `checkout/select_payment.html.twig` — gdy total = 0, auto-wybierz `free_payment` i przejdź dalej
 - [ ] 7.5 — Override `checkout/complete.html.twig` — komunikat "Twoja rezerwacja została potwierdzona"
 - [ ] 7.6 — Smoke test E2E: zaloguj jako customer → wybierz wydarzenie → "Zapisz się" → checkout → potwierdzenie
+- [ ] 7.7 — **Race condition test:** integration test (PHPUnit functional) — dwóch customer'ów równolegle book'uje ostatni slot. Oczekiwanie: jeden dostaje `fulfilled`, drugi 409/422 z message "Brak miejsc". Zweryfikować że `BookingService` używa `LockMode::PESSIMISTIC_WRITE` na `ProductVariant.onHand`
 
-**DoD:** customer kończy booking w 3 klikach, Order w admin pokazuje status `fulfilled`, payment `completed`.
+**DoD:** customer kończy booking w 3 klikach, Order w admin pokazuje status `fulfilled`, payment `completed`, race condition test zielony.
 
 ---
 
@@ -208,7 +214,7 @@ Odhaczamy taski sukcesywnie w kolejnych sesjach. Status fazy: `[ ]` w toku / `[x
 ## [ ] Faza 12 — API Platform: konfiguracja resource'ów i security — 4-5h
 **Cel:** publiczne czytanie wydarzeń przez API + uwierzytelnione operacje na bookingach.
 
-- [ ] 12.1 — Sprawdzić Sylius 2.x default API exposure (`/api/v2/shop/products`, `/api/v2/admin/products`) — co już działa
+- [ ] 12.1 — Sprawdzić Sylius 2.x default API exposure: `bin/console debug:router | grep api_platform` — udokumentować w `docs/SYLIUS_OVERRIDES.md` listę preconfigured operations dla Product/Order/Customer (decyzja: per-resource override vs global `api_platform.security` policy)
 - [ ] 12.2 — Skonfigurować nasze custom resources: City, Venue, Interest jako ApiResource z odpowiednimi operacjami
 - [ ] 12.3 — Filtry na `Product`: `SearchFilter` po city.code, taxon.code, eventStatus; `DateFilter` po variants.startsAt
 - [ ] 12.4 — Security expressions: shop API publiczne dla GET produktów, autoryzowane dla bookings; admin API z `is_granted('event:edit')` itp.
