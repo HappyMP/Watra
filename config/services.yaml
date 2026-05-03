@@ -81,6 +81,16 @@ services:
             - { name: kernel.event_listener, event: 'sylius.menu.admin.main', method: removeHiddenMenuItems }
             - { name: kernel.event_listener, event: 'sylius.menu.admin.main', method: addWatraMenuItems }
 
+    App\Fixture\WatraEventFixture:
+        arguments:
+            $em: '@doctrine.orm.entity_manager'
+            $channelRepository: '@sylius.repository.channel'
+            $taxonRepository: '@sylius.repository.taxon'
+            $taxCategoryRepository: '@sylius.repository.tax_category'
+            $channelPricingFactory: '@sylius.factory.channel_pricing'
+        tags:
+            - { name: sylius_fixtures.fixture }
+
     App\Fixture\WatraCatalogFixture:
         arguments:
             $manager: '@doctrine.orm.entity_manager'

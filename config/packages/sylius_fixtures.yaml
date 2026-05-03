@@ -134,4 +134,31 @@ sylius_fixtures:
                                 first_name: 'Admin'
                                 last_name: 'WATRA'
 
+                shop_user:
+                    name: shop_user
+                    options:
+                        custom:
+                            -   email: 'jan.kowalski@example.pl'
+                                first_name: 'Jan'
+                                last_name: 'Kowalski'
+                                password: 'watra'
+                            -   email: 'anna.nowak@example.pl'
+                                first_name: 'Anna'
+                                last_name: 'Nowak'
+                                password: 'watra'
+                            -   email: 'piotr.wisniewski@example.pl'
+                                first_name: 'Piotr'
+                                last_name: 'Wiśniewski'
+                                password: 'watra'
+                            -   email: 'maria.kaminska@example.pl'
+                                first_name: 'Maria'
+                                last_name: 'Kamińska'
+                                password: 'watra'
+                            -   email: 'tomasz.zielinski@example.pl'
+                                first_name: 'Tomasz'
+                                last_name: 'Zieliński'
+                                password: 'watra'
+
                 watra_catalog: ~
+
+                watra_events: ~
