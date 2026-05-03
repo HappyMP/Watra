@@ -1,29 +1,9 @@
 sylius_fixtures:
     suites:
         watra:
-            listeners: ~  # no orm_purger: this suite is additive, does not purge existing data
+            # Additive suite — no orm_purger. Assumes 'default' suite ran first (PLN currency and pl_PL locale already exist).
+            listeners: ~
             fixtures:
-                currency:
-                    options:
-                        currencies:
-                            - 'PLN'
-
-                locale:
-                    options:
-                        load_default_locale: false  # %locale% is 'pl' (short code, not BCP 47); we load pl_PL explicitly
-                        locales:
-                            - 'pl_PL'
-
-                geographical:
-                    options:
-                        countries:
-                            - 'PL'
-                        zones:
-                            PL:
-                                name: 'Poland'
-                                countries:
-                                    - 'PL'
-
                 channel:
                     options:
                         custom:

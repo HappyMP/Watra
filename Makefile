@@ -34,6 +34,7 @@ migrate:
 
 fixtures:
 	$(PHP_EXEC) bin/console sylius:fixtures:load --no-interaction
+	$(PHP_EXEC) bin/console sylius:fixtures:load watra --no-interaction
 
 setup-channel:
 	$(PHP_EXEC) bin/console sylius:fixtures:load watra --no-interaction
