@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace App\EventListener;
 
+use App\Entity\User\AdminUser;
 use App\Security\AdminRoutePermissionMap;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
@@ -16,6 +18,7 @@ final class AdminSecuritySubscriber implements EventSubscriberInterface
     public function __construct(
         private readonly AdminRoutePermissionMap $permissionMap,
         private readonly AuthorizationCheckerInterface $authorizationChecker,
+        private readonly TokenStorageInterface $tokenStorage,
     ) {
     }
 
@@ -37,8 +40,12 @@ final class AdminSecuritySubscriber implements EventSubscriberInterface
             return;
         }
 
-        // Not yet authenticated — let security firewall handle it
         if (!$this->authorizationChecker->isGranted('ROLE_ADMINISTRATION_ACCESS')) {
+            return;
+        }
+
+        // Users with no AdministrationRole have full access (backwards compat)
+        if ($this->currentUserHasNoRoles()) {
             return;
         }
 
@@ -48,5 +55,20 @@ final class AdminSecuritySubscriber implements EventSubscriberInterface
                 $permission->value,
             ));
         }
+    }
+
+    private function currentUserHasNoRoles(): bool
+    {
+        $token = $this->tokenStorage->getToken();
+        if ($token === null) {
+            return true;
+        }
+
+        $user = $token->getUser();
+        if (!$user instanceof AdminUser) {
+            return true;
+        }
+
+        return $user->getAdministrationRoles()->isEmpty();
     }
 }
