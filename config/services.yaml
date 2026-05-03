@@ -41,6 +41,3 @@ services:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
 
-    App\EventListener\AdminMenuListener:
-        tags:
-            - { name: kernel.event_listener, event: sylius.menu.admin.main, method: removeUnusedMenuItems }

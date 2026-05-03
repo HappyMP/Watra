@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace App\EventListener;
 
+use Sylius\Bundle\AdminBundle\Menu\MainMenuBuilder;
 use Sylius\Bundle\UiBundle\Menu\Event\MenuBuilderEvent;
+use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 
+#[AsEventListener(event: MainMenuBuilder::EVENT_NAME, method: 'removeUnusedMenuItems')]
 final class AdminMenuListener
 {
     public function removeUnusedMenuItems(MenuBuilderEvent $event): void
