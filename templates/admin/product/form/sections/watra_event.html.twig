@@ -1,0 +1,16 @@
+{% set form = hookable_metadata.context.form %}
+
+<div class="tab-pane {% if hookable_metadata.configuration.active|default(false) %}show active{% endif %}" id="product-watra-event" role="tabpanel" tabindex="0">
+    <div class="card mb-3">
+        <div class="card-header">
+            <h2 class="card-title">{{ 'app.menu.admin.main.watra.header'|trans }}</h2>
+        </div>
+        <div class="card-body">
+            <div class="mb-3">{{ form_row(form.city) }}</div>
+            <div class="mb-3">{{ form_row(form.defaultVenue) }}</div>
+            <div class="mb-3">{{ form_row(form.eventType) }}</div>
+            <div class="mb-3">{{ form_row(form.eventStatus) }}</div>
+            <div class="mb-3">{{ form_row(form.isOnline) }}</div>
+        </div>
+    </div>
+</div>

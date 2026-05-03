@@ -1,0 +1,33 @@
+{% set product = hookable_metadata.context.resource %}
+
+<div class="card mb-3">
+    <div class="card-header">
+        <div class="card-title">{{ 'app.menu.admin.main.watra.header'|trans }}</div>
+    </div>
+    <div class="card-body">
+        <table class="table table-sm">
+            <tbody>
+                <tr>
+                    <td class="fw-bold" style="width: 30%">{{ 'app.ui.city'|trans }}</td>
+                    <td>{{ product.city ? product.city.name : '-' }}</td>
+                </tr>
+                <tr>
+                    <td class="fw-bold">{{ 'app.ui.venue'|trans }}</td>
+                    <td>{{ product.defaultVenue ? product.defaultVenue.name : '-' }}</td>
+                </tr>
+                <tr>
+                    <td class="fw-bold">{{ 'app.ui.event_type'|trans }}</td>
+                    <td>{{ ('app.enum.event_type.' ~ product.eventType.value)|trans }}</td>
+                </tr>
+                <tr>
+                    <td class="fw-bold">{{ 'app.ui.event_status'|trans }}</td>
+                    <td>{{ ('app.enum.event_status.' ~ product.eventStatus.value)|trans }}</td>
+                </tr>
+                <tr>
+                    <td class="fw-bold">{{ 'app.ui.is_online'|trans }}</td>
+                    <td>{{ product.isOnline ? 'Tak' : 'Nie' }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

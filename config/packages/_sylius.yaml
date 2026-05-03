@@ -288,6 +288,56 @@ sylius_resource:
 
 sylius_twig_hooks:
     hooks:
+        # Product create — WATRA section in form
+        'sylius_admin.product.create.content.form.side_navigation':
+            watra_event:
+                template: 'admin/product/form/side_navigation/watra_event.html.twig'
+                priority: 850
+
+        'sylius_admin.product.create.content.form.sections':
+            watra_event:
+                template: 'admin/product/form/sections/watra_event.html.twig'
+                priority: 850
+
+        # Product update — WATRA section in form
+        'sylius_admin.product.update.content.form.side_navigation':
+            watra_event:
+                template: 'admin/product/form/side_navigation/watra_event.html.twig'
+                priority: 850
+
+        'sylius_admin.product.update.content.form.sections':
+            watra_event:
+                template: 'admin/product/form/sections/watra_event.html.twig'
+                priority: 850
+
+        # Product show — WATRA section
+        'sylius_admin.product.show.content.page_body':
+            watra_event:
+                template: 'admin/product/show/watra_event.html.twig'
+                priority: 550
+
+        # ProductVariant create — WATRA section in form
+        'sylius_admin.product_variant.create.content.form.side_navigation':
+            watra_event:
+                template: 'admin/product_variant/form/side_navigation/watra_event.html.twig'
+                priority: 350
+
+        'sylius_admin.product_variant.create.content.form.sections':
+            watra_event:
+                template: 'admin/product_variant/form/sections/watra_event.html.twig'
+                priority: 350
+
+        # ProductVariant update — WATRA section in form
+        'sylius_admin.product_variant.update.content.form.side_navigation':
+            watra_event:
+                template: 'admin/product_variant/form/side_navigation/watra_event.html.twig'
+                priority: 350
+
+        'sylius_admin.product_variant.update.content.form.sections':
+            watra_event:
+                template: 'admin/product_variant/form/sections/watra_event.html.twig'
+                priority: 350
+
         'sylius_admin.base#stylesheets':
             app_styles:
                 template: 'admin/stylesheets.html.twig'
