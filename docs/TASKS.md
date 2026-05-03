@@ -114,24 +114,32 @@ Odhaczamy taski sukcesywnie w kolejnych sesjach. Status fazy: `[ ]` w toku / `[x
 
 ---
 
-## [ ] Faza 5 — Rozszerzenie Sylius Product / ProductVariant / AdminUser — 8-10h
+## [x] Faza 5 — Rozszerzenie Sylius Product / ProductVariant / AdminUser — 8-10h
 **Cel:** Product reprezentuje wydarzenie, Variant reprezentuje termin, AdminUser ma role administracyjne.
 
-- [ ] 5.1 — Stworzyć `App\Entity\Catalog\Product extends Sylius\Component\Core\Model\Product` z polami: `city → City`, `defaultVenue → Venue`, `isOnline: bool`, `eventStatus: enum`, `eventType: enum`
-- [ ] 5.2 — Stworzyć `App\Entity\Catalog\ProductVariant extends BaseProductVariant` z polami: `startsAt`, `endsAt`, `venue → Venue` (nullable, override)
-- [ ] 5.3 — Stworzyć `App\Entity\Admin\AdminUser extends BaseAdminUser` z relacją M2M do `AdministrationRole`
-- [ ] 5.3a — Stworzyć `App\Entity\Customer\Customer extends BaseCustomer` (pusty extends, brak nowych pól w MVP). Powód: późniejszy override = migracja FK we wszystkich tabelach referencujących `sylius_customer`
-- [ ] 5.4 — Override w `_sylius.yaml`: `sylius_product.product` na nasz Product, `sylius_admin_user` na nasz AdminUser, `sylius_customer.customer` na nasz Customer
-- [ ] 5.5 — Stworzyć enumy `EventStatus` (DRAFT/PUBLISHED/CANCELLED/COMPLETED) i `EventType` (WORKSHOP/MEETUP/PARTY/CONFERENCE/OTHER)
-- [ ] 5.6 — Migracja schema (dodanie nowych kolumn)
-- [ ] 5.7 — `App\Form\Extension\ProductTypeExtension` dodający pola wydarzeniowe do form'a Product w admin'ie
-- [ ] 5.8 — `App\Form\Extension\ProductVariantTypeExtension` dodający `startsAt`, `endsAt`, `venue` do variant'a
-- [ ] 5.9 — `App\Form\Extension\AdminUserTypeExtension` dodający multi-select ról admin
-- [ ] 5.10 — Walidacja: ProductVariant `startsAt < endsAt`, `startsAt > now()` przy publikacji
-- [ ] 5.11 — DataFixtures: 5-10 example products (wydarzeń), każdy z 1-3 variantami (terminami)
-- [ ] 5.12 — Smoke test: admin tworzy wydarzenie, dodaje termin (variant), publikuje
+- [x] 5.1 — Stworzyć `App\Entity\Catalog\Product extends Sylius\Component\Core\Model\Product` z polami: `city → City`, `defaultVenue → Venue`, `isOnline: bool`, `eventStatus: enum`, `eventType: enum`
+- [x] 5.2 — Stworzyć `App\Entity\Catalog\ProductVariant extends BaseProductVariant` z polami: `startsAt`, `endsAt`, `venue → Venue` (nullable, override)
+- [x] 5.3 — Stworzyć `App\Entity\Admin\AdminUser extends BaseAdminUser` z relacją M2M do `AdministrationRole`
+- [x] 5.3a — Stworzyć `App\Entity\Customer\Customer extends BaseCustomer` (pusty extends, brak nowych pól w MVP). Powód: późniejszy override = migracja FK we wszystkich tabelach referencujących `sylius_customer`
+- [x] 5.4 — Override w `_sylius.yaml`: `sylius_product.product` na nasz Product, `sylius_admin_user` na nasz AdminUser, `sylius_customer.customer` na nasz Customer
+- [x] 5.5 — Stworzyć enumy `EventStatus` (DRAFT/PUBLISHED/CANCELLED/COMPLETED) i `EventType` (WORKSHOP/MEETUP/PARTY/CONFERENCE/OTHER)
+- [x] 5.6 — Migracja schema (dodanie nowych kolumn)
+- [x] 5.7 — `App\Form\Extension\ProductTypeExtension` dodający pola wydarzeniowe do form'a Product w admin'ie
+- [x] 5.8 — `App\Form\Extension\ProductVariantTypeExtension` dodający `startsAt`, `endsAt`, `venue` do variant'a
+- [x] 5.9 — `App\Form\Extension\AdminUserTypeExtension` dodający multi-select ról admin
+- [x] 5.10 — Walidacja: ProductVariant `startsAt < endsAt`, `startsAt > now()` przy publikacji
+- [x] 5.11 — DataFixtures: 5-10 example products (wydarzeń), każdy z 1-3 variantami (terminami)
+- [x] 5.12 — Smoke test: admin tworzy wydarzenie, dodaje termin (variant), publikuje
 
 **DoD:** Product = wydarzenie z minimum 1 terminem, w admin form widać polskie etykiety, fixture ładuje testowe dane.
+
+> **Uwagi po realizacji:**
+> - 5.3a i 5.4 były już zrealizowane we wcześniejszych fazach
+> - `city` w Product: nullable w ORM (nullable: true), required na poziomie formularza
+> - Form extensions (AbstractTypeExtension) auto-rejestrowane przez `autoconfigure: true` — brak wpisów w services.yaml
+> - Sylius AdminUser form type: `Sylius\Bundle\AdminBundle\Form\Type\AdminUserType`
+> - City lookup w WatraEventFixture: przez `buildCityMap()` (po nazwie translacji pl_PL)
+> - Kolumny camelCase (eventType, isOnline, startsAt) — PostgreSQL przechowuje lowercase, Doctrine quotuje automatycznie
 
 ---
 
