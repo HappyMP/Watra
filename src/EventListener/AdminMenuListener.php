@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\EventListener;
 
+use Knp\Menu\ItemInterface;
 use Sylius\Bundle\UiBundle\Menu\Event\MenuBuilderEvent;
 
 final class AdminMenuListener
@@ -28,5 +29,26 @@ final class AdminMenuListener
         }
 
         $menu->removeChild('official_support');
+    }
+
+    public function addWatraMenuItems(MenuBuilderEvent $event): void
+    {
+        $menu = $event->getMenu();
+
+        $watra = $menu->addChild('watra')
+            ->setLabel('app.menu.admin.main.watra.header')
+            ->setAttribute('data-test-watra-menu', true);
+
+        $watra->addChild('cities', ['route' => 'app_admin_city_index'])
+            ->setLabel('app.menu.admin.main.watra.cities')
+            ->setLabelAttribute('icon', 'tabler:map-pin');
+
+        $watra->addChild('venues', ['route' => 'app_admin_venue_index'])
+            ->setLabel('app.menu.admin.main.watra.venues')
+            ->setLabelAttribute('icon', 'tabler:building');
+
+        $watra->addChild('administration_roles', ['route' => 'app_admin_administration_role_index'])
+            ->setLabel('app.menu.admin.main.watra.administration_roles')
+            ->setLabelAttribute('icon', 'tabler:shield-check');
     }
 }

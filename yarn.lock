@@ -1024,6 +1024,11 @@
   resolved "https://registry.npmjs.org/@orchidjs/unicode-variants/-/unicode-variants-1.1.2.tgz"
   integrity sha512-5DobW1CHgnBROOEpFlEXytED5OosEWESFvg/VYmH0143oXcijYTprRYJTs+55HzGM4IqxiLFSuqEzu9mPNwVsA==
 
+"@parcel/watcher-linux-x64-glibc@2.5.6":
+  version "2.5.6"
+  resolved "https://registry.npmjs.org/@parcel/watcher-linux-x64-glibc/-/watcher-linux-x64-glibc-2.5.6.tgz"
+  integrity sha512-kbT5wvNQlx7NaGjzPFu8nVIW1rWqV780O7ZtkjuWaPUgpv2NMFpjYERVi0UYj1msZNyCzGlaCWEtzc+exjMGbQ==
+
 "@parcel/watcher-linux-x64-musl@2.5.6":
   version "2.5.6"
   resolved "https://registry.npmjs.org/@parcel/watcher-linux-x64-musl/-/watcher-linux-x64-musl-2.5.6.tgz"
@@ -1058,6 +1063,11 @@
   resolved "https://registry.npmjs.org/@popperjs/core/-/core-2.11.8.tgz"
   integrity sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==
 
+"@rollup/rollup-linux-x64-gnu@4.60.2":
+  version "4.60.2"
+  resolved "https://registry.npmjs.org/@rollup/rollup-linux-x64-gnu/-/rollup-linux-x64-gnu-4.60.2.tgz"
+  integrity sha512-UQjrkIdWrKI626Du8lCQ6MJp/6V1LAo2bOK9OTu4mSn8GGXIkPXk/Vsp4bLHCd9Z9Iz2OTEaokUE90VweJgIYQ==
+
 "@rollup/rollup-linux-x64-musl@4.60.2":
   version "4.60.2"
   resolved "https://registry.npmjs.org/@rollup/rollup-linux-x64-musl/-/rollup-linux-x64-musl-4.60.2.tgz"
@@ -1071,10 +1081,46 @@
 "@sylius-ui/admin@file:vendor/sylius/sylius/src/Sylius/Bundle/AdminBundle":
   version "2.0.0"
   resolved "file:vendor/sylius/sylius/src/Sylius/Bundle/AdminBundle"
+  dependencies:
+    "@babel/core" "^7.17.0"
+    "@babel/plugin-proposal-object-rest-spread" "^7.20.7"
+    "@babel/preset-env" "^7.25.8"
+    "@hotwired/stimulus" "^3.0.0"
+    "@popperjs/core" "^2.11.8"
+    "@sylius/admin-bundle" "file:Resources/assets/"
+    "@symfony/stimulus-bridge" "^3.2.0"
+    "@symfony/webpack-encore" "^5.0.1"
+    "@tabler/core" "~1.3.0"
+    apexcharts "^3.41.0"
+    bootstrap "^5.3.3"
+    infinite-tree "^1.17.1"
+    sass "~1.64.2"
+    sass-loader "^16.0.1"
+    slugify "^1.6"
+    spotlight.js "^0.7.8"
+    stimulus-use "^0.52"
+    tom-select "^2.2.2"
+    webpack "^5.72"
+    webpack-cli "^5.1.4"
 
 "@sylius-ui/shop@file:vendor/sylius/sylius/src/Sylius/Bundle/ShopBundle":
   version "2.0.0"
   resolved "file:vendor/sylius/sylius/src/Sylius/Bundle/ShopBundle"
+  dependencies:
+    "@babel/core" "^7.17.0"
+    "@babel/plugin-proposal-object-rest-spread" "^7.20.7"
+    "@babel/preset-env" "^7.25.8"
+    "@hotwired/stimulus" "^3.0.0"
+    "@popperjs/core" "^2.11.8"
+    "@sylius/shop-bundle" "file:Resources/assets/"
+    "@symfony/stimulus-bridge" "^3.2.0"
+    "@symfony/webpack-encore" "^5.0.1"
+    bootstrap "^5.3.3"
+    sass "~1.64.2"
+    sass-loader "^16.0.1"
+    spotlight.js "^0.7.8"
+    webpack "^5.72"
+    webpack-cli "^5.1.4"
 
 "@sylius/admin-bundle@file:Resources/assets/", "@sylius/admin-bundle@file:vendor/sylius/sylius/src/Sylius/Bundle/AdminBundle/Resources/assets":
   version "2.0.0"

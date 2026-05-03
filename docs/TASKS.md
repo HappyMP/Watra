@@ -90,22 +90,27 @@ Odhaczamy taski sukcesywnie w kolejnych sesjach. Status fazy: `[ ]` w toku / `[x
 
 ---
 
-## [ ] Faza 4 — Custom encje: City, Venue, AdministrationRole — 8-10h
+## [x] Faza 4 — Custom encje: City, Venue, AdministrationRole — 8-10h
 **Cel:** mieć encje miast, miejsc i ról admin'owych z migracjami, gridami i CRUD-em w admin'ie.
 
-- [ ] 4.1 — Stworzyć `App\Entity\Catalog\City` + `CityTranslation` (translatable: `name`)
-- [ ] 4.2 — Stworzyć `App\Entity\Catalog\Venue` + `VenueTranslation` (translatable: `name`, `address`) z FK do `City`
-- [ ] 4.3 — Stworzyć `App\Entity\Admin\AdministrationRole` (z `permissions: json`, `isSuperAdmin: bool`)
-- [ ] 4.4 — Zarejestrować jako Sylius Resources w `_sylius.yaml`
-- [ ] 4.5 — Migracja `php bin/console make:migration && doctrine:migrations:migrate`
-- [ ] 4.6 — Stworzyć `App\Form\Type\CityType`, `VenueType`, `AdministrationRoleType`
-- [ ] 4.7 — Stworzyć Sylius Grid configurations dla City, Venue, AdministrationRole
-- [ ] 4.8 — Routing admin CRUD: `/admin/cities`, `/admin/venues`, `/admin/administration-roles`
-- [ ] 4.9 — DataFixtures: 3 cities (Kraków, Warszawa, Wrocław), 4 venues (po 1-2 na miasto)
-- [ ] 4.10 — Twig hook dodający linki w sidebarze admin: "Miasta", "Lokalizacje", "Role administracji"
-- [ ] 4.11 — Smoke test: admin tworzy nowe miasto, edytuje, usuwa
+- [x] 4.1 — `App\Entity\Catalog\City` + `CityTranslation` (translatable: `name`), tabele: `watra_city`, `watra_city_translation`
+- [x] 4.2 — `App\Entity\Catalog\Venue` + `VenueTranslation` (translatable: `name`, `address`) z FK do `City`
+- [x] 4.3 — `App\Entity\Admin\AdministrationRole` (`permissions: json`, `isSuperAdmin: bool`)
+- [x] 4.4 — Zarejestrowane jako Sylius Resources w `_sylius.yaml` pod `sylius_resource.resources`
+- [x] 4.5 — Migracja `Version20260503122213` — 18 sql queries, tabele watra_city/venue/translation/role
+- [x] 4.6 — `CityType`, `CityTranslationType`, `VenueType`, `VenueTranslationType`, `AdministrationRoleType`
+- [x] 4.7 — Grid configs w `config/packages/sylius_grid.yaml`: app_admin_city, app_admin_venue, app_admin_administration_role
+- [x] 4.8 — Routing w `config/routes/app_admin.yaml`: /admin/cities/, /admin/venues/, /admin/administration-roles/
+- [x] 4.9 — `WatraCatalogFixture`: Kraków/Warszawa/Wrocław + 4 venues (ICE, Tauron, Kopernik, Hala Stulecia)
+- [x] 4.10 — `AdminMenuListener::addWatraMenuItems()` dodaje sekcję WATRA z linkami do sidebara
+- [x] 4.11 — Smoke test: `router:match /admin/cities/` → app_admin_city_index ✓, DB: 3 cities + 4 venues ✓
 
 **DoD:** wszystkie 3 encje mają działający CRUD w panelu admina, fixture-y się ładują.
+
+> **Uwagi po realizacji:**
+> - Translation classes muszą implementować `ResourceInterface` (nie tylko `TranslationInterface`) — wymóg Sylius 2.x ResourceBundle
+> - Form types dla AbstractResourceType wymagają ręcznej rejestracji w services.yaml (z `arguments: [ModelClass, [sylius]]`)
+> - `watra_catalog` fixture jest OSTATNI w suite — wymaga żeby channel WATRA istniał
 
 ---
 

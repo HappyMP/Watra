@@ -1,3 +1,23 @@
+app:
+    menu:
+        admin:
+            main:
+                watra:
+                    header: 'WATRA'
+                    cities: 'Miasta'
+                    venues: 'Lokalizacje'
+                    administration_roles: 'Role administracji'
+    ui:
+        city: 'Miasto'
+        cities: 'Miasta'
+        venue: 'Lokalizacja'
+        venues: 'Lokalizacje'
+        administration_role: 'Rola administracji'
+        administration_roles: 'Role administracji'
+        address: 'Adres'
+        select_city: 'Wybierz miasto'
+        super_admin: 'Super administrator'
+
 sylius:
     menu:
         admin:

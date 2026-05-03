@@ -265,6 +265,27 @@ sylius_user:
                 classes:
                     model: App\Entity\User\UserOAuth
 
+sylius_resource:
+    resources:
+        app.city:
+            driver: doctrine/orm
+            classes:
+                model: App\Entity\Catalog\City
+            translation:
+                classes:
+                    model: App\Entity\Catalog\CityTranslation
+        app.venue:
+            driver: doctrine/orm
+            classes:
+                model: App\Entity\Catalog\Venue
+            translation:
+                classes:
+                    model: App\Entity\Catalog\VenueTranslation
+        app.administration_role:
+            driver: doctrine/orm
+            classes:
+                model: App\Entity\Admin\AdministrationRole
+
 sylius_twig_hooks:
     hooks:
         'sylius_admin.base#stylesheets':
