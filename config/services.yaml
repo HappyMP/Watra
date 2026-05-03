@@ -87,11 +87,3 @@ services:
         tags:
             - { name: sylius_fixtures.fixture }
 
-    App\Fixture\PolandZoneFixture:
-        arguments:
-            $zoneFactory: '@sylius.factory.zone'
-            $zoneMemberFactory: '@sylius.factory.zone_member'
-            $zoneManager: '@sylius.manager.zone'
-            $zoneRepository: '@sylius.repository.zone'
-        tags:
-            - { name: sylius_fixtures.fixture }

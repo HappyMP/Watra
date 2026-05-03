@@ -33,7 +33,6 @@ migrate:
 	$(PHP_EXEC) bin/console doctrine:migrations:migrate --no-interaction
 
 fixtures:
-	$(PHP_EXEC) bin/console sylius:fixtures:load --no-interaction
 	$(PHP_EXEC) bin/console sylius:fixtures:load watra --no-interaction
 
 setup-channel:

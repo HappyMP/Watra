@@ -1,10 +1,53 @@
 sylius_fixtures:
     suites:
         watra:
-            # Additive suite — no orm_purger. Assumes 'default' suite ran first (PLN currency and pl_PL locale already exist).
-            listeners: ~
+            listeners:
+                orm_purger: ~
             fixtures:
-                poland_zone: ~
+                locale:
+                    options:
+                        locales:
+                            - 'pl_PL'
+
+                currency:
+                    options:
+                        currencies:
+                            - 'PLN'
+
+                geographical:
+                    options:
+                        countries:
+                            - 'PL'
+                        zones:
+                            PL:
+                                name: 'Polska'
+                                countries:
+                                    - 'PL'
+
+                taxon:
+                    options:
+                        custom:
+                            watra_root:
+                                name: 'Wszystkie wydarzenia'
+                                code: 'WATRA_ROOT'
+                                slug: 'wydarzenia'
+                                description: 'Katalog wydarzeń WATRA'
+                                children:
+                                    watra_warsztaty:
+                                        name: 'Warsztaty'
+                                        code: 'WATRA_WARSZTATY'
+                                        slug: 'warsztaty'
+                                        description: 'Warsztaty i szkolenia'
+                                    watra_meetupy:
+                                        name: 'Meetupy'
+                                        code: 'WATRA_MEETUPY'
+                                        slug: 'meetupy'
+                                        description: 'Spotkania branżowe'
+                                    watra_konferencje:
+                                        name: 'Konferencje'
+                                        code: 'WATRA_KONFERENCJE'
+                                        slug: 'konferencje'
+                                        description: 'Konferencje i wykłady'
 
                 tax_category:
                     options:
@@ -41,6 +84,7 @@ sylius_fixtures:
                                 default_tax_zone: 'PL'
                                 enabled: true
                                 hostname: 'localhost'
+                                menu_taxon: 'WATRA_ROOT'
                                 color: '#007bff'
                                 contact_email: 'kontakt@watra.pl'
                                 contact_phone_number: '+48 22 000 00 00'
@@ -77,5 +121,17 @@ sylius_fixtures:
                                 enabled: true
                                 channels:
                                     - 'WATRA'
+
+                admin_user:
+                    name: admin_user
+                    options:
+                        custom:
+                            -   email: 'admin@watra.pl'
+                                username: 'admin'
+                                password: 'watra'
+                                enabled: true
+                                locale_code: 'pl_PL'
+                                first_name: 'Admin'
+                                last_name: 'WATRA'
 
                 watra_catalog: ~
