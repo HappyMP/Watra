@@ -6,16 +6,20 @@ Odhaczamy taski sukcesywnie w kolejnych sesjach. Status fazy: `[ ]` w toku / `[x
 
 ---
 
-## [ ] Faza 0 — Weryfikacja środowiska (świeży Linux) — 2-4h
+## [x] Faza 0 — Weryfikacja środowiska (świeży Linux) — 2-4h
 **Cel:** wykryć co już zainstalowane na targetowym komputerze, doinstalować brakujące.
 
-- [ ] 0.1 — Stworzyć skrypt `bin/check-env.sh` sprawdzający wersje: PHP 8.3+, Composer 2.7+, Symfony CLI, Node 20+, Docker, Docker Compose
-- [ ] 0.2 — Udokumentować w `README.md` (sekcja `## Wymagania`) jak doinstalować każde z narzędzi na Ubuntu/Debian (oficjalne repos)
-- [ ] 0.3 — Uruchomić skrypt na targetowym Linuksie, doinstalować brakujące paczki
-- [ ] 0.4 — Zweryfikować Docker działa: `docker run hello-world` + `docker compose version`
-- [ ] 0.5 — Zweryfikować PHP ma rozszerzenia: `pdo_pgsql`, `intl`, `gd`, `zip`, `opcache`, `mbstring`, `xml`
+- [x] 0.1 — Stworzyć skrypt `bin/check-env.sh` sprawdzający wersje: PHP 8.3+, Composer 2.7+, Symfony CLI, Node 20+, Docker, Docker Compose
+- [x] 0.2 — Udokumentować w `README.md` (sekcja `## Wymagania`) jak doinstalować każde z narzędzi na Ubuntu/Debian (oficjalne repos)
+- [x] 0.3 — Uruchomić skrypt na targetowym Linuksie, doinstalować brakujące paczki
+- [x] 0.4 — Zweryfikować Docker działa: `docker run hello-world` + `docker compose version`
+- [x] 0.5 — Zweryfikować PHP ma rozszerzenia: `pdo_pgsql`, `intl`, `gd`, `zip`, `opcache`, `mbstring`, `xml`
 
 **DoD:** wszystkie wersje przechodzą check-env.sh, dev może uruchomić Docker bez sudo.
+
+> **Uwagi po realizacji:**
+> - `pdo_pgsql` na hoście: PPA ondrej/php tymczasowo niedostępne — rozszerzenie zainstalowane zostanie przy kolejnym dostępie do PPA lub bezpośrednio przez Dockerfile (w Docker-first workflow host PHP nie potrzebuje pdo_pgsql)
+> - Docker bez sudo: wymaga wylogowania i zalogowania po `usermod -aG docker $USER` — daemon działa poprawnie (sudo docker run hello-world ✓)
 
 ---
 
