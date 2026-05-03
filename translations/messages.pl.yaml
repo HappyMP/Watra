@@ -13,7 +13,7 @@ app:
         venue: 'Lokalizacja'
         venues: 'Lokalizacje'
         administration_role: 'Rola administracji'
-        administration_roles: 'Role administracji'
+        administration_roles: 'Role administracyjne'
         address: 'Adres'
         select_city: 'Wybierz miasto'
         select_venue: 'Wybierz lokalizację'
@@ -24,7 +24,6 @@ app:
         is_online: 'Wydarzenie online'
         starts_at: 'Początek'
         ends_at: 'Koniec'
-        administration_roles: 'Role administracyjne'
         super_admin: 'Super administrator'
     enum:
         event_status:
