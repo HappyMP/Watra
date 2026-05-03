@@ -51,17 +51,23 @@ Odhaczamy taski sukcesywnie w kolejnych sesjach. Status fazy: `[ ]` w toku / `[x
 
 ---
 
-## [ ] Faza 2 — Lokalizacja PL/EN i naming WATRY — 3-4h
+## [x] Faza 2 — Lokalizacja PL/EN i naming WATRY — 3-4h
 **Cel:** PL jako default, EN jako drugi locale, panel admina i shop pokazują "Wydarzenia" zamiast "Products".
 
-- [ ] 2.1 — `config/packages/_sylius.yaml`: `default_locale: pl`, `available_locales: [pl, en]`, `currency: PLN`
-- [ ] 2.2 — Skonfigurować channel `watra` (hostname `localhost`, locale `pl`, currency `PLN`) — fixture lub migracja
-- [ ] 2.3 — Stworzyć `translations/messages.pl.yaml` z override translation keys (rzeczywiste klucze i domain — z grep'a w task 1.11) → "Wydarzenia", "Terminy", "Rezerwacje", "Uczestnicy", "Tagi"
-- [ ] 2.4 — Stworzyć `translations/messages.en.yaml` z analogicznymi override (Events, Sessions, Bookings, Attendees, Tags)
-- [ ] 2.5 — Twig templates breadcrumbs / page titles — sprawdzić, że używają translation keys (jeśli hardcoded — override szablony)
-- [ ] 2.6 — Smoke test: panel admin po polsku pokazuje "Wydarzenia"
+- [x] 2.1 — `config/packages/_sylius.yaml`: `default_locale: pl`, `available_locales: [pl, en]`, `currency: PLN`
+- [x] 2.2 — Skonfigurować channel `watra` (hostname `localhost`, locale `pl_PL`, currency `PLN`) — fixture suite `watra` w `config/packages/sylius_fixtures.yaml`
+- [x] 2.3 — Stworzyć `translations/messages.pl.yaml` z override translation keys → "Wydarzenia", "Terminy", "Rezerwacje", "Uczestnicy", "Tagi" + singular i compound keys
+- [x] 2.4 — Stworzyć `translations/messages.en.yaml` z analogicznymi override (Events, Sessions, Bookings, Attendees, Tags)
+- [x] 2.5 — Twig templates breadcrumbs / page titles — sprawdzone, brak hardkodów (tylko asset loadery)
+- [x] 2.6 — Smoke test: admin panel `lang="pl"`, `sylius.ui.products`→"Wydarzenia" potwierdzone przez `debug:translation`
 
 **DoD:** menu admina i shop są w PL (lub EN po przełączeniu), kluczowe terminy zmapowane.
+
+> **Uwagi po realizacji:**
+> - Sylius używa pełnych kodów BCP 47 (`pl_PL`), nie krótkich (`pl`) — channel fixture musi używać `pl_PL`
+> - `GeographicalFixture` ma `defaultValue(Countries::getNames())` — zawsze tworzy wszystkie kraje jeśli `countries:` nie ustawione na `[]`; PL zone zostaje do Fazy 3 (task 3.4)
+> - `make fixtures` uruchamia teraz dwa suite'y: `default` (Sylius dev data) + `watra` (channel WATRA)
+> - Translation keys dla Sylius admin menu i UI są w domenie `messages` (nie `sylius`)
 
 ---
 
