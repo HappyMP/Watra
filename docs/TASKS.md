@@ -143,24 +143,35 @@ Odhaczamy taski sukcesywnie w kolejnych sesjach. Status fazy: `[ ]` w toku / `[x
 
 ---
 
-## [ ] Faza 6 — RBAC: Permission enum + Voter + integracja — 8-10h
+## [x] Faza 6 — RBAC: Permission enum + Voter + integracja — 8-10h
 **Cel:** każdy admin route i każda operacja API jest chroniona granularnym permissionem.
 
-- [ ] 6.1 — Stworzyć `App\Security\Permission` (PHP backed enum) z pełną listą ~30 permissionów
-- [ ] 6.2 — Helper'y w enum'ie: `Permission::all()`, `Permission::group(string $resource): array`
-- [ ] 6.3 — Stworzyć `App\Security\Voter\PermissionVoter` (extends Voter)
-- [ ] 6.4 — Rejestracja Voter'a w `services.yaml` (autowire) + tag `security.voter`
-- [ ] 6.5 — Rozszerzyć formularz `AdministrationRoleType` o multi-checkbox listę permissionów (pogrupowanych po zasobie)
-- [ ] 6.6 — DataFixtures `AdministrationRoleFixtures`: Super Admin (isSuperAdmin=true), Editor, Marketer, Front Desk
-- [ ] 6.7 — Stworzyć super-admin usera w fixtures: `admin@watra.test` + assigned Super Admin role
-- [ ] 6.8 — Dekoracja admin controllerów: `#[IsGranted(Permission::EVENT_CREATE->value)]` (na każdym route admin'a)
-- [ ] 6.9 — Twig macro `{% if has_permission('event:create') %}` używana w sidebarze admin'a
-- [ ] 6.10 — Test integracyjny: zaloguj jako Front Desk → próba GET `/admin/products/new` → 403; próba GET `/admin/orders` → 200
-- [ ] 6.10a — Test functional render Twig: jako Front Desk renderuj sidebar → asercja że link "Wydarzenia → Nowe" NIE jest w HTML (potwierdza że `is_granted('event:create')` w Twigu działa, nie tylko w controllerze)
-- [ ] 6.11 — API Platform operations: `security: "is_granted('event:create')"` na admin operations
-- [ ] 6.12 — Zweryfikować `PermissionVoter::supports($attribute)` rozpoznaje wszystkie permission stringi (`event:*`, `booking:*`, ...) — najlepiej przez prefix matching listy z enuma
+- [x] 6.1 — Stworzyć `App\Security\Permission` (PHP backed enum) z pełną listą ~30 permissionów
+- [x] 6.2 — Helper'y w enum'ie: `Permission::all()`, `Permission::group(string $resource): array`
+- [x] 6.3 — Stworzyć `App\Security\Voter\PermissionVoter` (extends Voter)
+- [x] 6.4 — Rejestracja Voter'a w `services.yaml` (autowire) + tag `security.voter`
+- [x] 6.5 — Rozszerzyć formularz `AdministrationRoleType` o multi-checkbox listę permissionów (pogrupowanych po zasobie)
+- [x] 6.6 — DataFixtures `AdministrationRoleFixtures`: Super Admin (isSuperAdmin=true), Editor, Marketer, Front Desk
+- [x] 6.7 — Stworzyć super-admin usera w fixtures: `admin@watra.test` + assigned Super Admin role
+- [x] 6.8 — Dekoracja admin controllerów: `#[IsGranted(Permission::EVENT_CREATE->value)]` (na każdym route admin'a)
+- [x] 6.9 — Twig macro `{% if has_permission('event:create') %}` używana w sidebarze admin'a
+- [x] 6.10 — Test integracyjny: zaloguj jako Front Desk → próba GET `/admin/products/new` → 403; próba GET `/admin/orders` → 200
+- [x] 6.10a — Test functional render Twig: jako Front Desk renderuj sidebar → asercja że link "Wydarzenia → Nowe" NIE jest w HTML (potwierdza że `is_granted('event:create')` w Twigu działa, nie tylko w controllerze)
+- [x] 6.11 — API Platform operations: `security: "is_granted('event:create')"` na admin operations
+- [x] 6.12 — Zweryfikować `PermissionVoter::supports($attribute)` rozpoznaje wszystkie permission stringi (`event:*`, `booking:*`, ...) — najlepiej przez prefix matching listy z enuma
 
 **DoD:** super admin może wszystko, Front Desk widzi tylko Rezerwacje + Uczestnicy w menu, próba dostępu do innych route'ów daje 403.
+
+> **Uwagi po realizacji:**
+> - PermissionVoter: ABSTAIN dla adminów bez ról (backwards compat z istniejącym admin@watra.pl), DENY dla adminów z rolami bez wymaganego permission
+> - Route protection: `kernel.request` EventSubscriber z `AdminRoutePermissionMap` (nie access_control) — mapuje route names → Permission enum values
+> - PermissionVoter auto-tagowany przez `autoconfigure: true` (extends Voter → security.voter tag)
+> - Twig `has_permission()` — `PermissionExtension` auto-wired przez autoconfigure
+> - AdminMenuListener wymaga `AuthorizationCheckerInterface` w konstruktorze — auto-wired
+> - Testy funkcjonalne: `loginUser($user, 'admin')` zamiast submitowania formularza logowania
+> - Test database (`sylius_test`): trzeba stworzyć raz przez `doctrine:database:create --env=test` + `doctrine:migrations:migrate --env=test`
+> - APP_ENV w testach: bootstrap.php wymaga jawnego ustawienia `$_SERVER['APP_ENV'] = 'test'` (Docker container ma `APP_ENV=dev`)
+> - API Platform: security przez `access_control` w security.yaml (MVP approach — nie przez `#[ApiResource(security)]`)
 
 ---
 
