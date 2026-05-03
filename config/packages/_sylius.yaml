@@ -93,7 +93,7 @@ sylius_customer:
                 model: App\Entity\Customer\CustomerGroup
 
 sylius_locale:
-    locale: 'pl' # Default locale for the platform. Channel-specific locales are configured in task 2.2
+    locale: 'pl' # Default platform locale; channel-specific locales are defined in the channel fixtures
     resources:
         locale:
             classes:
