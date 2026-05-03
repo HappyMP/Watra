@@ -68,7 +68,7 @@ sylius_grid:
                     type: twig
                     label: app.ui.super_admin
                     options:
-                        template: '@SyliusUi/Grid/Field/yesNo.html.twig'
+                        template: '@SyliusUi/grid/field/yes_no.html.twig'
             actions:
                 main:
                     create:
