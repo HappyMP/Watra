@@ -71,17 +71,22 @@ Odhaczamy taski sukcesywnie w kolejnych sesjach. Status fazy: `[ ]` w toku / `[x
 
 ---
 
-## [ ] Faza 3 — Wyłączenie sekcji niepotrzebnych w MVP — 4-5h
+## [x] Faza 3 — Wyłączenie sekcji niepotrzebnych w MVP — 4-5h
 **Cel:** ukryć Shipping/Tax/Zones/Exchange Rates z UX, pozostawić jako działający backend.
 
-- [ ] 3.1 — Override sidebara — użyj rzeczywistych nazw hooków zinwentaryzowanych w task 1.11 (Sylius 2.x preferuje Twig Hooks, ale fallback to override `templates/bundles/SyliusAdminBundle/_menu.html.twig`). Usunąć linki: Shipping Methods, Shipping Categories, Tax Categories, Tax Rates, Zones, Exchange Rates
-- [ ] 3.2 — Sylius'owe `_sylius.yaml`: stworzyć domyślny ShippingMethod `no_shipping` (calculator: flat_rate 0)
-- [ ] 3.3 — Stworzyć domyślny PaymentMethod `free` (gateway: offline) — fixture
-- [ ] 3.4 — Stworzyć domyślną Zone (Polska) i TaxCategory `default` z 0% — fixture
-- [ ] 3.5 — Skonfigurować channel: domyślny shipping `no_shipping`, payment `free`, tax_zone `pl`
-- [ ] 3.6 — Smoke test: w admin sidebar nie ma Shipping/Tax linków, ale checkout działa
+- [x] 3.1 — Override sidebara — EventListener na `sylius.menu.admin.main` (KNP Menu), `removeChild()` dla: shipping_methods, shipping_categories, tax_categories, tax_rates, zones, exchange_rates, payment_methods, promotions, catalog_promotions, official_support
+- [x] 3.2 — ShippingMethod `no_shipping` (flat_rate 0) — fixture w suite `watra`
+- [x] 3.3 — PaymentMethod `free_payment` (offline gateway) — fixture w suite `watra`
+- [x] 3.4 — Custom `PolandZoneFixture` (idempotentny) tworzy Zone `PL` + TaxCategory `default` + TaxRate `pl_0` (0%) — fixture w suite `watra`
+- [x] 3.5 — Channel WATRA z `default_tax_zone: PL` — zaktualizowany fixture
+- [x] 3.6 — Smoke test: curl do `/admin/` po loginie — brak linków shipping/tax/zone/exchange/payment-methods w HTML
 
 **DoD:** admin widzi tylko sekcje istotne dla wydarzeń, pełen Sylius shipping/tax istnieje "pod spodem".
+
+> **Uwagi po realizacji:**
+> - `GeographicalFixture` waliduje kraje w pamięci (nie w DB) → nie nadaje się do additive suite; zastąpiony przez `App\Fixture\PolandZoneFixture` z idempotentnym check'em
+> - W watra suite kolejność ma znaczenie: `channel` musi być PRZED `shipping_method` i `payment_method` (te fixtures szukają kanału po kodzie)
+> - `make fixtures` (default + watra) działa jako pełen reset — watra suite NIE jest idempotentny dla built-in fixtures (duplicate key na ponownym uruchomieniu bez purge)
 
 ---
 

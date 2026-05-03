@@ -4,6 +4,28 @@ sylius_fixtures:
             # Additive suite — no orm_purger. Assumes 'default' suite ran first (PLN currency and pl_PL locale already exist).
             listeners: ~
             fixtures:
+                poland_zone: ~
+
+                tax_category:
+                    options:
+                        custom:
+                            default:
+                                code: 'default'
+                                name: 'Domyślna'
+                                description: 'Domyślna kategoria podatkowa (0% VAT)'
+
+                tax_rate:
+                    options:
+                        custom:
+                            pl_0:
+                                code: 'pl_0'
+                                name: '0% VAT (PL)'
+                                zone: 'PL'
+                                category: 'default'
+                                calculator: 'default'
+                                amount: 0.0
+                                included_in_price: false
+
                 channel:
                     options:
                         custom:
@@ -16,6 +38,7 @@ sylius_fixtures:
                                     - 'PLN'
                                 base_currency: 'PLN'
                                 default_locale: 'pl_PL'
+                                default_tax_zone: 'PL'
                                 enabled: true
                                 hostname: 'localhost'
                                 color: '#007bff'
@@ -28,3 +51,29 @@ sylius_fixtures:
                                     street: 'ul. Przykładowa 1'
                                     city: 'Kraków'
                                     postcode: '30-001'
+
+                shipping_method:
+                    options:
+                        custom:
+                            no_shipping:
+                                code: 'no_shipping'
+                                name: 'Brak wysyłki'
+                                enabled: true
+                                channels:
+                                    - 'WATRA'
+                                calculator:
+                                    type: 'flat_rate'
+                                    configuration:
+                                        WATRA: { amount: 0 }
+
+                payment_method:
+                    options:
+                        custom:
+                            free_payment:
+                                code: 'free_payment'
+                                name: 'Bezpłatna rezerwacja'
+                                gatewayName: 'free_payment'
+                                gatewayFactory: 'offline'
+                                enabled: true
+                                channels:
+                                    - 'WATRA'

@@ -40,3 +40,16 @@ services:
     App\Controller\:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
+
+    App\EventListener\AdminMenuListener:
+        tags:
+            - { name: kernel.event_listener, event: 'sylius.menu.admin.main', method: removeHiddenMenuItems }
+
+    App\Fixture\PolandZoneFixture:
+        arguments:
+            $zoneFactory: '@sylius.factory.zone'
+            $zoneMemberFactory: '@sylius.factory.zone_member'
+            $zoneManager: '@sylius.manager.zone'
+            $zoneRepository: '@sylius.repository.zone'
+        tags:
+            - { name: sylius_fixtures.fixture }
