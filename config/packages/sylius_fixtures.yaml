@@ -161,4 +161,6 @@ sylius_fixtures:
 
                 watra_catalog: ~
 
+                watra_roles: ~
+
                 watra_events: ~

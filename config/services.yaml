@@ -97,3 +97,7 @@ services:
         tags:
             - { name: sylius_fixtures.fixture }
 
+    App\Fixture\AdministrationRoleFixture:
+        tags:
+            - { name: sylius_fixtures.fixture }
+
