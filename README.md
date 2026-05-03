@@ -25,13 +25,85 @@ Otwórz `http://localhost` (shop) lub `http://localhost/admin` (admin).
 
 ## Wymagania
 
-Zostaną sprawdzone przez `bin/check-env.sh` (Faza 0). Spodziewane:
-- PHP 8.3+ (extensions: pdo_pgsql, intl, gd, zip, opcache, mbstring, xml)
-- Composer 2.7+
-- Symfony CLI
-- Node 20 LTS
-- Docker + Docker Compose
-- PostgreSQL 16 (w Dockerze)
+Zweryfikuj środowisko skryptem:
+
+```bash
+bash bin/check-env.sh
+```
+
+### Wymagane narzędzia i instalacja na Ubuntu/Debian
+
+#### PHP 8.3+
+
+```bash
+sudo apt install -y software-properties-common
+sudo add-apt-repository ppa:ondrej/php
+sudo apt update
+sudo apt install -y php8.3-cli php8.3-fpm \
+  php8.3-pdo php8.3-pgsql php8.3-intl php8.3-gd \
+  php8.3-zip php8.3-opcache php8.3-mbstring php8.3-xml \
+  php8.3-curl php8.3-tokenizer
+```
+
+Weryfikacja: `php -v` (oczekiwane: PHP 8.3.x)
+
+#### Composer 2.7+
+
+```bash
+curl -sS https://getcomposer.org/installer | php
+sudo mv composer.phar /usr/local/bin/composer
+```
+
+Weryfikacja: `composer --version`
+
+#### Symfony CLI
+
+```bash
+curl -1sLf 'https://dl.cloudsmith.io/public/symfony/stable/setup.deb.sh' | sudo -E bash
+sudo apt install -y symfony-cli
+```
+
+Weryfikacja: `symfony version`
+
+#### Node.js 20 LTS
+
+```bash
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+sudo apt install -y nodejs
+```
+
+Weryfikacja: `node --version` (oczekiwane: v20.x.x)
+
+#### Docker + Docker Compose
+
+```bash
+# Usuń stare wersje
+sudo apt remove -y docker docker-engine docker.io containerd runc 2>/dev/null || true
+
+# Dodaj oficjalne repo Docker
+sudo apt install -y ca-certificates curl gnupg
+sudo install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | \
+  sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+sudo chmod a+r /etc/apt/keyrings/docker.gpg
+
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] \
+  https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+sudo apt update
+sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+# Uruchom bez sudo
+sudo usermod -aG docker $USER
+newgrp docker
+```
+
+Weryfikacja: `docker run hello-world` + `docker compose version`
+
+> **Uwaga:** po `usermod` może być wymagany wylogowanie i ponowne logowanie żeby `docker` działał bez `sudo`.
 
 ## Stack
 
