@@ -1,0 +1,81 @@
+services:
+    php:
+        build:
+            context: .
+            dockerfile: .docker/php/Dockerfile
+        depends_on:
+            postgres:
+                condition: service_healthy
+        environment:
+            APP_ENV: ${APP_ENV:-dev}
+            APP_SECRET: ${APP_SECRET:-watra_dev_secret_change_in_prod}
+            DATABASE_URL: "pgsql://watra:watra@postgres/sylius_%kernel.environment%?serverVersion=16&charset=utf8"
+            MAILER_DSN: smtp://mailpit:1025
+            MESSENGER_TRANSPORT_DSN: doctrine://default
+            SYLIUS_MESSENGER_TRANSPORT_MAIN_DSN: doctrine://default
+            SYLIUS_MESSENGER_TRANSPORT_MAIN_FAILED_DSN: doctrine://default?queue_name=main_failed
+            SYLIUS_MESSENGER_TRANSPORT_CATALOG_PROMOTION_REMOVAL_DSN: doctrine://default?queue_name=catalog_promotion_removal
+            SYLIUS_MESSENGER_TRANSPORT_CATALOG_PROMOTION_REMOVAL_FAILED_DSN: doctrine://default?queue_name=catalog_promotion_removal_failed
+            SYLIUS_MESSENGER_TRANSPORT_PAYMENT_REQUEST_DSN: sync://
+            SYLIUS_MESSENGER_TRANSPORT_PAYMENT_REQUEST_FAILED_DSN: sync://
+            PHP_DATE_TIMEZONE: Europe/Warsaw
+        volumes:
+            - .:/srv/sylius:rw,cached
+            - public-media:/srv/sylius/public/media:rw
+        user: ${DOCKER_USER:-1000:1000}
+
+    nginx:
+        image: nginx:1.27-alpine
+        depends_on:
+            php:
+                condition: service_started
+        ports:
+            - "80:80"
+        volumes:
+            - .docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+            - ./public:/srv/sylius/public:ro
+            - public-media:/srv/sylius/public/media:ro,nocopy
+
+    postgres:
+        image: postgres:16-alpine
+        environment:
+            POSTGRES_USER: watra
+            POSTGRES_PASSWORD: watra
+            POSTGRES_DB: sylius_dev
+        ports:
+            - "5432:5432"
+        volumes:
+            - postgres-data:/var/lib/postgresql/data:rw
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready -U watra -d sylius_dev"]
+            interval: 2s
+            timeout: 5s
+            retries: 15
+
+    mailpit:
+        image: axllent/mailpit:latest
+        ports:
+            - "8025:8025"
+            - "1025:1025"
+
+    redis:
+        image: redis:7-alpine
+        ports:
+            - "6379:6379"
+
+    nodejs:
+        image: node:20-alpine
+        user: ${DOCKER_USER:-1000:1000}
+        working_dir: /srv/sylius
+        entrypoint: ["/bin/sh", "-c"]
+        command:
+            - |
+                npm install
+                npm run build
+        volumes:
+            - .:/srv/sylius:rw,cached
+            - ./public:/srv/sylius/public:rw,delegated
+
+volumes:
+    postgres-data:
+    public-media:
