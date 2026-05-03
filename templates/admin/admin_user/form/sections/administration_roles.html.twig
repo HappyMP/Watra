@@ -1,0 +1,10 @@
+{% set form = hookable_metadata.context.form %}
+
+<div class="card mb-3">
+    <div class="card-header">
+        <div class="card-title">{{ 'app.ui.administration_roles'|trans }}</div>
+    </div>
+    <div class="card-body">
+        {{ form_row(form.administrationRoles) }}
+    </div>
+</div>
