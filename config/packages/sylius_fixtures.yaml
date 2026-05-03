@@ -1,6 +1,7 @@
 sylius_fixtures:
     suites:
         watra:
+            listeners: ~  # no orm_purger: this suite is additive, does not purge existing data
             fixtures:
                 currency:
                     options:
@@ -9,7 +10,7 @@ sylius_fixtures:
 
                 locale:
                     options:
-                        load_default_locale: false
+                        load_default_locale: false  # %locale% is 'pl' (short code, not BCP 47); we load pl_PL explicitly
                         locales:
                             - 'pl_PL'
 
