@@ -36,3 +36,37 @@ sylius:
         product_taxons: 'Event tags'
         show_orders: 'Show bookings'
         there_are_no_orders_for_this_customer_to_display: 'There are no bookings for this attendee to display.'
+app:
+    ui:
+        city: 'City'
+        cities: 'Cities'
+        venue: 'Venue'
+        venues: 'Venues'
+        administration_role: 'Administration role'
+        administration_roles: 'Administration roles'
+        address: 'Address'
+        select_city: 'Select city'
+        select_venue: 'Select venue'
+        select_event_type: 'Select type'
+        select_event_status: 'Select status'
+        event_type: 'Event type'
+        event_status: 'Event status'
+        is_online: 'Online event'
+        starts_at: 'Starts at'
+        ends_at: 'Ends at'
+        super_admin: 'Super administrator'
+    enum:
+        event_status:
+            draft: 'Draft'
+            published: 'Published'
+            cancelled: 'Cancelled'
+            completed: 'Completed'
+        event_type:
+            workshop: 'Workshop'
+            meetup: 'Meetup'
+            party: 'Party'
+            conference: 'Conference'
+            other: 'Other'
+    validation:
+        starts_at_must_be_before_ends_at: 'Start date must be before end date'
+        starts_at_must_be_in_future: 'Start date must be in the future'

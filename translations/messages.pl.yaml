@@ -16,7 +16,31 @@ app:
         administration_roles: 'Role administracji'
         address: 'Adres'
         select_city: 'Wybierz miasto'
+        select_venue: 'Wybierz lokalizację'
+        select_event_type: 'Wybierz typ'
+        select_event_status: 'Wybierz status'
+        event_type: 'Typ wydarzenia'
+        event_status: 'Status wydarzenia'
+        is_online: 'Wydarzenie online'
+        starts_at: 'Początek'
+        ends_at: 'Koniec'
+        administration_roles: 'Role administracyjne'
         super_admin: 'Super administrator'
+    enum:
+        event_status:
+            draft: 'Szkic'
+            published: 'Opublikowane'
+            cancelled: 'Anulowane'
+            completed: 'Zakończone'
+        event_type:
+            workshop: 'Warsztaty'
+            meetup: 'Meetup'
+            party: 'Impreza'
+            conference: 'Konferencja'
+            other: 'Inne'
+    validation:
+        starts_at_must_be_before_ends_at: 'Data rozpoczęcia musi być wcześniejsza niż data zakończenia'
+        starts_at_must_be_in_future: 'Data rozpoczęcia musi być w przyszłości'
 
 sylius:
     menu:
