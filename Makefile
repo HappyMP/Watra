@@ -1,4 +1,4 @@
-.PHONY: up down bash install migrate fixtures test cs-fix phpstan build logs
+.PHONY: up down bash install migrate fixtures setup-channel test cs-fix phpstan build logs
 
 DC ?= docker compose -f compose.yaml
 DOCKER_USER ?= $(shell if [ "$$(id -u)" = "0" ]; then echo "1000:1000"; else echo "$$(id -u):$$(id -g)"; fi)
@@ -34,6 +34,9 @@ migrate:
 
 fixtures:
 	$(PHP_EXEC) bin/console sylius:fixtures:load --no-interaction
+
+setup-channel:
+	$(PHP_EXEC) bin/console sylius:fixtures:load watra --no-interaction
 
 sylius-install:
 	$(PHP_EXEC) bin/console sylius:install -s default -n

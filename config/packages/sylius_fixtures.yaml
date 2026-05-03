@@ -1,0 +1,49 @@
+sylius_fixtures:
+    suites:
+        watra:
+            fixtures:
+                currency:
+                    options:
+                        currencies:
+                            - 'PLN'
+
+                locale:
+                    options:
+                        load_default_locale: false
+                        locales:
+                            - 'pl_PL'
+
+                geographical:
+                    options:
+                        countries:
+                            - 'PL'
+                        zones:
+                            PL:
+                                name: 'Poland'
+                                countries:
+                                    - 'PL'
+
+                channel:
+                    options:
+                        custom:
+                            watra:
+                                name: 'WATRA'
+                                code: 'WATRA'
+                                locales:
+                                    - 'pl_PL'
+                                currencies:
+                                    - 'PLN'
+                                base_currency: 'PLN'
+                                default_locale: 'pl_PL'
+                                enabled: true
+                                hostname: 'localhost'
+                                color: '#007bff'
+                                contact_email: 'kontakt@watra.pl'
+                                contact_phone_number: '+48 22 000 00 00'
+                                shop_billing_data:
+                                    company: 'WATRA'
+                                    tax_id: '0000000000'
+                                    country_code: 'PL'
+                                    street: 'ul. Przykładowa 1'
+                                    city: 'Kraków'
+                                    postcode: '30-001'
