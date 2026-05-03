@@ -31,6 +31,15 @@ Do not add `Co-Authored-By` lines to commit messages.
 - Hiding menu items: EventListener on `sylius.menu.admin.main`, call `removeChild()`
 - See `docs/SYLIUS_OVERRIDES.md` for verified Sylius 2.x conventions
 
+## Task workflow
+
+After completing each task:
+1. Mark the task as `[x]` in `docs/TASKS.md` (with notes if needed)
+2. Push changes to remote: `git push`
+3. Continue to the next task
+
+This applies to all remaining phases (3–14).
+
 ## Dev commands
 
 ```bash
