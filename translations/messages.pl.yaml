@@ -7,6 +7,9 @@ app:
                     cities: 'Miasta'
                     venues: 'Lokalizacje'
                     administration_roles: 'Role administracji'
+        shop:
+            account:
+                interests: 'Zainteresowane'
     ui:
         city: 'Miasto'
         cities: 'Miasta'
@@ -34,6 +37,10 @@ app:
         permission_group_admin_user: 'Administrator'
         permission_group_role: 'Role'
         permission_group_dashboard: 'Panel'
+        my_interests: 'Moje zainteresowania'
+        no_interests: 'Nie obserwujesz jeszcze żadnych wydarzeń.'
+        no_upcoming_dates: 'Brak nadchodzących terminów'
+        remove_interest: 'Usuń'
     permission:
         event_index: 'Przeglądaj wydarzenia'
         event_show: 'Podgląd wydarzenia'

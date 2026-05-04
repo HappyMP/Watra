@@ -37,6 +37,10 @@ sylius:
         show_orders: 'Show bookings'
         there_are_no_orders_for_this_customer_to_display: 'There are no bookings for this attendee to display.'
 app:
+    menu:
+        shop:
+            account:
+                interests: 'Interested'
     ui:
         city: 'City'
         cities: 'Cities'
@@ -64,6 +68,10 @@ app:
         permission_group_admin_user: 'Administrator'
         permission_group_role: 'Roles'
         permission_group_dashboard: 'Dashboard'
+        my_interests: 'My Interests'
+        no_interests: 'You are not following any events yet.'
+        no_upcoming_dates: 'No upcoming dates'
+        remove_interest: 'Remove'
     permission:
         event_index: 'Browse events'
         event_show: 'View event'
