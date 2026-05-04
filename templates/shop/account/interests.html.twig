@@ -1,0 +1,6 @@
+{% extends '@SyliusShop/account/common/index.html.twig' %}
+
+{% set prefixes = ['sylius_shop.account.interests.index'] %}
+{% set attrs = { interests: interests } %}
+
+{% block title %}{{ 'app.ui.my_interests'|trans }} | {{ parent() }}{% endblock %}

@@ -1,0 +1,47 @@
+<div class="ui segment">
+    <div class="ui header">
+        <h2>{{ 'app.ui.my_interests'|trans }}</h2>
+    </div>
+
+    {% if interests is empty %}
+        <p class="text-muted">{{ 'app.ui.no_interests'|trans }}</p>
+    {% else %}
+        <div class="ui divided list">
+            {% for interest in interests %}
+                {% set product = interest.product %}
+                {% set nextVariant = null %}
+                {% for variant in product.variants %}
+                    {% if variant.startsAt is not null and variant.startsAt > date() %}
+                        {% if nextVariant is null or variant.startsAt < nextVariant.startsAt %}
+                            {% set nextVariant = variant %}
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+                <div class="item" style="padding: 1rem 0; display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <strong>
+                            <a href="{{ path('sylius_shop_product_show', {slug: product.slug}) }}">
+                                {{ product.name }}
+                            </a>
+                        </strong>
+                        <div class="description text-muted">
+                            {% if product.city is not null %}
+                                {{ product.city.name }} &mdash;
+                            {% endif %}
+                            {% if nextVariant is not null %}
+                                {{ nextVariant.startsAt|date('d.m.Y H:i') }}
+                            {% else %}
+                                {{ 'app.ui.no_upcoming_dates'|trans }}
+                            {% endif %}
+                        </div>
+                    </div>
+                    <form method="POST" action="{{ path('app_shop_interest_toggle', {_locale: app.request.locale, productId: product.id}) }}">
+                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                            ✕ {{ 'app.ui.remove_interest'|trans }}
+                        </button>
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
