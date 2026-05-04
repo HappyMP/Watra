@@ -11,3 +11,16 @@ sylius_twig_hooks:
             booking_details:
                 template: 'shop/order/thank_you/booking_details.html.twig'
                 priority: 150
+
+        'sylius_shop.product.show.content.info.summary':
+            interest_button:
+                template: 'shop/product/show/interest_button.html.twig'
+                priority: 50
+
+        'sylius_shop.account.interests.index.content':
+            menu:
+                template: '@SyliusShop/account/common/content/menu.html.twig'
+                priority: 100
+            main:
+                template: 'shop/account/interests/main.html.twig'
+                priority: 0
