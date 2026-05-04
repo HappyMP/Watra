@@ -190,17 +190,26 @@ Odhaczamy taski sukcesywnie w kolejnych sesjach. Status fazy: `[ ]` w toku / `[x
 
 ---
 
-## [ ] Faza 8 — Custom encja Interest + frontend "Zainteresowany" — 4-5h
+## [x] Faza 8 — Custom encja Interest + frontend "Zainteresowany" — 4-5h
 **Cel:** zalogowany customer może oznaczyć wydarzenie jako "zainteresowany" bez bookingu.
 
-- [ ] 8.1 — Stworzyć `App\Entity\Customer\Interest` (customer → Customer, product → Product, createdAt) z UNIQUE (customer, product)
-- [ ] 8.2 — Migracja
-- [ ] 8.3 — Repository `InterestRepository::findByCustomer()`, `existsForCustomerAndProduct()`
-- [ ] 8.4 — Service `App\Service\InterestService::toggle(Customer $c, Product $p): bool`
-- [ ] 8.5 — Live Component `InterestButton` (Symfony UX): ikonka serca, click toggle, optimistic UI
-- [ ] 8.6 — Wstawienie komponentu w `product_show.html.twig` (Twig Hook na `sylius_shop.product.show.main`)
-- [ ] 8.7 — Sekcja `/account/interests` — lista wydarzeń customer'a oznaczonych jako interest
-- [ ] 8.8 — Smoke test: gość klika serce → redirect na login; zalogowany → toggle działa
+- [x] 8.1 — Stworzyć `App\Entity\Customer\Interest` (customer → Customer, product → Product, createdAt) z UNIQUE (customer, product)
+- [x] 8.2 — Migracja
+- [x] 8.3 — Repository `InterestRepository::findByCustomer()`, `findOneByCustomerAndProduct()`, `countByProduct()`
+- [x] 8.4 — Service `App\Service\InterestService::toggle(Customer $c, Product $p): bool`
+- [x] 8.5 — Live Component `InterestButton` (Symfony UX): ikonka serca, click toggle, route: `sylius_shop_live_component`
+- [x] 8.6 — Wstawienie komponentu via Twig Hook `sylius_shop.product.show.content.info.summary` (context via `hookable_metadata.context.product`)
+- [x] 8.7 — Sekcja `/account/interests` — lista wydarzeń customer'a oznaczonych jako interest
+- [x] 8.8 — Smoke test: gość widzi tooltip z linkiem do logowania; zalogowany → toggle działa (live#action)
+
+> **Uwagi po realizacji:**
+> - Live Component: `symfony/ux-live-component` dostępny transitively przez Sylius — brak potrzeby dodawania bezpośredniej zależności
+> - Account page: extends `@SyliusShop/account/common/index.html.twig` + Twig Hooks `sylius_shop.account.interests.index.content`
+> - Account menu: EventListener na `sylius.menu.shop.account` z metodą `addInterestsMenuItem()`
+> - Route locale prefix: `/{_locale}/account/interests` z requirement `[a-z]{2}_[A-Z]{2}`
+> - Live Component route: musi być `route: 'sylius_shop_live_component'` (domyślny `ux_live_component` nie istnieje w Sylius)
+> - Twig Hook context: zmienne dostępne przez `hookable_metadata.context.product`, nie bezpośrednio
+> - Twig Hooks wyłączone w testach: `add_review` (dwa miejsca) i `associations` — pre-existing Sylius bug (empty slug w test env)
 
 **DoD:** customer może dodać/usunąć interest, widzi listę swoich w `/account/interests`.
 
