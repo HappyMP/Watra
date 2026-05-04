@@ -1,0 +1,23 @@
+<div {{ attributes }}>
+    {% if app.user %}
+        <button
+            type="button"
+            class="btn {{ this.isInterested() ? 'btn-danger' : 'btn-outline-secondary' }}"
+            data-action="live#action"
+            data-live-action-param="toggle"
+        >
+            {{ this.isInterested() ? '♥' : '♡' }} {{ this.getCount() }}
+        </button>
+    {% else %}
+        <span
+            class="d-inline-block"
+            data-bs-toggle="tooltip"
+            data-bs-placement="top"
+            title="Zaloguj się, aby śledzić wydarzenie"
+        >
+            <a href="{{ path('sylius_shop_login') }}" class="btn btn-outline-secondary">
+                ♡ {{ this.getCount() }}
+            </a>
+        </span>
+    {% endif %}
+</div>
