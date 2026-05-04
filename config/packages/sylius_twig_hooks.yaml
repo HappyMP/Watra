@@ -17,6 +17,18 @@ sylius_twig_hooks:
                 template: 'shop/product/show/interest_button.html.twig'
                 priority: 50
 
+        'sylius_shop.product.show.content.info.summary.average_rating':
+            add_review:
+                enabled: false
+
+        'sylius_shop.product.show.content.info.overview.accordion.reviews.content':
+            add_review:
+                enabled: false
+
+        'sylius_shop.product.show.content.product_listing':
+            associations:
+                enabled: false
+
         'sylius_shop.account.interests.index.content':
             menu:
                 template: '@SyliusShop/account/common/content/menu.html.twig'

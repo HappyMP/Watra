@@ -16,7 +16,7 @@ use Symfony\UX\LiveComponent\Attribute\LiveAction;
 use Symfony\UX\LiveComponent\Attribute\LiveProp;
 use Symfony\UX\LiveComponent\DefaultActionTrait;
 
-#[AsLiveComponent('InterestButton')]
+#[AsLiveComponent('InterestButton', route: 'sylius_shop_live_component')]
 final class InterestButton
 {
     use DefaultActionTrait;
