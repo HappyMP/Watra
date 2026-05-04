@@ -1,0 +1,12 @@
+{% set order = hookable_metadata.context.order %}
+
+<div class="text-center mb-4">
+    <div class="display-1 mb-3">✅</div>
+    <h1 class="h2 text-success fw-bold">Rezerwacja potwierdzona!</h1>
+    <p class="text-muted fs-5">
+        Numer rezerwacji: <strong>#{{ order.number }}</strong>
+    </p>
+    <p class="text-muted">
+        Szczegóły zostały wysłane na adres <strong>{{ order.customer.email }}</strong>
+    </p>
+</div>

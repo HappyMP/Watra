@@ -1,0 +1,13 @@
+sylius_twig_hooks:
+    hooks:
+        'sylius_shop.order.thank_you.content':
+            header:
+                enabled: false
+            payment_instruction:
+                enabled: false
+            booking_banner:
+                template: 'shop/order/thank_you/booking_banner.html.twig'
+                priority: 200
+            booking_details:
+                template: 'shop/order/thank_you/booking_details.html.twig'
+                priority: 150

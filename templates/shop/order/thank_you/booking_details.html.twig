@@ -1,0 +1,38 @@
+{% set order = hookable_metadata.context.order %}
+
+<div class="row justify-content-center mb-5">
+    <div class="col-lg-8">
+        <h3 class="h5 mb-3 text-center">Twoje wydarzenia</h3>
+        {% for item in order.items %}
+            {% set variant = item.variant %}
+            <div class="card mb-3 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title mb-1">{{ item.productName }}</h5>
+                    <p class="text-muted small mb-2">{{ item.variantName }}</p>
+                    <div class="d-flex flex-wrap gap-3 fs-6">
+                        {% if variant.startsAt %}
+                            <span>
+                                📅 {{ variant.startsAt|date('d.m.Y') }}
+                                {% if variant.endsAt %}
+                                    &nbsp;{{ variant.startsAt|date('H:i') }}–{{ variant.endsAt|date('H:i') }}
+                                {% endif %}
+                            </span>
+                        {% endif %}
+                        {% set venue = variant.venue ?? null %}
+                        {% if venue %}
+                            <span>📍 {{ venue.name }}</span>
+                        {% endif %}
+                        <span>🎟 Liczba miejsc: {{ item.quantity }}</span>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+
+        <div class="text-center mt-4">
+            <a href="{{ path('sylius_shop_account_order_index') }}"
+               class="btn btn-outline-primary">
+                Moje rezerwacje
+            </a>
+        </div>
+    </div>
+</div>
