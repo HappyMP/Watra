@@ -88,6 +88,8 @@ sylius_fixtures:
                                 color: '#007bff'
                                 contact_email: 'kontakt@watra.pl'
                                 contact_phone_number: '+48 22 000 00 00'
+                                skipping_shipping_step_allowed: true
+                                skipping_payment_step_allowed: true
                                 shop_billing_data:
                                     company: 'WATRA'
                                     tax_id: '0000000000'

@@ -9,7 +9,10 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Sylius\Bundle\ProductBundle\Form\Type\ProductVariantType;
+use Sylius\Component\Core\Model\ProductVariantInterface;
 
 final class ProductVariantTypeExtension extends AbstractTypeExtension
 {
@@ -33,6 +36,14 @@ final class ProductVariantTypeExtension extends AbstractTypeExtension
                 'required' => false,
                 'choice_label' => fn (Venue $venue): string => $venue->getName(),
             ]);
+
+        // WATRA events are never physically shipped
+        $builder->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event): void {
+            $variant = $event->getData();
+            if ($variant instanceof ProductVariantInterface) {
+                $variant->setShippingRequired(false);
+            }
+        });
     }
 
     public static function getExtendedTypes(): iterable
