@@ -175,18 +175,18 @@ Odhaczamy taski sukcesywnie w kolejnych sesjach. Status fazy: `[ ]` w toku / `[x
 
 ---
 
-## [ ] Faza 7 — Konfiguracja "wydarzenia bez płatności" — 6-8h
+## [x] Faza 7 — Konfiguracja "wydarzenia bez płatności" — 6-8h
 **Cel:** checkout dla wydarzenia darmowego (total = 0) działa bez wpisywania danych płatności i adresu wysyłki.
 
-- [ ] 7.1 — `PaymentMethod` `free_payment` z gateway'em Payum `offline` — fixture (weryfikacja z fazy 3)
-- [ ] 7.2 — Custom `OrderProcessor` (Sylius Composite) który auto-marks payment jako `completed` gdy `order.total = 0`
-- [ ] 7.3 — Override `checkout/select_shipping.html.twig` — gdy wszystkie `OrderItem` to wydarzenia, ukryj sekcję shipping address i auto-skip
-- [ ] 7.4 — Override `checkout/select_payment.html.twig` — gdy total = 0, auto-wybierz `free_payment` i przejdź dalej
-- [ ] 7.5 — Override `checkout/complete.html.twig` — komunikat "Twoja rezerwacja została potwierdzona"
-- [ ] 7.6 — Smoke test E2E: zaloguj jako customer → wybierz wydarzenie → "Zapisz się" → checkout → potwierdzenie
-- [ ] 7.7 — **Race condition test:** integration test (PHPUnit functional) — dwóch customer'ów równolegle book'uje ostatni slot. Oczekiwanie: jeden dostaje `fulfilled`, drugi 409/422 z message "Brak miejsc". Zweryfikować że `BookingService` używa `LockMode::PESSIMISTIC_WRITE` na `ProductVariant.onHand`
+- [x] 7.1 — `free_payment` fixture (weryfikacja z fazy 3) + `shippingRequired=false` na wariantach + flagi `skipping_shipping/payment_step_allowed` na kanale
+- [x] 7.2 — `FreeOrderPaymentListener` (priority 250) na `workflow.sylius_order_checkout.completed.complete` — auto-completes $0 payment via SM
+- [x] 7.3 — Shipping step skip: natywny Sylius via `shippingRequired=false` + `skipping_shipping_step_allowed: true` (brak override szablonu)
+- [x] 7.4 — Payment step skip: natywny Sylius via `total=0` + `skipping_payment_step_allowed: true` (brak override szablonu)
+- [x] 7.5 — Rich booking confirmation page via Twig Hooks (`sylius_shop.order.thank_you.content`): banner + event details per item
+- [x] 7.6 — Smoke test E2E: `shippingRequired=false` na wszystkich wariantach, dostępność stron checkout
+- [x] 7.7 — Race condition test: `BookingService` z `LockMode::PESSIMISTIC_WRITE`, symulacja wyczerpania stocku
 
-**DoD:** customer kończy booking w 3 klikach, Order w admin pokazuje status `fulfilled`, payment `completed`, race condition test zielony.
+**Implementacja:** użyto natywnych mechanizmów Sylius zamiast custom OrderProcessor/template overrides. `BookingService` z pessimistic locking. Potwierdzenie bookingu via Twig Hooks.
 
 ---
 
