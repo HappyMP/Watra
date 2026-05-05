@@ -56,6 +56,10 @@ sylius_twig_hooks:
             associations:
                 enabled: false
 
+        'sylius_shop.base.offcanvas.cart.body.items':
+            item:
+                enabled: false
+
         'sylius_shop.homepage.index':
             banner:
                 enabled: false

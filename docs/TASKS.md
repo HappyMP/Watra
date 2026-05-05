@@ -215,21 +215,30 @@ Odhaczamy taski sukcesywnie w kolejnych sesjach. Status fazy: `[ ]` w toku / `[x
 
 ---
 
-## [ ] Faza 9 — Frontend shop: homepage, lista wydarzeń, strona wydarzenia — 12-16h
+## [x] Faza 9A — Frontend shop: homepage, EventCard, strona wydarzenia (podzielona z 9B)
 **Cel:** publiczny frontend WATRY z kartami wydarzeń, filtrami i szczegółami.
 
-- [ ] 9.1 — Theme `WatraShop` w `themes/WatraShop/` z plikami nadpisującymi `SyliusShopBundle`
-- [ ] 9.2 — `assets/shop/` — Stimulus controllers: `datepicker_controller.js`, `map_controller.js`, `tag_selector_controller.js`
-- [ ] 9.3 — Custom `HomeController` w `src/Controller/Shop/` — pobiera 3 listy: nadchodzące, polecane, w Krakowie
-- [ ] 9.4 — Template `templates/shop/home/index.html.twig` z hero + 3 sekcje kart wydarzeń
-- [ ] 9.5 — Komponent Twig `EventCard` (re-używalny) — zdjęcie, tytuł, najbliższy termin, miasto, tagi, "Zainteresowany" toggle
-- [ ] 9.6 — Lista wydarzeń `/wydarzenia` — Sylius'owy index taxon-product LUB custom controller
-- [ ] 9.7 — Live Component `EventListFilters`: filtry city (select), tags (multi-checkbox), date range (from/to), search input z debounce 300ms
-- [ ] 9.8 — Override `product/show.html.twig`: nazwa, opis, lista terminów (variantów) z capacity i przyciskiem "Zapisz się" per termin, mapa Leaflet, "Zainteresowany"
-- [ ] 9.9 — Strona "Moje wydarzenia" w `/account/orders` — filter na orders gdzie items są wydarzeniami, ładny widok karty
-- [ ] 9.10 — Sekcja `/account/interests` (z fazy 8.7 — integracja w nawigacji konta)
-- [ ] 9.11 — Footer + nav: linki do `/regulamin`, `/polityka-prywatnosci` (proste statyczne Twig)
-- [ ] 9.12 — Responsive smoke test: 375px, 768px, 1280px
+- [x] 9.3 — Twig Hooks na `sylius_shop.homepage.index` — hero + spotlight + city tabs (brak custom HomeController)
+- [x] 9.4 — Templates: hero, HomepageSpotlight, HomepageCity
+- [x] 9.5 — Komponent Twig `EventCard` — gradient/zdjęcie, tytuł, termin, miasto, cena, "Zainteresowany"
+- [x] 9.8 — Override `product/show`: ciemny hero + opis po lewej + terminy w sidebarze po prawej
+- [x] 9.11 — Statyczne strony: `/regulamin`, `/polityka-prywatnosci`
+- [ ] 9.1 — Theme WatraShop (9B)
+- [ ] 9.2 — Stimulus controllers: datepicker, map, tag_selector (9B)
+- [ ] 9.6 — Lista wydarzeń `/wydarzenia` (9B)
+- [ ] 9.7 — Live Component `EventListFilters` (9B)
+- [ ] 9.9 — Strona "Moje wydarzenia" w `/account/orders` (9B)
+- [ ] 9.12 — Responsive smoke test (9B)
+
+> **Uwagi po realizacji (9A):**
+> - Homepage: Twig Hooks na `sylius_shop.homepage.index` — brak custom HomeController
+> - EventCard: `#[AsTwigComponent]` z `ChannelContextInterface` dla ceny
+> - ProductRepository: custom DQL z GROUP BY + MIN(v.startsAt) (PostgreSQL nie przyjmuje DISTINCT + ORDER BY na kolumnie spoza SELECT)
+> - City translations: `city.name` niedostępne bezpośrednio w DQL — wymaga JOIN na `city.translations`
+> - Per-variant add-to-cart: `CartController::addVariant` GET → redirect do checkout
+> - CSS tabs na homepage: radio + label trick, zero JS
+> - Twig Hooks wyłączone w testach (pre-existing Sylius bug): add_review (2x), associations, offcanvas cart items
+> - Faza 9B: mapa Leaflet, EventListFilters Live Component, account orders, responsive test
 
 **DoD:** publiczny frontend działa end-to-end, można przeglądać i filtrować wydarzenia, klikać "Zapisz się" i "Zainteresowany".
 
