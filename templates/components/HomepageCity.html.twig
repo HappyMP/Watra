@@ -1,0 +1,47 @@
+{% set tabs = [
+    { id: 'krakow',   label: 'Kraków' },
+    { id: 'warszawa', label: 'Warszawa' },
+    { id: 'online',   label: '🌐 Online' },
+] %}
+
+<section class="container py-5">
+  <h2 class="h4 fw-bold mb-4">{{ 'app.ui.events_by_city'|trans }}</h2>
+
+  {# CSS-only tabs: hidden radios control which panel is visible #}
+  {% for tab in tabs %}
+    <input type="radio" name="city-tab" id="tab-{{ tab.id }}" class="d-none"
+           {{ loop.first ? 'checked' : '' }}>
+  {% endfor %}
+
+  <div class="mb-4 d-flex gap-2">
+    {% for tab in tabs %}
+      <label for="tab-{{ tab.id }}" class="btn btn-sm btn-outline-secondary" style="cursor:pointer;">
+        {{ tab.label }}
+      </label>
+    {% endfor %}
+  </div>
+
+  <style>
+    {% for tab in tabs %}
+    #tab-{{ tab.id }}:checked ~ .city-panels #panel-{{ tab.id }} { display: block; }
+    #tab-{{ tab.id }}:checked ~ .mb-4 label[for="tab-{{ tab.id }}"] { background:#4f46e5; color:white; border-color:#4f46e5; }
+    {% endfor %}
+    .city-panels > div { display: none; }
+  </style>
+
+  <div class="city-panels">
+    {% for tab in tabs %}
+      <div id="panel-{{ tab.id }}">
+        <div class="row g-3">
+          {% for product in eventsByCity[tab.id] %}
+            <div class="col-12 col-sm-6 col-lg-3">
+              {{ component('EventCard', { product: product }) }}
+            </div>
+          {% else %}
+            <p class="text-muted col-12">{{ 'app.ui.no_events_in_city'|trans }}</p>
+          {% endfor %}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</section>

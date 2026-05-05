@@ -44,6 +44,9 @@ sylius_twig_hooks:
             watra_spotlight:
                 component: 'HomepageSpotlight'
                 priority: 200
+            watra_city:
+                component: 'HomepageCity'
+                priority: 100
 
         'sylius_shop.account.interests.index.content':
             menu:
