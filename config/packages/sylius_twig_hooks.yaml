@@ -13,9 +13,29 @@ sylius_twig_hooks:
                 priority: 150
 
         'sylius_shop.product.show.content.info.summary':
+            header:
+                enabled: false
+            prices:
+                enabled: false
+            catalog_promotions:
+                enabled: false
+            short_description:
+                enabled: false
+            add_to_cart:
+                enabled: false
             interest_button:
                 template: 'shop/product/show/interest_button.html.twig'
                 priority: 50
+            watra_terms:
+                template: 'shop/product/show/watra_terms.html.twig'
+                priority: 200
+
+        'sylius_shop.product.show.content.info.overview':
+            accordion:
+                enabled: false
+            watra_description:
+                template: 'shop/product/show/watra_description.html.twig'
+                priority: 100
 
         'sylius_shop.product.show.content.info.summary.average_rating':
             add_review:

@@ -1,0 +1,10 @@
+{% set product = hookable_metadata.context.product %}
+
+<div class="p-4">
+  <h2 class="h5 fw-bold mb-3">{{ 'app.ui.about_event'|trans }}</h2>
+  {% if product.description %}
+    <div class="text-muted lh-lg">{{ product.description|raw }}</div>
+  {% else %}
+    <p class="text-muted fst-italic">{{ 'app.ui.no_description'|trans }}</p>
+  {% endif %}
+</div>

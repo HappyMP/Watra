@@ -1,0 +1,44 @@
+{% set product = hookable_metadata.context.product %}
+{% set now = date() %}
+
+{% set upcomingVariants = [] %}
+{% for variant in product.variants %}
+  {% if variant.enabled and variant.startsAt is not null and variant.startsAt > now %}
+    {% set upcomingVariants = upcomingVariants|merge([variant]) %}
+  {% endif %}
+{% endfor %}
+
+<div class="p-4">
+  <h2 class="h5 fw-bold mb-3">📅 {{ 'app.ui.choose_date'|trans }}</h2>
+
+  {% if upcomingVariants is empty %}
+    <p class="text-muted">{{ 'app.ui.no_upcoming_dates'|trans }}</p>
+  {% else %}
+    <div class="d-flex flex-column gap-3">
+      {% for variant in upcomingVariants %}
+        <div class="border rounded-3 p-3 {{ loop.first ? 'border-primary bg-primary bg-opacity-10' : '' }}">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <div>
+              <div class="fw-semibold">{{ variant.startsAt|date('D, d M Y', 'Europe/Warsaw') }}</div>
+              <div class="text-muted small">
+                {{ variant.startsAt|date('H:i', 'Europe/Warsaw') }}
+                {% if variant.endsAt %}– {{ variant.endsAt|date('H:i', 'Europe/Warsaw') }}{% endif %}
+              </div>
+            </div>
+            {% set pricing = null %}
+            {% for channelPricing in variant.channelPricings %}
+              {% set pricing = channelPricing %}
+            {% endfor %}
+            {% if pricing and pricing.price %}
+              <span class="fw-bold text-success fs-5">{{ (pricing.price / 100)|number_format(0, ',', ' ') }} zł</span>
+            {% endif %}
+          </div>
+          <a href="{{ path('app_shop_cart_add_variant', {_locale: app.request.locale, variantCode: variant.code}) }}"
+             class="btn w-100 {{ loop.first ? 'btn-primary' : 'btn-outline-secondary' }} btn-sm">
+            {{ 'app.ui.book_now'|trans }} →
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+</div>
