@@ -1,0 +1,52 @@
+{% set nextVariant = this.nextVariant %}
+{% set minPrice = this.minPrice %}
+{% set bgUrl = this.backgroundImageUrl %}
+{% set isLarge = size == 'large' %}
+
+<a href="{{ path('sylius_shop_product_show', {_locale: app.request.locale, slug: product.slug}) }}"
+   class="text-decoration-none d-block h-100">
+  <div class="event-card position-relative overflow-hidden rounded-3 h-100"
+       style="min-height: {{ isLarge ? '320px' : '200px' }};
+              background: {% if bgUrl %}url('{{ bgUrl }}') center/cover no-repeat, {% endif %}linear-gradient(135deg, #1e1b4b 0%, #312e81 60%, #4c1d95 100%);">
+
+    {# Dark overlay #}
+    <div class="position-absolute top-0 start-0 w-100 h-100"
+         style="background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.3) 60%, rgba(0,0,0,0.1) 100%);">
+    </div>
+
+    {# Type badge + interest button #}
+    <div class="position-absolute top-0 start-0 w-100 d-flex justify-content-between align-items-start p-2">
+      <span class="badge rounded-pill" style="background:rgba(255,255,255,0.2);font-size:0.7rem;">
+        {{ ('app.enum.event_type.' ~ product.eventType.value)|trans }}
+      </span>
+      {{ component('InterestButton', { productId: product.id }) }}
+    </div>
+
+    {# Content at bottom #}
+    <div class="position-absolute bottom-0 start-0 w-100 p-3 text-white">
+      {% if nextVariant %}
+        <div class="small mb-1" style="opacity:0.8;">
+          🗓 {{ nextVariant.startsAt|date('d.m.Y H:i') }}
+          {% if product.isOnline %}
+            &nbsp;·&nbsp; 🌐 Online
+          {% elseif product.city %}
+            &nbsp;·&nbsp; 📍 {{ product.city.name }}
+          {% endif %}
+        </div>
+      {% else %}
+        <div class="small mb-1" style="opacity:0.6;">{{ 'app.ui.no_upcoming_dates'|trans }}</div>
+      {% endif %}
+
+      <div class="fw-bold {{ isLarge ? 'fs-5' : 'fs-6' }} lh-sm mb-2">{{ product.name }}</div>
+
+      <div class="d-flex justify-content-between align-items-center">
+        {% if minPrice %}
+          <span class="fw-bold" style="color:#86efac;">{{ (minPrice / 100)|number_format(0, ',', ' ') }} zł</span>
+        {% else %}
+          <span style="color:#86efac;">{{ 'app.ui.free'|trans }}</span>
+        {% endif %}
+        <span class="btn btn-sm btn-light py-1 px-2" style="font-size:0.75rem;">Zobacz →</span>
+      </div>
+    </div>
+  </div>
+</a>
