@@ -85,6 +85,8 @@ services:
         tags:
             - { name: kernel.event_listener, event: 'sylius.menu.shop.account', method: addInterestsMenuItem }
 
+    App\Repository\Product\ProductRepository: ~
+
     App\Fixture\WatraEventFixture:
         arguments:
             $em: '@doctrine.orm.entity_manager'
