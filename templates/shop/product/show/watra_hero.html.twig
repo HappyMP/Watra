@@ -1,0 +1,30 @@
+{% set product = hookable_metadata.context.product %}
+{% set bgUrl = null %}
+{% if product.images is not empty %}
+  {% set bgUrl = '/media/image/' ~ product.images.first().path %}
+{% endif %}
+
+<div class="text-white py-5"
+     style="background: {% if bgUrl %}url('{{ bgUrl }}') center/cover no-repeat, {% endif %}linear-gradient(135deg, #1e1b4b 0%, #312e81 60%, #4c1d95 100%); position:relative;">
+  <div class="position-absolute top-0 start-0 w-100 h-100"
+       style="background:rgba(0,0,0,0.5);"></div>
+  <div class="container position-relative">
+    <div class="d-flex justify-content-between align-items-start mb-2">
+      <span class="badge rounded-pill" style="background:rgba(255,255,255,0.2);">
+        {{ ('app.enum.event_type.' ~ product.eventType.value)|trans }}
+      </span>
+      {{ component('InterestButton', { productId: product.id }) }}
+    </div>
+    <h1 class="display-6 fw-bold mb-2">{{ product.name }}</h1>
+    <div class="d-flex gap-3 flex-wrap" style="opacity:0.85;font-size:0.95rem;">
+      {% if product.isOnline %}
+        <span>🌐 Online</span>
+      {% elseif product.city %}
+        <span>📍 {{ product.city.name }}</span>
+      {% endif %}
+      {% if product.defaultVenue %}
+        <span>🏢 {{ product.defaultVenue.name }}</span>
+      {% endif %}
+    </div>
+  </div>
+</div>

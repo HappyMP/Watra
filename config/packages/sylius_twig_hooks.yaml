@@ -25,6 +25,13 @@ sylius_twig_hooks:
             add_review:
                 enabled: false
 
+        'sylius_shop.product.show.content':
+            header:
+                enabled: false
+            watra_hero:
+                template: 'shop/product/show/watra_hero.html.twig'
+                priority: 300
+
         'sylius_shop.product.show.content.product_listing':
             associations:
                 enabled: false
