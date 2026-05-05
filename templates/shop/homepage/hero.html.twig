@@ -1,0 +1,11 @@
+<section class="text-white text-center py-5"
+         style="background: linear-gradient(135deg, #1e1b4b 0%, #312e81 60%, #4c1d95 100%); min-height: 280px; display:flex; align-items:center;">
+  <div class="container">
+    <h1 class="display-5 fw-bold mb-3">{{ 'app.ui.homepage_hero_title'|trans }}</h1>
+    <p class="lead mb-4" style="opacity:0.85;">{{ 'app.ui.homepage_hero_subtitle'|trans }}</p>
+    <a href="{{ path('sylius_shop_product_index', {_locale: app.request.locale, slug: 'wydarzenia'}) }}"
+       class="btn btn-light btn-lg px-4">
+      {{ 'app.ui.homepage_hero_cta'|trans }} →
+    </a>
+  </div>
+</section>
