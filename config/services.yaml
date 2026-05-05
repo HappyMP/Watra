@@ -87,6 +87,14 @@ services:
 
     App\Repository\Product\ProductRepository: ~
 
+    App\Controller\Shop\CartController:
+        arguments:
+            $variantRepository: '@sylius.repository.product_variant'
+            $orderItemFactory: '@sylius.factory.order_item'
+            $orderItemQuantityModifier: '@sylius.modifier.order_item_quantity'
+            $orderModifier: '@sylius.modifier.order'
+        tags: ['controller.service_arguments']
+
     App\Fixture\WatraEventFixture:
         arguments:
             $em: '@doctrine.orm.entity_manager'
