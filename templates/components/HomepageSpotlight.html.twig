@@ -1,0 +1,32 @@
+<section class="container py-5">
+  <h2 class="h4 fw-bold mb-4">{{ 'app.ui.upcoming_events'|trans }}</h2>
+
+  {% if featured is not null %}
+    {# Two-column: large featured on left, small list on right #}
+    <div class="row g-4">
+      <div class="col-12 col-lg-7">
+        {{ component('EventCard', { product: featured, size: 'large' }) }}
+      </div>
+      <div class="col-12 col-lg-5">
+        <div class="d-flex flex-column gap-3 h-100">
+          {% for product in upcoming %}
+            {{ component('EventCard', { product: product }) }}
+          {% else %}
+            <p class="text-muted">{{ 'app.ui.no_upcoming_dates'|trans }}</p>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  {% else %}
+    {# No featured: show upcoming in a grid #}
+    <div class="row g-4">
+      {% for product in upcoming %}
+        <div class="col-12 col-sm-6 col-lg-4">
+          {{ component('EventCard', { product: product }) }}
+        </div>
+      {% else %}
+        <p class="text-muted col-12">{{ 'app.ui.no_upcoming_dates'|trans }}</p>
+      {% endfor %}
+    </div>
+  {% endif %}
+</section>

@@ -41,6 +41,9 @@ sylius_twig_hooks:
             watra_hero:
                 template: 'shop/homepage/hero.html.twig'
                 priority: 300
+            watra_spotlight:
+                component: 'HomepageSpotlight'
+                priority: 200
 
         'sylius_shop.account.interests.index.content':
             menu:
