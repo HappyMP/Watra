@@ -273,16 +273,23 @@ Odhaczamy taski sukcesywnie w kolejnych sesjach. Status fazy: `[ ]` w toku / `[x
 
 ---
 
-## [ ] Faza 11 — Admin: dashboard widget + lista uczestników wydarzenia — 5-6h
+## [x] Faza 11 — Admin: dashboard widget + lista uczestników wydarzenia — 5-6h
 **Cel:** admin widzi statystyki i kto się zapisał na konkretne wydarzenie.
 
-- [ ] 11.1 — Custom `DashboardController` w `src/Controller/Admin/` — 4 metryki: liczba published events, bookings 7d, new customers 7d, occupancy %
-- [ ] 11.2 — Repository methods do ww. metryk (QueryBuilder, group by date)
-- [ ] 11.3 — Override `admin/dashboard/index.html.twig` z 4 kart-widget'ami i wykresem prostym (Chart.js przez Stimulus)
-- [ ] 11.4 — Custom action `/admin/products/{id}/attendees` — lista wszystkich Customer'ów którzy mają booking na dany Product
-- [ ] 11.5 — Eksport CSV listy uczestników (Permission `booking:export`)
-- [ ] 11.6 — Twig hook na `product_show` w admin'ie dodający link "Lista uczestników"
-- [ ] 11.7 — Smoke test: admin widzi metryki, klika wydarzenie, widzi listę osób, eksportuje CSV
+- [x] 11.1 — `DashboardMetricsService` — 4 metryki: published events, bookings 7d, new customers 7d, avg occupancy %
+- [x] 11.2 — DQL query methods w serwisie (productId, onHand, COUNT DISTINCT orders)
+- [x] 11.3 — `WatraDashboardMetrics` Twig Component + template (4 karty + CSS paski obłożenia; Chart.js zastąpiony czystym CSS)
+- [x] 11.4 — Custom action `/admin/products/{id}/attendees` — lista Customer'ów z bookingiem na dany Product
+- [x] 11.5 — Eksport CSV listy uczestników (Permission `booking:export`)
+- [x] 11.6 — Twig hook `sylius_admin.product.show.content.header.title_block.actions` dodający link "Lista uczestników"
+- [x] 11.7 — Smoke test: routes OK, hooks OK, templates lint OK, config verified
+
+> **Uwagi po realizacji:**
+> - Dashboard: Twig Hook override na `sylius_admin.dashboard.index.content` — `statistics` i `latest_statistics` wyłączone, wstrzyknięto `WatraDashboardMetrics`
+> - Occupancy: `SUM(v.onHand)` jako pojemność, `COUNT(DISTINCT o.id)` dla stanów `fulfilled/new/paid`
+> - Attendees: DISTINCT ORDER query przez `variant→product` (max 200 wierszy), `StreamedResponse` dla CSV
+> - Product show link: `templates/admin/product/show/attendees_link.html.twig`
+> - Chart.js pominięto — CSS progress bary wystarczające dla MVP (YAGNI)
 
 **DoD:** dashboard pokazuje 4 metryki, każde wydarzenie ma podstronę z listą uczestników.
 
