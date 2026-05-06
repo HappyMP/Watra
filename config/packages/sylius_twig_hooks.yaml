@@ -88,6 +88,11 @@ sylius_twig_hooks:
                 component: 'WatraDashboardMetrics'
                 priority: 50
 
+        'sylius_admin.product.show.content.header.title_block.actions':
+            watra_attendees:
+                template: 'admin/product/show/attendees_link.html.twig'
+                priority: 50
+
         'sylius_shop.product.index.content.body':
             sidebar:
                 enabled: false

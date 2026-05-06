@@ -52,6 +52,10 @@ final class AdminRoutePermissionMap
         'app_admin_administration_role_update' => Permission::ROLE_MANAGE,
         'app_admin_administration_role_delete' => Permission::ROLE_MANAGE,
 
+        // Attendees per event
+        'app_admin_attendees'     => Permission::ATTENDEE_INDEX,
+        'app_admin_attendees_csv' => Permission::BOOKING_EXPORT,
+
         // Admin Users
         'sylius_admin_admin_user_index'  => Permission::ADMIN_USER_INDEX,
         'sylius_admin_admin_user_create' => Permission::ADMIN_USER_CREATE,
