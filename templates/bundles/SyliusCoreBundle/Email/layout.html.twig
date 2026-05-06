@@ -1,0 +1,45 @@
+{% block body %}
+    {% autoescape false %}
+        <div style="font-family: Arial, sans-serif; background: #f0eefc; padding: 30px 20px; font-size: 15px; color: #333; line-height: 1.6;">
+            <div style="max-width: 600px; margin: 0 auto;">
+
+                <div style="background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%); padding: 28px 30px; text-align: center; border-radius: 8px 8px 0 0;">
+                    {% if sylius_bundle_loaded_checker('SyliusShopBundle') %}
+                        {% set homeUrl = sylius_channel_url(path('sylius_shop_homepage', {'_locale': localeCode}), channel) %}
+                        <a href="{{ homeUrl|raw }}" style="text-decoration: none; display: inline-flex; align-items: center; gap: 14px;">
+                    {% else %}
+                        <div style="display: inline-flex; align-items: center; gap: 14px;">
+                    {% endif %}
+
+                    <svg width="32" height="38" viewBox="0 0 36 42" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink: 0;">
+                        <path d="M18 2C18 2 8 12 8 22C8 27.5 12.5 32 18 32C23.5 32 28 27.5 28 22C28 12 18 2 18 2Z" fill="#a78bfa"/>
+                        <path d="M18 16C18 16 13 21 13 25C13 27.8 15.2 30 18 30C20.8 30 23 27.8 23 25C23 21 18 16 18 16Z" fill="#7c3aed"/>
+                        <path d="M14 30 Q18 36 22 30 Q20 40 18 42 Q16 40 14 30Z" fill="#4c1d95" opacity="0.7"/>
+                    </svg>
+                    <div style="text-align: left;">
+                        <div style="font-size: 26px; font-weight: 900; color: #fff; letter-spacing: 4px; line-height: 1;">WATRA</div>
+                        <div style="font-size: 9px; color: #a78bfa; letter-spacing: 3px; text-transform: uppercase; margin-top: 3px;">Platforma wydarzen</div>
+                    </div>
+
+                    {% if sylius_bundle_loaded_checker('SyliusShopBundle') %}
+                        </a>
+                    {% else %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div style="background: #fff; padding: 36px 40px;">
+                    {% block content %}{% endblock %}
+                </div>
+
+                <div style="background: #f5f3ff; border-top: 1px solid #e5e0ff; padding: 18px 30px; text-align: center; border-radius: 0 0 8px 8px;">
+                    <div style="font-size: 12px; font-weight: bold; color: #7c3aed; margin-bottom: 4px;">WATRA</div>
+                    <div style="font-size: 11px; color: #9ca3af;">
+                        &copy; 2026 WATRA &nbsp;&middot;&nbsp; kontakt@watra.pl &nbsp;&middot;&nbsp; watra.pl
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    {% endautoescape %}
+{% endblock %}
