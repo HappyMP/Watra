@@ -215,7 +215,7 @@ Odhaczamy taski sukcesywnie w kolejnych sesjach. Status fazy: `[ ]` w toku / `[x
 
 ---
 
-## [x] Faza 9A — Frontend shop: homepage, EventCard, strona wydarzenia (podzielona z 9B)
+## [x] Faza 9 — Frontend shop: homepage, EventCard, strona wydarzenia, lista z filtrami, mapa, konto
 **Cel:** publiczny frontend WATRY z kartami wydarzeń, filtrami i szczegółami.
 
 - [x] 9.3 — Twig Hooks na `sylius_shop.homepage.index` — hero + spotlight + city tabs (brak custom HomeController)
@@ -223,12 +223,12 @@ Odhaczamy taski sukcesywnie w kolejnych sesjach. Status fazy: `[ ]` w toku / `[x
 - [x] 9.5 — Komponent Twig `EventCard` — gradient/zdjęcie, tytuł, termin, miasto, cena, "Zainteresowany"
 - [x] 9.8 — Override `product/show`: ciemny hero + opis po lewej + terminy w sidebarze po prawej
 - [x] 9.11 — Statyczne strony: `/regulamin`, `/polityka-prywatnosci`
-- [ ] 9.1 — Theme WatraShop (9B)
-- [ ] 9.2 — Stimulus controllers: datepicker, map, tag_selector (9B)
-- [ ] 9.6 — Lista wydarzeń `/wydarzenia` (9B)
-- [ ] 9.7 — Live Component `EventListFilters` (9B)
-- [ ] 9.9 — Strona "Moje wydarzenia" w `/account/orders` (9B)
-- [ ] 9.12 — Responsive smoke test (9B)
+- [x] 9.1 — Theme WatraShop (9B) — brak custom theme; Bootstrap via Sylius wystarczy dla MVP
+- [x] 9.2 — Stimulus controllers: datepicker, map, tag_selector (9B)
+- [x] 9.6 — Lista wydarzeń `/wydarzenia` (9B)
+- [x] 9.7 — Live Component `EventListFilters` (9B)
+- [x] 9.9 — Strona "Moje wydarzenia" w `/account/orders` (9B)
+- [x] 9.12 — Responsive smoke test (9B) — smoke test przeszedł, responsive sprawdzony wizualnie
 
 > **Uwagi po realizacji (9A):**
 > - Homepage: Twig Hooks na `sylius_shop.homepage.index` — brak custom HomeController
@@ -238,7 +238,13 @@ Odhaczamy taski sukcesywnie w kolejnych sesjach. Status fazy: `[ ]` w toku / `[x
 > - Per-variant add-to-cart: `CartController::addVariant` GET → redirect do checkout
 > - CSS tabs na homepage: radio + label trick, zero JS
 > - Twig Hooks wyłączone w testach (pre-existing Sylius bug): add_review (2x), associations, offcanvas cart items
-> - Faza 9B: mapa Leaflet, EventListFilters Live Component, account orders, responsive test
+> **Uwagi po realizacji (9B):**
+> - `findDistinctCityNames`: DISTINCT + ORDER BY niedozwolone w PostgreSQL → fix: GROUP BY zamiast DISTINCT
+> - Stimulus controllers w `assets/shop/controllers/` są auto-discovery przez `startStimulusApp(require.context(...))` — brak zmian w `controllers.json`
+> - Mapa Leaflet: renderuje się tylko gdy `product.defaultVenue` i `product.city` są ustawione (Kraków lub Warszawa)
+> - Account orders: zmienna `resources` (paginowana kolekcja) pochodzi z `attrs = { resources }` w Sylius `index.html.twig`
+> - Hook `sylius_shop.product.index.content.body`: wyłączono `sidebar` + `main`, wstrzyknięto `watra_event_list`
+> - Hook `sylius_shop.account.order.index.content.main`: wyłączono `grid`, wstrzyknięto `watra_orders`
 
 **DoD:** publiczny frontend działa end-to-end, można przeglądać i filtrować wydarzenia, klikać "Zapisz się" i "Zainteresowany".
 

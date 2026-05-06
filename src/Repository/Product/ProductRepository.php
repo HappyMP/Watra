@@ -159,7 +159,7 @@ final class ProductRepository extends ServiceEntityRepository
     public function findDistinctCityNames(string $channelCode, string $locale): array
     {
         $rows = $this->createQueryBuilder('p')
-            ->select('DISTINCT cityTranslation.name AS cityName')
+            ->select('cityTranslation.name AS cityName')
             ->innerJoin('p.channels', 'ch')
             ->innerJoin('p.city', 'city')
             ->innerJoin('city.translations', 'cityTranslation', 'WITH', 'cityTranslation.locale = :locale')
@@ -173,6 +173,7 @@ final class ProductRepository extends ServiceEntityRepository
             ->setParameter('locale', $locale)
             ->setParameter('status', 'published')
             ->setParameter('now', new \DateTimeImmutable())
+            ->addGroupBy('cityTranslation.name')
             ->orderBy('cityTranslation.name', 'ASC')
             ->getQuery()
             ->getScalarResult();
