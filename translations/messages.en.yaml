@@ -130,6 +130,17 @@ app:
             party: 'Party'
             conference: 'Conference'
             other: 'Other'
+    emails:
+        order_confirmation:
+            title: 'Your booking is confirmed!'
+            view_booking: 'View booking'
+            thank_you: 'Thank you — see you at the event!'
+        booking_cancelled:
+            subject: 'Booking cancelled — WATRA'
+            title: 'Your booking has been cancelled'
+            order_number: 'Booking number'
+            apology: 'We apologize for the inconvenience. Contact us at kontakt@watra.pl if you have any questions.'
+            browse_events: 'Browse other events'
     validation:
         starts_at_must_be_before_ends_at: 'Start date must be before end date'
         starts_at_must_be_in_future: 'Start date must be in the future'

@@ -99,6 +99,17 @@ app:
             party: 'Impreza'
             conference: 'Konferencja'
             other: 'Inne'
+    emails:
+        order_confirmation:
+            title: 'Twoja rezerwacja została potwierdzona!'
+            view_booking: 'Zobacz rezerwację'
+            thank_you: 'Dziękujemy za zaufanie — do zobaczenia na wydarzeniu!'
+        booking_cancelled:
+            subject: 'Rezerwacja anulowana — WATRA'
+            title: 'Twoja rezerwacja została anulowana'
+            order_number: 'Numer rezerwacji'
+            apology: 'Przepraszamy za niedogodności. W razie pytań skontaktuj się z nami: kontakt@watra.pl'
+            browse_events: 'Przeglądaj inne wydarzenia'
     validation:
         starts_at_must_be_before_ends_at: 'Data rozpoczęcia musi być wcześniejsza niż data zakończenia'
         starts_at_must_be_in_future: 'Data rozpoczęcia musi być w przyszłości'
