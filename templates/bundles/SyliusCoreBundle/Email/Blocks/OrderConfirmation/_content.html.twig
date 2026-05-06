@@ -1,0 +1,37 @@
+{% set url = sylius_channel_url(path('sylius_shop_account_order_show', {'tokenValue': order.tokenValue}), channel) %}
+
+<div style="text-align: center; margin-bottom: 28px;">
+    <div style="font-size: 22px; font-weight: bold; color: #1e1b4b; margin-bottom: 8px;">
+        {{ 'app.emails.order_confirmation.title'|trans({}, null, localeCode) }}
+    </div>
+    <div style="display: inline-block; border: 1px solid #e5e0ff; padding: 8px 20px; color: #7c3aed; font-size: 26px; border-radius: 6px; margin-top: 8px;">
+        #{{ order.number }}
+    </div>
+</div>
+
+{% for item in order.items %}
+    {% set variant = item.variant %}
+    <div style="border: 1px solid #f0eefc; border-radius: 6px; padding: 16px 20px; margin-bottom: 12px;">
+        <div style="font-size: 16px; font-weight: bold; color: #1e1b4b; margin-bottom: 6px;">
+            {{ item.productName }}
+        </div>
+        <div style="font-size: 13px; color: #6b7280; line-height: 1.6;">
+            {% if variant is not null and variant.startsAt is not null %}
+                📅 {{ variant.startsAt|date('d.m.Y H:i') }}
+            {% endif %}
+            {% if variant is not null and variant.product is not null and variant.product.city is not null %}
+                &nbsp;&middot;&nbsp; 📍 {{ variant.product.city.name }}
+            {% endif %}
+        </div>
+    </div>
+{% endfor %}
+
+<div style="text-align: center; margin: 28px 0;">
+    <a href="{{ url|raw }}" style="display: inline-block; background: linear-gradient(135deg, #1e1b4b, #312e81); color: #fff; padding: 14px 30px; text-decoration: none; border-radius: 6px; font-size: 14px; font-weight: bold;">
+        {{ 'app.emails.order_confirmation.view_booking'|trans({}, null, localeCode) }} &rarr;
+    </a>
+</div>
+
+<div style="text-align: center; color: #6b7280; font-size: 13px;">
+    {{ 'app.emails.order_confirmation.thank_you'|trans({}, null, localeCode) }}
+</div>
