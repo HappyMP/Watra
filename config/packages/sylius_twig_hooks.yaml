@@ -79,6 +79,15 @@ sylius_twig_hooks:
                 component: 'HomepageCity'
                 priority: 100
 
+        'sylius_admin.dashboard.index.content':
+            statistics:
+                enabled: false
+            latest_statistics:
+                enabled: false
+            watra_metrics:
+                component: 'WatraDashboardMetrics'
+                priority: 50
+
         'sylius_shop.product.index.content.body':
             sidebar:
                 enabled: false
