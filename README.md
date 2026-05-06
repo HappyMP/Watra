@@ -23,6 +23,30 @@ make fixtures  # załaduj testowe dane
 
 Otwórz `http://localhost` (shop) lub `http://localhost/admin` (admin).
 
+## Emaile transakcyjne
+
+Wszystkie maile (rejestracja, weryfikacja, reset hasła, potwierdzenie i anulowanie rezerwacji) są wysyłane **asynchronicznie** przez Symfony Messenger (transport: `doctrine`).
+
+### Mailpit — podgląd maili (dev)
+
+Otwórz w przeglądarce: **http://localhost:8025**
+
+### Worker Messenger
+
+Worker musi działać, żeby maile były faktycznie wysyłane. Uruchom go w osobnym terminalu:
+
+```bash
+sudo docker compose -f compose.yaml exec php bin/console messenger:consume async --limit=50
+```
+
+Lub w tle (kontener nie blokuje terminala):
+
+```bash
+sudo docker compose -f compose.yaml exec -d php bin/console messenger:consume async
+```
+
+W produkcji zaleca się supervisord lub systemd do zarządzania workerem.
+
 ## Wymagania
 
 Zweryfikuj środowisko skryptem:
