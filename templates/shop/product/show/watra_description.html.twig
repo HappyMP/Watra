@@ -1,10 +1,27 @@
 {% set product = hookable_metadata.context.product %}
 
 <div class="p-4">
-  <h2 class="h5 fw-bold mb-3">{{ 'app.ui.about_event'|trans }}</h2>
-  {% if product.description %}
-    <div class="text-muted lh-lg">{{ product.description|raw }}</div>
-  {% else %}
-    <p class="text-muted fst-italic">{{ 'app.ui.no_description'|trans }}</p>
-  {% endif %}
+    <h2 class="h5 fw-bold mb-3">{{ 'app.ui.about_event'|trans }}</h2>
+    {% if product.description %}
+        <div class="text-muted lh-lg">{{ product.description|raw }}</div>
+    {% else %}
+        <p class="text-muted fst-italic">{{ 'app.ui.no_description'|trans }}</p>
+    {% endif %}
 </div>
+
+{% if product.defaultVenue and product.city %}
+    {% set cityCoords = {
+        'Kraków':   { lat: 50.0647, lng: 19.9450 },
+        'Warszawa': { lat: 52.2297, lng: 21.0122 }
+    } %}
+    {% if cityCoords[product.city.name] is defined %}
+        {% set coords = cityCoords[product.city.name] %}
+        <div class="px-4 pb-4">
+            <div data-controller="map"
+                 data-map-lat-value="{{ coords.lat }}"
+                 data-map-lng-value="{{ coords.lng }}"
+                 data-map-label-value="{{ product.defaultVenue.name }} — {{ product.defaultVenue.address }}"
+                 style="height: 300px; border-radius: 8px; overflow: hidden;"></div>
+        </div>
+    {% endif %}
+{% endif %}
