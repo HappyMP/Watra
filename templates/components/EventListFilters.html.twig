@@ -1,0 +1,58 @@
+<div {{ attributes }}>
+    <div class="container py-3">
+        {# Filter bar #}
+        <div class="d-flex flex-wrap gap-2 mb-4">
+            <select class="form-select form-select-sm w-auto"
+                    data-model="city"
+                    data-action="live#update">
+                <option value="">{{ 'app.ui.all_cities'|trans }}</option>
+                {% for cityName in availableCities %}
+                    <option value="{{ cityName }}"{{ city == cityName ? ' selected' : '' }}>
+                        {{ cityName }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <select class="form-select form-select-sm w-auto"
+                    data-model="eventType"
+                    data-action="live#update">
+                <option value="">{{ 'app.ui.all_types'|trans }}</option>
+                {% for type in eventTypes %}
+                    <option value="{{ type.value }}"{{ eventType == type.value ? ' selected' : '' }}>
+                        {{ ('app.enum.event_type.' ~ type.value)|trans }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <input type="text"
+                   class="form-control form-control-sm"
+                   style="min-width: 200px;"
+                   placeholder="{{ 'app.ui.search_events'|trans }}"
+                   data-model="norender|search"
+                   data-action="input->live#update:debounce(300)"
+                   value="{{ search }}">
+
+            <input type="date"
+                   class="form-control form-control-sm w-auto"
+                   data-model="dateFrom"
+                   data-action="live#update"
+                   data-controller="datepicker"
+                   value="{{ dateFrom }}">
+        </div>
+
+        {# Results grid #}
+        {% if products is empty %}
+            <div class="text-center text-muted py-5">
+                <p class="fs-5">{{ 'app.ui.no_events_found'|trans }}</p>
+            </div>
+        {% else %}
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                {% for product in products %}
+                    <div class="col">
+                        {{ component('EventCard', { product: product }) }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</div>
