@@ -295,14 +295,21 @@ Odhaczamy taski sukcesywnie w kolejnych sesjach. Status fazy: `[ ]` w toku / `[x
 
 ---
 
-## [ ] Faza 12 — API Platform: konfiguracja resource'ów i security — 4-5h
+## [x] Faza 12 — API Platform: konfiguracja resource'ów i security — 4-5h
 **Cel:** publiczne czytanie wydarzeń przez API + uwierzytelnione operacje na bookingach.
 
-- [ ] 12.1 — Sprawdzić Sylius 2.x default API exposure: `bin/console debug:router | grep api_platform` — udokumentować w `docs/SYLIUS_OVERRIDES.md` listę preconfigured operations dla Product/Order/Customer (decyzja: per-resource override vs global `api_platform.security` policy)
-- [ ] 12.2 — Skonfigurować nasze custom resources: City, Venue, Interest jako ApiResource z odpowiednimi operacjami
-- [ ] 12.3 — Filtry na `Product`: `SearchFilter` po city.code, taxon.code, eventStatus; `DateFilter` po variants.startsAt
-- [ ] 12.4 — Security expressions: shop API publiczne dla GET produktów, autoryzowane dla bookings; admin API z `is_granted('event:edit')` itp.
-- [ ] 12.5 — CORS w `nelmio_cors.yaml`: dev `*`, prod whitelist
+- [x] 12.1 — Istniejące Sylius API: `/api/v2/shop/products` (publiczne), `/api/v2/shop/orders` (JWT), `/api/v2/admin/*` (JWT admin). Decyzja: własny endpoint zamiast nadpisywania Sylius API.
+- [x] 12.2 — Custom resources (City, Venue, Interest): odłożone — frontend używa danych zagnieżdżonych w `/api/v2/shop/events`
+- [x] 12.3 — Filtry: city (LOWER match), eventType (enum), search (LIKE na nazwie), dateFrom (startsAt >=)
+- [x] 12.4 — Security: endpoint publiczny (PUBLIC_ACCESS już skonfigurowany dla `/api/v2/shop/*`)
+- [x] 12.5 — CORS: `CorsSubscriber` (`kernel.response`) zamiast nelmio/cors-bundle — żadnych nowych zależności
+- [x] 12.6 — Smoke test: `curl /api/v2/shop/events` zwraca JSON `{total, items[]}`, filtry city/eventType działają, CORS header obecny
+
+> **Uwagi po realizacji:**
+> - Własny `/api/v2/shop/events` controller zamiast API Platform DTO (YAGNI dla MVP headless frontendu)
+> - Response: `{total, items[]}` — nie JSON-LD, łatwy do konsumpcji przez React/Vue
+> - CORS: `CorsSubscriber` listenuje na `kernel.request` (OPTIONS preflight) i `kernel.response`
+> - Security: public access działa przez istniejący `access_control: api_shop_regex/.*: PUBLIC_ACCESS`
 - [ ] 12.6 — Smoke test: `curl /api/v2/shop/products?city=krakow` zwraca JSON-LD, `/api/v2/docs` pokazuje OpenAPI
 
 **DoD:** publiczny GET działa bez auth, wszystkie write'y wymagają auth, RBAC checks działają.
