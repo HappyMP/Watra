@@ -1,0 +1,64 @@
+<div class="container-xl py-4">
+
+    <div class="row g-3 mb-4">
+        <div class="col-sm-6 col-xl-3">
+            <div class="card border-0 shadow-sm h-100" style="border-left: 4px solid #7c3aed !important;">
+                <div class="card-body">
+                    <div class="text-muted small text-uppercase fw-semibold mb-1" style="letter-spacing:.5px;">{{ 'app.ui.published_events'|trans }}</div>
+                    <div class="display-6 fw-bold" style="color:#1e1b4b;">{{ publishedEvents }}</div>
+                    <div class="small mt-1" style="color:#7c3aed;">{{ 'app.ui.active'|trans }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="card border-0 shadow-sm h-100" style="border-left: 4px solid #059669 !important;">
+                <div class="card-body">
+                    <div class="text-muted small text-uppercase fw-semibold mb-1" style="letter-spacing:.5px;">{{ 'app.ui.bookings_7d'|trans }}</div>
+                    <div class="display-6 fw-bold" style="color:#1e1b4b;">{{ bookings7d }}</div>
+                    <div class="small mt-1" style="color:#059669;">{{ 'app.ui.last_7_days'|trans }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="card border-0 shadow-sm h-100" style="border-left: 4px solid #0ea5e9 !important;">
+                <div class="card-body">
+                    <div class="text-muted small text-uppercase fw-semibold mb-1" style="letter-spacing:.5px;">{{ 'app.ui.new_customers_7d'|trans }}</div>
+                    <div class="display-6 fw-bold" style="color:#1e1b4b;">{{ newCustomers7d }}</div>
+                    <div class="small mt-1" style="color:#0ea5e9;">{{ 'app.ui.new_accounts'|trans }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="card border-0 shadow-sm h-100" style="border-left: 4px solid #f59e0b !important;">
+                <div class="card-body">
+                    <div class="text-muted small text-uppercase fw-semibold mb-1" style="letter-spacing:.5px;">{{ 'app.ui.avg_occupancy'|trans }}</div>
+                    <div class="display-6 fw-bold" style="color:#1e1b4b;">{{ avgOccupancy }}%</div>
+                    <div class="small mt-1" style="color:#f59e0b;">{{ 'app.ui.upcoming_events'|trans }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if upcomingOccupancy is not empty %}
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <h6 class="fw-bold mb-3" style="color:#1e1b4b;">{{ 'app.ui.upcoming_occupancy'|trans }}</h6>
+                <div class="d-flex flex-column gap-2">
+                    {% for row in upcomingOccupancy %}
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="text-muted small" style="width:220px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="{{ row.name }}">
+                                {{ row.name }}
+                            </div>
+                            <div class="flex-grow-1" style="background:#f0eefc; border-radius:4px; height:12px;">
+                                <div style="background:#7c3aed; border-radius:4px; height:12px; width:{{ row.occupancyPct }}%;"></div>
+                            </div>
+                            <div class="small fw-bold" style="color:#7c3aed; width:36px; text-align:right;">{{ row.occupancyPct }}%</div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="text-muted mt-2" style="font-size:11px;">{{ 'app.ui.occupancy_formula_hint'|trans }}</div>
+            </div>
+        </div>
+    {% endif %}
+
+</div>
