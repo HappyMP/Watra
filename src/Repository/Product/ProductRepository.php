@@ -149,4 +149,92 @@ final class ProductRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    /**
+     * Returns distinct city names (in given locale) for cities that have at least
+     * one published product with a future variant in this channel.
+     *
+     * @return string[]
+     */
+    public function findDistinctCityNames(string $channelCode, string $locale): array
+    {
+        $rows = $this->createQueryBuilder('p')
+            ->select('DISTINCT cityTranslation.name AS cityName')
+            ->innerJoin('p.channels', 'ch')
+            ->innerJoin('p.city', 'city')
+            ->innerJoin('city.translations', 'cityTranslation', 'WITH', 'cityTranslation.locale = :locale')
+            ->innerJoin('p.variants', 'v')
+            ->andWhere('ch.code = :channelCode')
+            ->andWhere('p.eventStatus = :status')
+            ->andWhere('p.enabled = true')
+            ->andWhere('v.enabled = true')
+            ->andWhere('v.startsAt > :now')
+            ->setParameter('channelCode', $channelCode)
+            ->setParameter('locale', $locale)
+            ->setParameter('status', 'published')
+            ->setParameter('now', new \DateTimeImmutable())
+            ->orderBy('cityTranslation.name', 'ASC')
+            ->getQuery()
+            ->getScalarResult();
+
+        return array_column($rows, 'cityName');
+    }
+
+    /**
+     * Published products matching optional filters, ordered by nearest future variant.
+     *
+     * @param array{city?: string, eventType?: string, search?: string, dateFrom?: string} $filters
+     * @return Product[]
+     */
+    public function findFiltered(string $channelCode, string $locale, array $filters, int $limit = 20): array
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->addSelect('translation')
+            ->addSelect('MIN(v.startsAt) as HIDDEN minStartsAt')
+            ->innerJoin('p.translations', 'translation', 'WITH', 'translation.locale = :locale')
+            ->innerJoin('p.variants', 'v')
+            ->innerJoin('p.channels', 'ch')
+            ->andWhere('ch.code = :channelCode')
+            ->andWhere('p.eventStatus = :status')
+            ->andWhere('p.enabled = true')
+            ->andWhere('v.enabled = true')
+            ->andWhere('v.startsAt > :now')
+            ->setParameter('locale', $locale)
+            ->setParameter('channelCode', $channelCode)
+            ->setParameter('status', 'published')
+            ->setParameter('now', new \DateTimeImmutable())
+            ->addGroupBy('p.id')
+            ->addGroupBy('translation.id')
+            ->addOrderBy('minStartsAt', 'ASC')
+            ->setMaxResults($limit);
+
+        if (!empty($filters['city'])) {
+            $qb->innerJoin('p.city', 'city')
+                ->innerJoin('city.translations', 'cityTranslation')
+                ->andWhere('LOWER(cityTranslation.name) = LOWER(:city)')
+                ->addGroupBy('cityTranslation.id')
+                ->setParameter('city', $filters['city']);
+        }
+
+        if (!empty($filters['eventType'])) {
+            $qb->andWhere('p.eventType = :eventType')
+                ->setParameter('eventType', $filters['eventType']);
+        }
+
+        if (!empty($filters['search'])) {
+            $qb->andWhere('LOWER(translation.name) LIKE LOWER(:search)')
+                ->setParameter('search', '%' . $filters['search'] . '%');
+        }
+
+        if (!empty($filters['dateFrom'])) {
+            try {
+                $qb->andWhere('v.startsAt >= :dateFrom')
+                    ->setParameter('dateFrom', new \DateTimeImmutable($filters['dateFrom']));
+            } catch (\Exception) {
+                // ignore unparseable date string
+            }
+        }
+
+        return $qb->getQuery()->getResult();
+    }
 }
