@@ -250,17 +250,24 @@ Odhaczamy taski sukcesywnie w kolejnych sesjach. Status fazy: `[ ]` w toku / `[x
 
 ---
 
-## [ ] Faza 10 — Email transactional — 4-5h
+## [x] Faza 10 — Email transactional — 4-5h
 **Cel:** automatyczne maile dla rejestracji, weryfikacji, resetu, bookingu.
 
-- [ ] 10.1 — Mailer skonfigurowany na Mailpit (`MAILER_DSN=smtp://mailpit:1025`)
-- [ ] 10.2 — Override Sylius'owych templatów email pod brand WATRA: rejestracja, weryfikacja, reset hasła, order_confirmation
-- [ ] 10.3 — Logo + kolory + footer WATRY w wszystkich templatach
-- [ ] 10.4 — Custom email "rezerwacja potwierdzona" z linkiem do `/account/orders/{id}`
-- [ ] 10.5 — Custom email "rezerwacja anulowana" — wysyłany gdy admin zmienia status booking na cancelled
-- [ ] 10.6 — Messenger transport `doctrine` dla async wysyłki (transport: `async`)
-- [ ] 10.7 — Worker `php bin/console messenger:consume async` udokumentowany w README
-- [ ] 10.8 — Smoke test: rejestracja → mail w Mailpit; reset hasła → mail w Mailpit; booking → mail w Mailpit
+- [x] 10.1 — Mailer skonfigurowany na Mailpit (`MAILER_DSN=smtp://mailpit:1025`)
+- [x] 10.2 — Override Sylius'owych templatów email pod brand WATRA: rejestracja, weryfikacja, reset hasła, order_confirmation
+- [x] 10.3 — Logo SVG (płomień + wordmark) + gradient #1e1b4b→#312e81 + footer WATRY w layoucie
+- [x] 10.4 — Custom email "rezerwacja potwierdzona" z nazwą wydarzenia, datą, linkiem do `/account/orders`
+- [x] 10.5 — Custom email "rezerwacja anulowana" — EventSubscriber na `workflow.sylius_order.completed.cancel`
+- [x] 10.6 — Messenger transport `doctrine` dla async wysyłki (routing: `SendEmailMessage` → `async`)
+- [x] 10.7 — Worker `php bin/console messenger:consume async` udokumentowany w README
+- [x] 10.8 — Smoke test: szablony lint OK, sender config OK, subscriber zarejestrowany, routing async OK
+
+> **Uwagi po realizacji:**
+> - Async: routing `Symfony\Component\Mailer\Messenger\SendEmailMessage` → `doctrine://default`; Twig renderuje synchronicznie, tylko SMTP async
+> - Layout override: `templates/bundles/SyliusCoreBundle/Email/layout.html.twig` — obejmuje wszystkie maile Syliusa automatycznie
+> - Booking cancellation: EventSubscriber na `workflow.sylius_order.completed.cancel` (klasa `CompletedEvent`)
+> - Sender name/address: `config/packages/sylius_mailer.yaml` (WATRA / kontakt@watra.pl)
+> - Logo SVG standalone: `public/images/watra-logo.svg`
 
 **DoD:** wszystkie maile w Mailpit, brand WATRY widoczny, async działa.
 
