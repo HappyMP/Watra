@@ -1,0 +1,5 @@
+{% set product = hookable_metadata.context.resource %}
+<a href="{{ path('app_admin_attendees', { id: product.id }) }}"
+   class="btn btn-sm btn-outline-secondary">
+    {{ 'app.ui.attendees_list'|trans }}
+</a>

@@ -1,0 +1,95 @@
+{% extends '@SyliusAdmin/shared/layout/base.html.twig' %}
+
+{% block title %}{{ 'app.ui.attendees_list'|trans }} | Admin{% endblock %}
+
+{% block body %}
+    {% include '@SyliusAdmin/shared/crud/common/sidebar.html.twig' %}
+    {% include '@SyliusAdmin/shared/crud/common/navbar.html.twig' %}
+    <div class="page-wrapper">
+        <div class="container-xl py-4">
+
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb mb-1">
+                            <li class="breadcrumb-item">
+                                <a href="{{ path('sylius_admin_product_index') }}">{{ 'sylius.ui.products'|trans }}</a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a href="{{ path('sylius_admin_product_show', { id: product.id }) }}">{{ product.name }}</a>
+                            </li>
+                            <li class="breadcrumb-item active">{{ 'app.ui.attendees_list'|trans }}</li>
+                        </ol>
+                    </nav>
+                    <h1 class="h4 fw-bold mb-0" style="color:#1e1b4b;">
+                        {{ 'app.ui.attendees_list'|trans }}: {{ product.name }}
+                    </h1>
+                    <div class="text-muted small mt-1">{{ orders|length }} {{ 'app.ui.bookings_count'|trans }}</div>
+                </div>
+                <a href="{{ path('app_admin_attendees_csv', { id: product.id }) }}"
+                   class="btn btn-sm btn-outline-secondary">
+                    ⬇ {{ 'app.ui.export_csv'|trans }}
+                </a>
+            </div>
+
+            {% if orders is empty %}
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body text-center py-5 text-muted">
+                        {{ 'app.ui.no_attendees'|trans }}
+                    </div>
+                </div>
+            {% else %}
+                <div class="card border-0 shadow-sm">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead style="background:#f5f3ff; font-size:12px; text-transform:uppercase; letter-spacing:.5px; color:#6b7280;">
+                                <tr>
+                                    <th class="px-3 py-2">{{ 'app.ui.attendee'|trans }}</th>
+                                    <th class="px-3 py-2">{{ 'sylius.ui.email'|trans }}</th>
+                                    <th class="px-3 py-2">{{ 'app.ui.starts_at'|trans }}</th>
+                                    <th class="px-3 py-2">{{ 'sylius.ui.order_number'|trans }}</th>
+                                    <th class="px-3 py-2">{{ 'sylius.ui.state'|trans }}</th>
+                                    <th class="px-3 py-2"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for order in orders %}
+                                    {% set customer = order.customer %}
+                                    {% set startsAt = null %}
+                                    {% for item in order.items %}
+                                        {% if item.variant is not null and item.variant.startsAt is not null and startsAt is null %}
+                                            {% set startsAt = item.variant.startsAt %}
+                                        {% endif %}
+                                    {% endfor %}
+                                    <tr>
+                                        <td class="px-3 py-2 fw-semibold" style="color:#1e1b4b;">
+                                            {{ customer ? (customer.firstName ~ ' ' ~ customer.lastName) : '—' }}
+                                        </td>
+                                        <td class="px-3 py-2 text-muted small">{{ customer ? customer.email : '—' }}</td>
+                                        <td class="px-3 py-2 small">{{ startsAt ? startsAt|date('d.m.Y H:i') : '—' }}</td>
+                                        <td class="px-3 py-2" style="color:#7c3aed;">#{{ order.number }}</td>
+                                        <td class="px-3 py-2">
+                                            <span class="badge rounded-pill
+                                                {% if order.state == 'fulfilled' %}bg-success
+                                                {% elseif order.state == 'new' %}bg-warning text-dark
+                                                {% else %}bg-secondary{% endif %}">
+                                                {{ order.state }}
+                                            </span>
+                                        </td>
+                                        <td class="px-3 py-2">
+                                            <a href="{{ path('sylius_admin_order_show', { id: order.id }) }}"
+                                               class="text-decoration-none small" style="color:#7c3aed;">
+                                                {{ 'app.ui.order_details'|trans }} →
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            {% endif %}
+
+        </div>
+    </div>
+{% endblock %}
