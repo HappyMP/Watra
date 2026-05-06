@@ -79,6 +79,15 @@ sylius_twig_hooks:
                 component: 'HomepageCity'
                 priority: 100
 
+        'sylius_shop.product.index.content.body':
+            sidebar:
+                enabled: false
+            main:
+                enabled: false
+            watra_event_list:
+                template: 'shop/event_list/main.html.twig'
+                priority: 0
+
         'sylius_shop.account.interests.index.content':
             menu:
                 template: '@SyliusShop/account/common/content/menu.html.twig'
