@@ -88,6 +88,13 @@ sylius_twig_hooks:
                 template: 'shop/event_list/main.html.twig'
                 priority: 0
 
+        'sylius_shop.account.order.index.content.main':
+            grid:
+                enabled: false
+            watra_orders:
+                template: 'shop/account/orders/main.html.twig'
+                priority: 0
+
         'sylius_shop.account.interests.index.content':
             menu:
                 template: '@SyliusShop/account/common/content/menu.html.twig'

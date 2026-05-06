@@ -1,0 +1,70 @@
+<div class="p-3">
+    <h2 class="h5 fw-bold mb-4">{{ 'app.ui.my_orders'|trans }}</h2>
+
+    {% if resources is empty %}
+        <div class="text-center text-muted py-5">
+            <p class="fs-4">🎟</p>
+            <p>{{ 'app.ui.no_orders'|trans }}</p>
+        </div>
+    {% else %}
+        <div class="d-flex flex-column gap-3">
+            {% for order in resources %}
+                {% set isPast = true %}
+                {% for item in order.items %}
+                    {% if item.variant is not null and item.variant.startsAt is not null and item.variant.startsAt > date() %}
+                        {% set isPast = false %}
+                    {% endif %}
+                {% endfor %}
+
+                {% set barColor = '#6c757d' %}
+                {% if order.state == 'fulfilled' %}
+                    {% set barColor = '#198754' %}
+                {% elseif order.state == 'paid' %}
+                    {% set barColor = '#4c1d95' %}
+                {% endif %}
+
+                <div class="card border-0 shadow-sm{{ isPast ? ' opacity-75' : '' }}"
+                     style="border-left: 3px solid {{ barColor }} !important;">
+                    <div class="card-body py-2 px-3">
+                        <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+                            <div>
+                                {% for item in order.items %}
+                                    <div class="fw-semibold">
+                                        {% if item.variant is not null and item.variant.product is not null %}
+                                            {{ item.variant.product.name }}
+                                        {% else %}
+                                            {{ item.productName }}
+                                        {% endif %}
+                                    </div>
+                                    <div class="text-muted small">
+                                        {% if item.variant is not null and item.variant.startsAt is not null %}
+                                            {{ item.variant.startsAt|date('d.m.Y H:i') }}
+                                        {% endif %}
+                                        {% if item.variant is not null and item.variant.product is not null and item.variant.product.city is not null %}
+                                            &nbsp;·&nbsp;{{ item.variant.product.city.name }}
+                                        {% endif %}
+                                        {% if item.variant is not null and item.variant.product is not null %}
+                                            &nbsp;·&nbsp;{{ ('app.enum.event_type.' ~ item.variant.product.eventType.value)|trans }}
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <div class="d-flex align-items-center gap-3">
+                                <span class="badge rounded-pill bg-secondary">
+                                    {{ ('sylius.ui.' ~ order.state)|trans }}
+                                </span>
+                                <span class="fw-semibold">
+                                    {{ (order.total / 100)|number_format(2, ',', ' ') }} {{ order.currencyCode }}
+                                </span>
+                                <a href="{{ path('sylius_shop_account_order_show', { tokenValue: order.tokenValue }) }}"
+                                   class="btn btn-sm btn-outline-secondary">
+                                    {{ 'app.ui.order_details'|trans }} →
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
