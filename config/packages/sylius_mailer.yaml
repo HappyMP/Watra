@@ -1,0 +1,9 @@
+sylius_mailer:
+    sender:
+        name: 'WATRA'
+        address: 'kontakt@watra.pl'
+    emails:
+        booking_cancelled:
+            subject: 'app.emails.booking_cancelled.subject'
+            template: 'email/booking_cancelled.html.twig'
+            enabled: true

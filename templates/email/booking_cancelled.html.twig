@@ -1,0 +1,46 @@
+{% extends '@SyliusCore/Email/layout.html.twig' %}
+
+{% block subject %}
+    {{ 'app.emails.booking_cancelled.subject'|trans({}, null, localeCode)|raw }}
+{% endblock %}
+
+{% block content %}
+    <div style="text-align: center; margin-bottom: 24px;">
+        <div style="font-size: 22px; font-weight: bold; color: #1e1b4b; margin-bottom: 8px;">
+            {{ 'app.emails.booking_cancelled.title'|trans({}, null, localeCode) }}
+        </div>
+        <div style="font-size: 13px; color: #6b7280;">
+            {{ 'app.emails.booking_cancelled.order_number'|trans({}, null, localeCode) }} #{{ order.number }}
+        </div>
+    </div>
+
+    {% for item in order.items %}
+        {% set variant = item.variant %}
+        <div style="border: 1px solid #fee2e2; border-radius: 6px; padding: 16px 20px; margin-bottom: 12px; background: #fff5f5;">
+            <div style="font-size: 16px; font-weight: bold; color: #1e1b4b; margin-bottom: 6px;">
+                {{ item.productName }}
+            </div>
+            <div style="font-size: 13px; color: #6b7280; line-height: 1.6;">
+                {% if variant is not null and variant.startsAt is not null %}
+                    📅 {{ variant.startsAt|date('d.m.Y H:i') }}
+                {% endif %}
+                {% if variant is not null and variant.product is not null and variant.product.city is not null %}
+                    &nbsp;&middot;&nbsp; 📍 {{ variant.product.city.name }}
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+
+    <div style="font-size: 14px; color: #6b7280; line-height: 1.7; margin: 20px 0;">
+        {{ 'app.emails.booking_cancelled.apology'|trans({}, null, localeCode) }}
+    </div>
+
+    <div style="text-align: center; margin-top: 24px;">
+        {% if sylius_bundle_loaded_checker('SyliusShopBundle') %}
+            {% set eventsUrl = sylius_channel_url(path('sylius_shop_product_index', {'slug': 'wydarzenia', '_locale': localeCode}), channel) %}
+            <a href="{{ eventsUrl|raw }}" style="display: inline-block; background: linear-gradient(135deg, #1e1b4b, #312e81); color: #fff; padding: 14px 30px; text-decoration: none; border-radius: 6px; font-size: 14px; font-weight: bold;">
+                {{ 'app.emails.booking_cancelled.browse_events'|trans({}, null, localeCode) }} &rarr;
+            </a>
+        {% endif %}
+    </div>
+{% endblock %}
