@@ -191,13 +191,15 @@ final class WatraEventFixture extends AbstractFixture
 
         $product->addChannel($channel);
 
-        $taxon = $this->taxonRepository->findOneBy(['code' => $data['taxon']]);
-        if ($taxon !== null) {
-            $product->setMainTaxon($taxon);
+        $taxonEntity = $this->taxonRepository->findOneBy(['code' => $data['taxon']]);
+        if ($taxonEntity !== null) {
+            /** @var \Sylius\Component\Core\Model\TaxonInterface $typedTaxon */
+            $typedTaxon = $taxonEntity;
+            $product->setMainTaxon($typedTaxon);
 
             $productTaxon = new ProductTaxon();
             $productTaxon->setProduct($product);
-            $productTaxon->setTaxon($taxon);
+            $productTaxon->setTaxon($typedTaxon);
             $product->addProductTaxon($productTaxon);
             $this->em->persist($productTaxon);
         }

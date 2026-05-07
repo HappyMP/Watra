@@ -22,7 +22,8 @@ final class AccountInterestController extends AbstractController
         private readonly InterestRepository $interestRepository,
         private readonly InterestService $interestService,
         private readonly ProductRepositoryInterface $productRepository,
-    ) {}
+    ) {
+    }
 
     #[Route('/{_locale}/account/interests', name: 'app_shop_account_interests', methods: ['GET'], requirements: ['_locale' => '[a-z]{2}_[A-Z]{2}'])]
     public function index(): Response

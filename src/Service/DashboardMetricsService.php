@@ -13,7 +13,8 @@ final class DashboardMetricsService
 {
     public function __construct(
         private readonly EntityManagerInterface $em,
-    ) {}
+    ) {
+    }
 
     public function getPublishedEventsCount(): int
     {
@@ -109,7 +110,7 @@ final class DashboardMetricsService
             }
             $booked = $countMap[(int) $row['id']] ?? 0;
             $result[] = [
-                'name'         => $row['name'],
+                'name' => $row['name'],
                 'occupancyPct' => min(100, (int) round($booked / $onHand * 100)),
             ];
         }

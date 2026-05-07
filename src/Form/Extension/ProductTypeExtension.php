@@ -8,12 +8,12 @@ use App\Entity\Catalog\City;
 use App\Entity\Catalog\Venue;
 use App\Enum\EventStatus;
 use App\Enum\EventType;
+use Sylius\Bundle\ProductBundle\Form\Type\ProductType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Sylius\Bundle\ProductBundle\Form\Type\ProductType;
 
 final class ProductTypeExtension extends AbstractTypeExtension
 {

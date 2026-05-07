@@ -15,7 +15,7 @@ final class CorsSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            KernelEvents::REQUEST  => ['onKernelRequest', 9999],
+            KernelEvents::REQUEST => ['onKernelRequest', 9999],
             KernelEvents::RESPONSE => 'onKernelResponse',
         ];
     }
@@ -33,10 +33,10 @@ final class CorsSubscriber implements EventSubscriberInterface
 
         if ($request->getMethod() === 'OPTIONS') {
             $response = new Response('', 204, [
-                'Access-Control-Allow-Origin'  => '*',
+                'Access-Control-Allow-Origin' => '*',
                 'Access-Control-Allow-Methods' => 'GET, POST, PUT, PATCH, DELETE, OPTIONS',
                 'Access-Control-Allow-Headers' => 'Content-Type, Authorization, Accept',
-                'Access-Control-Max-Age'       => '3600',
+                'Access-Control-Max-Age' => '3600',
             ]);
             $event->setResponse($response);
         }

@@ -27,7 +27,8 @@ final class CartController extends AbstractController
         private readonly OrderItemQuantityModifierInterface $orderItemQuantityModifier,
         private readonly OrderModifierInterface $orderModifier,
         private readonly EntityManagerInterface $entityManager,
-    ) {}
+    ) {
+    }
 
     #[Route(
         '/{_locale}/cart/add-variant/{variantCode}',

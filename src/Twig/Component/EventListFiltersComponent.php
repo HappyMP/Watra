@@ -35,7 +35,8 @@ final class EventListFiltersComponent
         private readonly ProductRepository $productRepository,
         private readonly ChannelContextInterface $channelContext,
         private readonly LocaleContextInterface $localeContext,
-    ) {}
+    ) {
+    }
 
     /** @return Product[] */
     #[ExposeInTemplate]
@@ -45,10 +46,10 @@ final class EventListFiltersComponent
             $this->channelContext->getChannel()->getCode(),
             $this->localeContext->getLocaleCode(),
             [
-                'city'      => $this->city,
+                'city' => $this->city,
                 'eventType' => $this->eventType,
-                'search'    => $this->search,
-                'dateFrom'  => $this->dateFrom,
+                'search' => $this->search,
+                'dateFrom' => $this->dateFrom,
             ],
         );
     }

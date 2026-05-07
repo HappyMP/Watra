@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Form\Extension;
 
 use App\Entity\Admin\AdministrationRole;
+use Sylius\Bundle\AdminBundle\Form\Type\AdminUserType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\FormBuilderInterface;
-use Sylius\Bundle\AdminBundle\Form\Type\AdminUserType;
 
 final class AdminUserTypeExtension extends AbstractTypeExtension
 {

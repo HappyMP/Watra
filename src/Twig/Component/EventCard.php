@@ -14,11 +14,13 @@ use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 final class EventCard
 {
     public Product $product;
+
     public string $size = 'normal';
 
     public function __construct(
         private readonly ChannelContextInterface $channelContext,
-    ) {}
+    ) {
+    }
 
     public function getNextVariant(): ?ProductVariant
     {

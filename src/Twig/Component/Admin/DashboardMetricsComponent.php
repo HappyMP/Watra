@@ -13,7 +13,8 @@ final class DashboardMetricsComponent
 {
     public function __construct(
         private readonly DashboardMetricsService $metricsService,
-    ) {}
+    ) {
+    }
 
     #[ExposeInTemplate]
     public function getPublishedEvents(): int

@@ -7,6 +7,7 @@ namespace App\Tests\Behat\Context;
 use App\Entity\User\AdminUser;
 use Behat\Mink\Driver\BrowserKitDriver;
 use Behat\MinkExtension\Context\RawMinkContext;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Webmozart\Assert\Assert;
 
 final class AuthenticationContext extends RawMinkContext
@@ -19,6 +20,7 @@ final class AuthenticationContext extends RawMinkContext
         $driver = $this->getSession()->getDriver();
         Assert::isInstanceOf($driver, BrowserKitDriver::class, 'BrowserKit driver required for loginUser');
 
+        /** @var KernelBrowser $client */
         $client = $driver->getClient();
 
         /** @var AdminUser|null $user */

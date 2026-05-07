@@ -13,7 +13,8 @@ final class BookingCancelledEmailSubscriber implements EventSubscriberInterface
 {
     public function __construct(
         private readonly SenderInterface $emailSender,
-    ) {}
+    ) {
+    }
 
     public static function getSubscribedEvents(): array
     {
@@ -41,8 +42,8 @@ final class BookingCancelledEmailSubscriber implements EventSubscriberInterface
             'booking_cancelled',
             [$email],
             [
-                'order'      => $order,
-                'channel'    => $order->getChannel(),
+                'order' => $order,
+                'channel' => $order->getChannel(),
                 'localeCode' => $order->getLocaleCode() ?? 'pl_PL',
             ],
         );

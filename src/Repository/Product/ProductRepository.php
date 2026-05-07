@@ -53,6 +53,7 @@ final class ProductRepository extends ServiceEntityRepository
      * Published products with at least one future variant, ordered by nearest startsAt.
      *
      * @param int[] $excludeIds
+     *
      * @return Product[]
      */
     public function findUpcoming(string $channelCode, string $locale, int $limit = 4, array $excludeIds = []): array
@@ -185,6 +186,7 @@ final class ProductRepository extends ServiceEntityRepository
      * Published products matching optional filters, ordered by nearest future variant.
      *
      * @param array{city?: string, eventType?: string, search?: string, dateFrom?: string} $filters
+     *
      * @return Product[]
      */
     public function findFiltered(string $channelCode, string $locale, array $filters, int $limit = 20): array

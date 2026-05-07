@@ -18,7 +18,8 @@ final class HomepageCityComponent
         private readonly ProductRepository $productRepository,
         private readonly ChannelContextInterface $channelContext,
         private readonly LocaleContextInterface $localeContext,
-    ) {}
+    ) {
+    }
 
     /** @return array<string, Product[]> Keys: 'krakow', 'warszawa', 'online' */
     #[ExposeInTemplate]
@@ -28,9 +29,9 @@ final class HomepageCityComponent
         $locale = $this->localeContext->getLocaleCode();
 
         return [
-            'krakow'   => $this->productRepository->findByCity('Kraków', $channel, $locale, 4),
+            'krakow' => $this->productRepository->findByCity('Kraków', $channel, $locale, 4),
             'warszawa' => $this->productRepository->findByCity('Warszawa', $channel, $locale, 4),
-            'online'   => $this->productRepository->findOnline($channel, $locale, 4),
+            'online' => $this->productRepository->findOnline($channel, $locale, 4),
         ];
     }
 }

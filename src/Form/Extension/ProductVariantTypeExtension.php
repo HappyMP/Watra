@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace App\Form\Extension;
 
 use App\Entity\Catalog\Venue;
+use Sylius\Bundle\ProductBundle\Form\Type\ProductVariantType;
+use Sylius\Component\Core\Model\ProductVariantInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
-use Sylius\Bundle\ProductBundle\Form\Type\ProductVariantType;
-use Sylius\Component\Core\Model\ProductVariantInterface;
 
 final class ProductVariantTypeExtension extends AbstractTypeExtension
 {

@@ -15,7 +15,8 @@ final class InterestService
     public function __construct(
         private readonly EntityManagerInterface $em,
         private readonly InterestRepository $interestRepository,
-    ) {}
+    ) {
+    }
 
     public function toggle(Customer $customer, Product $product): bool
     {
@@ -24,11 +25,13 @@ final class InterestService
         if ($existing !== null) {
             $this->em->remove($existing);
             $this->em->flush();
+
             return false;
         }
 
         $this->em->persist(new Interest($customer, $product));
         $this->em->flush();
+
         return true;
     }
 }

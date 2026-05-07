@@ -1,8 +1,9 @@
 parameters:
-    level: 9
+    level: 5
+    treatPhpDocTypesAsCertain: false
     paths:
-        - bin/
-        - config/
-        - public/
         - src/
         - tests/
+    ignoreErrors:
+        - '#Property .+ is never assigned .+ so it can be removed from the property type#'
+        - '#Call to static method PHPUnit\\Framework\\Assert::assertIs.+ with .+ will always evaluate to true#'

@@ -21,6 +21,7 @@ final class CheckoutFlowTest extends WebTestCase
         self::assertNotEmpty($variants, 'Fixtures must provide at least one product variant');
 
         foreach ($variants as $variant) {
+            /** @var \App\Entity\Product\ProductVariant $variant */
             self::assertFalse(
                 $variant->isShippingRequired(),
                 sprintf('Variant "%s" must have shippingRequired=false', $variant->getCode()),

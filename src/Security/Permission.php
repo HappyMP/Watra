@@ -7,37 +7,37 @@ namespace App\Security;
 enum Permission: string
 {
     // Events (Product)
-    case EVENT_INDEX  = 'event:index';
-    case EVENT_SHOW   = 'event:show';
+    case EVENT_INDEX = 'event:index';
+    case EVENT_SHOW = 'event:show';
     case EVENT_CREATE = 'event:create';
     case EVENT_UPDATE = 'event:update';
     case EVENT_DELETE = 'event:delete';
 
     // Bookings (Order)
-    case BOOKING_INDEX  = 'booking:index';
-    case BOOKING_SHOW   = 'booking:show';
+    case BOOKING_INDEX = 'booking:index';
+    case BOOKING_SHOW = 'booking:show';
     case BOOKING_UPDATE = 'booking:update';
     case BOOKING_EXPORT = 'booking:export';
 
     // Attendees (Customer)
-    case ATTENDEE_INDEX  = 'attendee:index';
-    case ATTENDEE_SHOW   = 'attendee:show';
+    case ATTENDEE_INDEX = 'attendee:index';
+    case ATTENDEE_SHOW = 'attendee:show';
     case ATTENDEE_CREATE = 'attendee:create';
     case ATTENDEE_UPDATE = 'attendee:update';
     case ATTENDEE_DELETE = 'attendee:delete';
 
     // Tags (Taxon)
-    case TAG_INDEX  = 'tag:index';
+    case TAG_INDEX = 'tag:index';
     case TAG_CREATE = 'tag:create';
     case TAG_UPDATE = 'tag:update';
     case TAG_DELETE = 'tag:delete';
 
     // Cities & Venues
-    case CITY_MANAGE  = 'city:manage';
+    case CITY_MANAGE = 'city:manage';
     case VENUE_MANAGE = 'venue:manage';
 
     // Admin Users
-    case ADMIN_USER_INDEX  = 'admin_user:index';
+    case ADMIN_USER_INDEX = 'admin_user:index';
     case ADMIN_USER_CREATE = 'admin_user:create';
     case ADMIN_USER_UPDATE = 'admin_user:update';
     case ADMIN_USER_DELETE = 'admin_user:delete';

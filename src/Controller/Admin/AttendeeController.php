@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller\Admin;
 
 use App\Entity\Order\Order;
+use App\Entity\Order\OrderItem;
 use App\Entity\Product\Product;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,7 +19,8 @@ final class AttendeeController extends AbstractController
 {
     public function __construct(
         private readonly EntityManagerInterface $em,
-    ) {}
+    ) {
+    }
 
     #[Route('/attendees', name: 'app_admin_attendees', methods: ['GET'])]
     public function index(int $id): Response
@@ -32,7 +34,7 @@ final class AttendeeController extends AbstractController
 
         return $this->render('admin/attendees/index.html.twig', [
             'product' => $product,
-            'orders'  => $orders,
+            'orders' => $orders,
         ]);
     }
 
@@ -58,14 +60,16 @@ final class AttendeeController extends AbstractController
             foreach ($orders as $order) {
                 $customer = $order->getCustomer();
                 $firstName = $customer?->getFirstName() ?? '';
-                $lastName  = $customer?->getLastName() ?? '';
-                $email     = $customer?->getEmail() ?? '';
+                $lastName = $customer?->getLastName() ?? '';
+                $email = $customer?->getEmail() ?? '';
 
                 $startsAt = '';
                 foreach ($order->getItems() as $item) {
+                    /** @var OrderItem $item */
                     $variant = $item->getVariant();
                     if ($variant !== null && method_exists($variant, 'getStartsAt') && $variant->getStartsAt() !== null) {
                         $startsAt = $variant->getStartsAt()->format('d.m.Y H:i');
+
                         break;
                     }
                 }

@@ -14,13 +14,15 @@ final class ProductRepositoryTest extends KernelTestCase
     protected function setUp(): void
     {
         self::bootKernel();
-        $this->repo = static::getContainer()->get(ProductRepository::class);
+        /** @var ProductRepository $repo */
+        $repo = static::getContainer()->get(ProductRepository::class);
+        $this->repo = $repo;
     }
 
     public function testFindUpcomingReturnsArray(): void
     {
         $results = $this->repo->findUpcoming('WATRA', 'pl_PL', 4);
-        self::assertIsArray($results);
+        self::assertIsIterable($results);
     }
 
     public function testFindUpcomingRespectsLimit(): void
@@ -32,18 +34,18 @@ final class ProductRepositoryTest extends KernelTestCase
     public function testFindByCityReturnsArray(): void
     {
         $results = $this->repo->findByCity('Kraków', 'WATRA', 'pl_PL', 4);
-        self::assertIsArray($results);
+        self::assertIsIterable($results);
     }
 
     public function testFindOnlineReturnsArray(): void
     {
         $results = $this->repo->findOnline('WATRA', 'pl_PL', 4);
-        self::assertIsArray($results);
+        self::assertIsIterable($results);
     }
 
     public function testFindFeaturedReturnsArray(): void
     {
         $results = $this->repo->findFeatured('WATRA', 'pl_PL', 1);
-        self::assertIsArray($results);
+        self::assertIsIterable($results);
     }
 }

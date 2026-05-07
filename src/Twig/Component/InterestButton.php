@@ -31,7 +31,8 @@ final class InterestButton
         private readonly InterestRepository $interestRepository,
         private readonly InterestService $interestService,
         private readonly Security $security,
-    ) {}
+    ) {
+    }
 
     public function mount(int $productId): void
     {

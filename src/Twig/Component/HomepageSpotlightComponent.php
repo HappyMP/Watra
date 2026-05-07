@@ -17,7 +17,8 @@ final class HomepageSpotlightComponent
         private readonly ProductRepository $productRepository,
         private readonly ChannelContextInterface $channelContext,
         private readonly LocaleContextInterface $localeContext,
-    ) {}
+    ) {
+    }
 
     #[ExposeInTemplate]
     public function getFeatured(): ?object
