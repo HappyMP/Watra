@@ -77,6 +77,7 @@ final class AdministrationRoleFixture extends AbstractFixture
     {
     }
 
+    /** @param array<string> $permissions */
     private function createRole(string $name, bool $isSuperAdmin, array $permissions): AdministrationRole
     {
         $role = new AdministrationRole();

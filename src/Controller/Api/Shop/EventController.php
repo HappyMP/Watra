@@ -55,9 +55,10 @@ final class EventController extends AbstractController
         $venue = $product->getDefaultVenue();
 
         $images = $product->getImages();
-        $imageUrl = $images->isEmpty()
+        $firstImage = $images->first();
+        $imageUrl = ($firstImage === false || $firstImage === null)
             ? null
-            : '/media/image/' . $images->first()->getPath();
+            : '/media/image/' . $firstImage->getPath();
 
         return [
             'id' => $product->getId(),

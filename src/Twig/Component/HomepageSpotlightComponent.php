@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Twig\Component;
 
+use App\Entity\Product\Product;
 use App\Repository\Product\ProductRepository;
 use Sylius\Component\Channel\Context\ChannelContextInterface;
 use Sylius\Component\Locale\Context\LocaleContextInterface;
@@ -21,7 +22,7 @@ final class HomepageSpotlightComponent
     }
 
     #[ExposeInTemplate]
-    public function getFeatured(): ?object
+    public function getFeatured(): ?Product
     {
         $results = $this->productRepository->findFeatured(
             $this->channelContext->getChannel()->getCode(),
@@ -32,7 +33,7 @@ final class HomepageSpotlightComponent
         return $results[0] ?? null;
     }
 
-    /** @return object[] */
+    /** @return Product[] */
     #[ExposeInTemplate]
     public function getUpcoming(): array
     {

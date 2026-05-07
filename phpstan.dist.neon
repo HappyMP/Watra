@@ -1,9 +1,10 @@
 parameters:
-    level: 5
+    level: 7
     treatPhpDocTypesAsCertain: false
     paths:
         - src/
-        - tests/
     ignoreErrors:
         - '#Property .+ is never assigned .+ so it can be removed from the property type#'
-        - '#Call to static method PHPUnit\\Framework\\Assert::assertIs.+ with .+ will always evaluate to true#'
+
+includes:
+    - phpstan-tests.neon

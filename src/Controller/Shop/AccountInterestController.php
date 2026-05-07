@@ -18,6 +18,9 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_USER')]
 final class AccountInterestController extends AbstractController
 {
+    /**
+     * @param ProductRepositoryInterface<\Sylius\Component\Core\Model\ProductInterface> $productRepository
+     */
     public function __construct(
         private readonly InterestRepository $interestRepository,
         private readonly InterestService $interestService,

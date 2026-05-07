@@ -6,6 +6,7 @@ namespace App\Controller\Shop;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Sylius\Component\Core\Model\OrderInterface;
+use Sylius\Component\Core\Model\OrderItem;
 use Sylius\Component\Core\Repository\ProductVariantRepositoryInterface;
 use Sylius\Component\Order\Context\CartContextInterface;
 use Sylius\Component\Order\Modifier\OrderItemQuantityModifierInterface;
@@ -20,6 +21,9 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_USER')]
 final class CartController extends AbstractController
 {
+    /**
+     * @param ProductVariantRepositoryInterface<\Sylius\Component\Core\Model\ProductVariantInterface> $variantRepository
+     */
     public function __construct(
         private readonly CartContextInterface $cartContext,
         private readonly ProductVariantRepositoryInterface $variantRepository,
@@ -46,6 +50,7 @@ final class CartController extends AbstractController
         /** @var OrderInterface $cart */
         $cart = $this->cartContext->getCart();
 
+        /** @var OrderItem $orderItem */
         $orderItem = $this->orderItemFactory->createNew();
         $orderItem->setVariant($variant);
         $this->orderItemQuantityModifier->modify($orderItem, 1);

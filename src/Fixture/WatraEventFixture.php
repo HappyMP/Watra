@@ -24,6 +24,11 @@ use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 
 final class WatraEventFixture extends AbstractFixture
 {
+    /**
+     * @param ChannelRepositoryInterface<\Sylius\Component\Core\Model\ChannelInterface> $channelRepository
+     * @param TaxonRepositoryInterface<\Sylius\Component\Core\Model\TaxonInterface> $taxonRepository
+     * @param TaxCategoryRepositoryInterface<\Sylius\Component\Taxation\Model\TaxCategoryInterface> $taxCategoryRepository
+     */
     public function __construct(
         private readonly EntityManagerInterface $em,
         private readonly ChannelRepositoryInterface $channelRepository,
@@ -36,7 +41,9 @@ final class WatraEventFixture extends AbstractFixture
 
     public function load(array $options): void
     {
+        /** @var \Sylius\Component\Core\Model\ChannelInterface $channel */
         $channel = $this->channelRepository->findOneByCode('WATRA');
+        /** @var \Sylius\Component\Taxation\Model\TaxCategoryInterface $taxCategory */
         $taxCategory = $this->taxCategoryRepository->findOneBy(['code' => 'default']);
         $cityByName = $this->buildCityMap();
 
@@ -231,8 +238,15 @@ final class WatraEventFixture extends AbstractFixture
         return $map;
     }
 
-    private function createEvent(array $data, $channel, $taxCategory, ?City $city): void
-    {
+    /**
+     * @param array<string, mixed> $data
+     */
+    private function createEvent(
+        array $data,
+        \Sylius\Component\Core\Model\ChannelInterface $channel,
+        \Sylius\Component\Taxation\Model\TaxCategoryInterface $taxCategory,
+        ?City $city,
+    ): void {
         $product = new Product();
         $product->setCode($data['code']);
         $product->setEnabled(true);

@@ -75,6 +75,10 @@ final class EventCard
             return null;
         }
 
-        return '/media/image/' . $images->first()->getPath();
+        $firstImage = $images->first();
+
+        return ($firstImage === false || $firstImage === null)
+            ? null
+            : '/media/image/' . $firstImage->getPath();
     }
 }

@@ -67,7 +67,11 @@ enum Permission: string
         ));
     }
 
-    /** Returns all resource prefixes that exist in the enum. */
+    /**
+     * Returns all resource prefixes that exist in the enum.
+     *
+     * @return array<int, string>
+     */
     public static function resources(): array
     {
         $resources = [];

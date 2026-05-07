@@ -10,8 +10,12 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 
+/**
+ * @extends Voter<string, mixed>
+ */
 final class PermissionVoter extends Voter
 {
+    /** @param array<mixed> $attributes */
     public function vote(TokenInterface $token, mixed $subject, array $attributes): int
     {
         $relevant = array_filter(

@@ -19,6 +19,7 @@ class AdministrationRole implements ResourceInterface
     #[ORM\Column(length: 128)]
     private string $name = '';
 
+    /** @var array<string> */
     #[ORM\Column(type: 'json')]
     private array $permissions = [];
 
@@ -40,11 +41,13 @@ class AdministrationRole implements ResourceInterface
         $this->name = $name;
     }
 
+    /** @return array<string> */
     public function getPermissions(): array
     {
         return $this->permissions;
     }
 
+    /** @param array<string> $permissions */
     public function setPermissions(array $permissions): void
     {
         $this->permissions = $permissions;

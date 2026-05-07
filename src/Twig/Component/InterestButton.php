@@ -26,6 +26,9 @@ final class InterestButton
 
     private ?Product $resolvedProduct = null;
 
+    /**
+     * @param ProductRepositoryInterface<\Sylius\Component\Core\Model\ProductInterface> $productRepository
+     */
     public function __construct(
         private readonly ProductRepositoryInterface $productRepository,
         private readonly InterestRepository $interestRepository,
