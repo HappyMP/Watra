@@ -1,5 +1,7 @@
 # WATRA — backlog (poza MVP)
 
+> **MVP status:** Fazy 0-14 ukończone (maj 2026). Poniżej funkcje post-MVP — planowane po stabilizacji i pierwszych użytkownikach.
+
 Funkcje świadomie odłożone poza MVP. Każda pozycja ma krótkie uzasadnienie i hint, jak ją zaadresujemy.
 
 ---
