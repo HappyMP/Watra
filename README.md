@@ -2,7 +2,7 @@
 
 Platforma do organizacji wydarzeń (na start Kraków, docelowo wiele miast). Portal do listowania wydarzeń, zapisów, zarządzania katalogiem przez administrację. Zbudowana na **Sylius 2.x** (Symfony 7 + API Platform 4 + Bootstrap + Symfony UX).
 
-> **Status:** w fazie planowania. Kodzenie jeszcze nie rozpoczęte. Pełen plan: [docs/PLAN.md](docs/PLAN.md). Roadmapa MVP w taskach: [docs/TASKS.md](docs/TASKS.md).
+> **Status:** MVP ukończony — wszystkie 14 faz zrealizowane (maj 2026). Pełen plan: [docs/PLAN.md](docs/PLAN.md). Roadmapa: [docs/TASKS.md](docs/TASKS.md).
 
 ## Dokumentacja
 
@@ -46,6 +46,23 @@ sudo docker compose -f compose.yaml exec -d php bin/console messenger:consume as
 ```
 
 W produkcji zaleca się supervisord lub systemd do zarządzania workerem.
+
+## API (headless frontend)
+
+Publiczny endpoint dla React/Vue frontend:
+
+```bash
+# Lista wydarzeń (publiczny, bez auth)
+curl http://localhost/api/v2/shop/events
+
+# Filtrowanie
+curl "http://localhost/api/v2/shop/events?city=Kraków&eventType=workshop"
+curl "http://localhost/api/v2/shop/events?search=php&dateFrom=2026-06-01"
+```
+
+Response: `{"total": 10, "items": [{"id": ..., "name": ..., "nextVariant": {...}}]}`
+
+CORS: `Access-Control-Allow-Origin: *` na wszystkich `/api/v2/` routach.
 
 ## Wymagania
 
