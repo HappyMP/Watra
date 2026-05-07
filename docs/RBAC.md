@@ -1,52 +1,89 @@
 # WATRA — RBAC (Role-Based Access Control)
 
-> **Status: placeholder.** Pełna dokumentacja powstanie w Fazie 14 ([TASKS.md](TASKS.md) task 14.4).
+## Architektura
 
-## TOC (planowany)
+System uprawnień składa się z trzech komponentów:
 
-1. **Architektura** — opis komponentów (`Permission` enum, `AdministrationRole` entity, `PermissionVoter`).
-2. **Lista permissionów** — pełna referencja, pogrupowana po zasobach.
-3. **Domyślne role** — Super Admin, Editor, Marketer, Front Desk: jakie mają permissiony i kiedy ich używamy.
-4. **Jak dodać nowy permission** — krok po kroku (enum → migracja → fixture → użycie w controllerze/Twigu/API).
-5. **Jak stworzyć nową rolę** — przez panel admin lub fixture.
-6. **Jak zabezpieczyć nowy endpoint/action** — `#[IsGranted]` w controllerze, `security:` w API Platform Resource, `is_granted()` w Twig.
-7. **Testowanie** — wzorce do `PermissionVoterTest` i `RbacTest`.
-8. **Anty-wzorce** — czego NIE robić (np. `ROLE_ADMIN` zamiast permission, hard-codowane permission stringi).
+1. **`App\Security\Permission`** — PHP backed enum z ~30 wartościami (np. `event:create`, `booking:index`). Każda wartość to jedna atomowa operacja.
+2. **`App\Entity\Admin\AdministrationRole`** — encja Doctrine. Przechowuje `name`, `isSuperAdmin: bool` i `permissions: array<string>` (JSON w DB). Admin może mieć wiele ról.
+3. **`App\Security\Voter\PermissionVoter`** — extends `Symfony\Voter`. Dla każdego `is_granted('event:create')` sprawdza czy user ma rolę z tym permission. Super admin zawsze GRANT.
 
-## Przegląd architektury (skrócony)
+Routing → permission mapping: `App\Security\AdminRoutePermissionMap` — static array route name → Permission enum value. Sprawdzany przez `App\EventSubscriber\AdminRoutePermissionSubscriber` na `kernel.request`.
 
+## Lista permissionów
+
+| Permission | Opis |
+|-----------|------|
+| `event:index` | Przeglądanie listy wydarzeń |
+| `event:show` | Podgląd szczegółów wydarzenia |
+| `event:create` | Tworzenie nowych wydarzeń |
+| `event:update` | Edycja istniejących wydarzeń |
+| `event:delete` | Usuwanie wydarzeń |
+| `booking:index` | Przeglądanie listy rezerwacji |
+| `booking:show` | Podgląd rezerwacji |
+| `booking:update` | Edycja rezerwacji |
+| `booking:export` | Eksport CSV uczestników |
+| `attendee:index` | Przeglądanie uczestników |
+| `attendee:show` | Podgląd uczestnika |
+| `attendee:create` | Tworzenie uczestników |
+| `attendee:update` | Edycja uczestników |
+| `attendee:delete` | Usuwanie uczestników |
+| `tag:index` | Przeglądanie tagów |
+| `tag:create` | Tworzenie tagów |
+| `tag:update` | Edycja tagów |
+| `tag:delete` | Usuwanie tagów |
+| `city:manage` | Zarządzanie miastami |
+| `venue:manage` | Zarządzanie lokalizacjami |
+| `admin_user:index` | Przeglądanie adminów |
+| `admin_user:create` | Tworzenie adminów |
+| `admin_user:update` | Edycja adminów |
+| `admin_user:delete` | Usuwanie adminów |
+| `role:manage` | Zarządzanie rolami |
+| `dashboard:access` | Dostęp do panelu |
+
+## Domyślne role (fixtures)
+
+| Rola | isSuperAdmin | Uprawnienia |
+|------|-------------|------------|
+| **Super Admin** | `true` | Wszystko (ignoruje listę permissionów) |
+| **Editor** | `false` | Pełny CRUD na wydarzeniach i tagach |
+| **Marketer** | `false` | Podgląd wydarzeń, uczestników, rezerwacji |
+| **Front Desk** | `false` | Rezerwacje (index/show/update), Uczestnicy (index/show), Dashboard |
+
+## Jak dodać nowy permission
+
+1. Dodaj case do `src/Security/Permission.php`:
+   ```php
+   case MY_PERMISSION = 'resource:action';
+   ```
+2. Dodaj go do `Permission::group('resource')` jeśli istnieje, lub stwórz nową grupę w `groups()`.
+3. W `src/Security/AdminRoutePermissionMap.php` przypisz route name → nowy Permission.
+4. W templates użyj `{% if has_permission('resource:action') %}` do warunkowego renderowania.
+5. Dodaj do odpowiednich ról w `src/Fixture/AdministrationRoleFixture.php`.
+
+## Jak stworzyć nową rolę
+
+1. **W admin panelu:** `/admin/administration-roles/new` — formularz z multi-checkboxem permissionów.
+2. **Przez fixture:** w `AdministrationRoleFixture::load()` dodaj `createRole('Nazwa', false, [Permission::X->value, ...])`.
+3. **Przypisz rolę do admina:** `/admin/admin-users/{id}/edit`.
+
+## Twig — sprawdzanie uprawnień
+
+```twig
+{% if has_permission('event:create') %}
+    <a href="{{ path('sylius_admin_product_create') }}">Nowe wydarzenie</a>
+{% endif %}
 ```
-User (AdminUser)
-  └─ has many → AdministrationRole
-                   └─ has json[] permissions: ["event:create", "booking:cancel", ...]
-                   └─ has bool isSuperAdmin (bypass voter)
 
-PermissionVoter (Symfony Voter)
-  - supports("event:edit") = true
-  - voteOnAttribute(): user has any role with isSuperAdmin = true → grant
-                      | user has any role with permission "event:edit" → grant
-                      | else → deny
-```
+Funkcja Twig `has_permission()` zdefiniowana w `src/Twig/Extension/PermissionExtension.php`.
 
-## Quick reference
+## PHP — sprawdzanie uprawnień
 
 ```php
-// Controller
+// W kontrolerze
+$this->denyAccessUnlessGranted(Permission::EVENT_CREATE->value);
+
+// Przez atrybut
 #[IsGranted(Permission::EVENT_CREATE->value)]
-public function newEvent(): Response { ... }
-
-// API Platform Resource
-#[Post(security: "is_granted('event:create')")]
-
-// Twig
-{% if is_granted('event:create') %}
-    <a href="{{ path('admin_event_new') }}">Dodaj wydarzenie</a>
-{% endif %}
-
-// Programowo
-if ($this->security->isGranted('booking:cancel')) { ... }
+public function create(): Response { ... }
 ```
-
----
-
-*Pełna dokumentacja zostanie uzupełniona po implementacji RBAC w Fazie 6.*
