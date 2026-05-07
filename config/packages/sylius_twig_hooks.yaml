@@ -93,10 +93,10 @@ sylius_twig_hooks:
                 template: 'admin/product/show/attendees_link.html.twig'
                 priority: 50
 
-        'sylius_shop.product.index.content.body':
-            sidebar:
+        'sylius_shop.product.index.content':
+            breadcrumbs:
                 enabled: false
-            main:
+            body:
                 enabled: false
             watra_event_list:
                 template: 'shop/event_list/main.html.twig'
