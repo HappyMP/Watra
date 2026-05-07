@@ -1,1 +1,122 @@
-// navbar — filled in Task 4
+// assets/shop/styles/_navbar.scss
+
+.watra-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1030;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  background: transparent;
+  transition: background 0.3s ease, border-color 0.3s ease, backdrop-filter 0.3s ease;
+  border-bottom: 1px solid transparent;
+
+  &--scrolled {
+    background: $watra-bg-nav;
+    border-bottom-color: $watra-border-accent;
+  }
+
+  .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+  }
+
+  &__logo {
+    color: $watra-text-primary;
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: 2px;
+    text-decoration: none;
+
+    &:hover {
+      color: $watra-text-primary;
+      text-decoration: none;
+    }
+  }
+
+  &__links {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+
+    a {
+      color: $watra-text-muted;
+      font-size: 0.85rem;
+      text-decoration: none;
+      transition: color 0.2s;
+
+      &:hover {
+        color: $watra-text-primary;
+      }
+
+      &.active {
+        color: $watra-purple-300;
+      }
+    }
+  }
+
+  &__cta {
+    background: $watra-purple-500;
+    color: $watra-text-primary !important;
+    padding: 0.4rem 1rem;
+    border-radius: $watra-radius-sm;
+    font-size: 0.8rem;
+    font-weight: 600;
+    transition: background 0.2s;
+
+    &:hover {
+      background: $watra-purple-600 !important;
+      color: $watra-text-primary !important;
+    }
+  }
+
+  // Push page content below fixed navbar
+  & + * {
+    padding-top: 60px;
+  }
+
+  // Mobile burger (hidden on desktop)
+  &__burger {
+    display: none;
+    background: none;
+    border: none;
+    color: $watra-text-primary;
+    cursor: pointer;
+    padding: 0.25rem;
+  }
+
+  @media (max-width: 767.98px) {
+    &__links {
+      display: none;
+      position: absolute;
+      top: 60px;
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 1rem 1.5rem;
+      background: $watra-bg-nav;
+      border-bottom: 1px solid $watra-border-accent;
+      gap: 1rem;
+
+      &--open {
+        display: flex;
+      }
+    }
+
+    &__burger {
+      display: block;
+    }
+  }
+}
+
+// Offset pages that have a hero directly under navbar
+.watra-has-transparent-nav {
+  .watra-navbar + * {
+    padding-top: 0;
+  }
+}
