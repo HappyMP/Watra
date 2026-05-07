@@ -69,9 +69,7 @@ jobs:
                     bin/console doctrine:migrations:migrate --env=test --no-interaction
 
             -   name: Load test fixtures
-                run: |
-                    bin/console sylius:fixtures:load default --env=test --no-interaction
-                    bin/console sylius:fixtures:load watra --env=test --no-interaction
+                run: bin/console sylius:fixtures:load watra --env=test --no-interaction
 
             -   name: Clear test router cache
                 run: php -d memory_limit=1G bin/console cache:clear --env=test
