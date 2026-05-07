@@ -1,0 +1,40 @@
+{# templates/shop/layout/navbar.html.twig #}
+<nav class="watra-navbar"
+     data-controller="navbar">
+    <div class="container">
+        <a href="{{ path('sylius_shop_homepage', {_locale: app.request.locale}) }}"
+           class="watra-navbar__logo">
+            WATRA
+        </a>
+
+        <div class="watra-navbar__links" id="watra-nav-links">
+            <a href="{{ path('sylius_shop_product_index', {_locale: app.request.locale, slug: 'wydarzenia'}) }}">
+                {{ 'app.ui.all_events'|trans }}
+            </a>
+
+            {% if app.user %}
+                <a href="{{ path('sylius_shop_account_order_index', {_locale: app.request.locale}) }}">
+                    {{ 'app.ui.my_bookings'|trans }}
+                </a>
+                <a href="{{ path('sylius_shop_account_profile_update', {_locale: app.request.locale}) }}">
+                    {{ 'sylius.ui.my_account'|trans({}, 'sylius_ui') }}
+                </a>
+            {% else %}
+                <a href="{{ path('sylius_shop_login', {_locale: app.request.locale}) }}"
+                   class="watra-navbar__cta">
+                    {{ 'sylius.ui.log_in'|trans({}, 'sylius_ui') }}
+                </a>
+            {% endif %}
+        </div>
+
+        <button class="watra-navbar__burger"
+                aria-label="Menu"
+                onclick="this.closest('nav').querySelector('#watra-nav-links').classList.toggle('watra-navbar__links--open')">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                <rect y="3" width="20" height="2" rx="1"/>
+                <rect y="9" width="20" height="2" rx="1"/>
+                <rect y="15" width="20" height="2" rx="1"/>
+            </svg>
+        </button>
+    </div>
+</nav>

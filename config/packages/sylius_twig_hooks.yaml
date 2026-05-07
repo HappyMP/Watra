@@ -1,5 +1,18 @@
 sylius_twig_hooks:
     hooks:
+        'sylius_shop.base.header':
+            top_bar:
+                enabled: false
+            content:
+                enabled: false
+            navbar:
+                enabled: false
+            flashes:
+                enabled: false
+            watra_navbar:
+                template: 'shop/layout/navbar.html.twig'
+                priority: 100
+
         'sylius_shop.order.thank_you.content':
             header:
                 enabled: false

@@ -71,6 +71,7 @@ app:
         all_types: 'Wszystkie typy'
         search_events: 'Szukaj wydarzeń…'
         no_events_found: 'Brak wydarzeń spełniających kryteria.'
+        my_bookings: 'Moje rezerwacje'
         my_orders: 'Moje rezerwacje'
         no_orders: 'Brak rezerwacji'
         order_details: 'Szczegóły'

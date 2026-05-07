@@ -102,6 +102,7 @@ app:
         all_types: 'All types'
         search_events: 'Search events…'
         no_events_found: 'No events match your criteria.'
+        my_bookings: 'My bookings'
         my_orders: 'My bookings'
         no_orders: 'No bookings yet'
         order_details: 'Details'
