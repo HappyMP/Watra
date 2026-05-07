@@ -129,3 +129,10 @@ sylius_twig_hooks:
             main:
                 template: 'shop/account/interests/main.html.twig'
                 priority: 0
+
+        'sylius_shop.base.footer':
+            content:
+                enabled: false
+            watra_footer:
+                template: 'shop/layout/footer.html.twig'
+                priority: 100

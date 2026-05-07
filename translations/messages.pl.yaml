@@ -73,6 +73,12 @@ app:
         no_events_found: 'Brak wydarzeń spełniających kryteria.'
         my_bookings: 'Moje rezerwacje'
         my_orders: 'Moje rezerwacje'
+        footer_tagline: "Platforma wydarzeń edukacyjnych i kulturalnych w Polsce."
+        footer_discover: "Odkryj"
+        footer_account: "Konto"
+        online_events: "Online"
+        terms: "Regulamin"
+        privacy: "Polityka prywatności"
         no_orders: 'Brak rezerwacji'
         order_details: 'Szczegóły'
     permission:

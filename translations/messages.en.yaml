@@ -104,6 +104,12 @@ app:
         no_events_found: 'No events match your criteria.'
         my_bookings: 'My bookings'
         my_orders: 'My bookings'
+        footer_tagline: "Platform for educational and cultural events in Poland."
+        footer_discover: "Discover"
+        footer_account: "Account"
+        online_events: "Online"
+        terms: "Terms"
+        privacy: "Privacy policy"
         no_orders: 'No bookings yet'
         order_details: 'Details'
     permission:

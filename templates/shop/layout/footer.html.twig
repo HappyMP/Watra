@@ -1,0 +1,43 @@
+{# templates/shop/layout/footer.html.twig #}
+<footer class="watra-footer">
+    <div class="container">
+        <div class="watra-footer__grid">
+            <div class="watra-footer__brand">
+                <a href="{{ path('sylius_shop_homepage', {_locale: app.request.locale}) }}"
+                   class="watra-footer__logo">WATRA</a>
+                <p>{{ 'app.ui.footer_tagline'|trans }}</p>
+            </div>
+
+            <div class="watra-footer__col">
+                <h4>{{ 'app.ui.footer_discover'|trans }}</h4>
+                <ul>
+                    <li><a href="{{ path('sylius_shop_product_index', {_locale: app.request.locale, slug: 'wydarzenia'}) }}">{{ 'app.ui.all_events'|trans }}</a></li>
+                    <li><a href="{{ path('sylius_shop_product_index', {_locale: app.request.locale, slug: 'wydarzenia'}) }}?eventType=workshop">{{ 'app.enum.event_type.workshop'|trans }}</a></li>
+                    <li><a href="{{ path('sylius_shop_product_index', {_locale: app.request.locale, slug: 'wydarzenia'}) }}?eventType=conference">{{ 'app.enum.event_type.conference'|trans }}</a></li>
+                    <li><a href="{{ path('sylius_shop_product_index', {_locale: app.request.locale, slug: 'wydarzenia'}) }}?isOnline=1">{{ 'app.ui.online_events'|trans }}</a></li>
+                </ul>
+            </div>
+
+            <div class="watra-footer__col">
+                <h4>{{ 'app.ui.footer_account'|trans }}</h4>
+                <ul>
+                    {% if app.user %}
+                        <li><a href="{{ path('sylius_shop_account_order_index', {_locale: app.request.locale}) }}">{{ 'app.ui.my_bookings'|trans }}</a></li>
+                        <li><a href="{{ path('sylius_shop_account_profile_update', {_locale: app.request.locale}) }}">{{ 'sylius.ui.my_account'|trans({}, 'sylius_ui') }}</a></li>
+                    {% else %}
+                        <li><a href="{{ path('sylius_shop_login', {_locale: app.request.locale}) }}">{{ 'sylius.ui.log_in'|trans({}, 'sylius_ui') }}</a></li>
+                        <li><a href="{{ path('sylius_shop_register', {_locale: app.request.locale}) }}">{{ 'sylius.ui.register'|trans({}, 'sylius_ui') }}</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+
+        <div class="watra-footer__bottom">
+            <span>© {{ "now"|date("Y") }} WATRA</span>
+            <div>
+                <a href="{{ path('app_shop_regulamin', {_locale: app.request.locale}) }}">{{ 'app.ui.terms'|trans }}</a>
+                <a href="{{ path('app_shop_privacy', {_locale: app.request.locale}) }}">{{ 'app.ui.privacy'|trans }}</a>
+            </div>
+        </div>
+    </div>
+</footer>
