@@ -462,3 +462,60 @@ php bin/console debug:translation --locale=en | grep sylius | head -30
 ---
 
 *Ostatnia aktualizacja: 2026-05-03 — wersja wstępna (przed `composer install`). Weryfikacja po Fazie 1 task 1.11.*
+
+---
+
+## Overrides dodane w fazach 5-14
+
+### Encje (Phase 5) — `config/packages/_sylius.yaml`
+
+| Nasza klasa | Zastępuje | Powód |
+|-------------|-----------|-------|
+| `App\Entity\Product\Product` | `Sylius\Component\Core\Model\Product` | Dodano: city, defaultVenue, isOnline, eventStatus, eventType |
+| `App\Entity\Product\ProductVariant` | `Sylius\Component\Core\Model\ProductVariant` | Dodano: startsAt, endsAt, venue |
+| `App\Entity\User\AdminUser` | `Sylius\Component\Core\Model\AdminUser` | Dodano: relacja ManyToMany → AdministrationRole |
+| `App\Entity\Customer\Customer` | `Sylius\Component\Core\Model\Customer` | Pusty extends — gotowy na przyszłe zmiany |
+
+### Email templates (Phase 10)
+
+| Plik | Zastępuje | Powód |
+|------|-----------|-------|
+| `templates/bundles/SyliusCoreBundle/Email/layout.html.twig` | `@SyliusCore/Email/layout.html.twig` | WATRA branding (gradient header, stopka) |
+| `templates/bundles/SyliusCoreBundle/Email/Blocks/OrderConfirmation/_content.html.twig` | domyślna treść Sylius | Dodano: nazwa wydarzenia, termin, link do konta |
+
+### Twig Hooks (Phases 3, 7-9, 11) — `config/packages/sylius_twig_hooks.yaml`
+
+| Hook | Co zmieniono | Cel |
+|------|-------------|-----|
+| `sylius_shop.homepage.index` | wyłączone default Sylius, wstrzyknięte: hero, spotlight, city tabs | WATRA homepage |
+| `sylius_shop.product.show.content` | wyłączono `header`, dodano `watra_hero` | ciemny hero z obrazem |
+| `sylius_shop.product.show.content.info.summary` | wyłączono prices/add_to_cart, dodano watra_terms + interest_button | lista terminów z akcją |
+| `sylius_shop.product.show.content.info.overview` | wyłączono accordion, dodano watra_description | opis + mapa |
+| `sylius_shop.product.index.content.body` | wyłączono sidebar + main, dodano watra_event_list | EventListFilters |
+| `sylius_shop.order.thank_you.content` | wyłączono header/payment, dodano booking_banner + booking_details | strona potwierdzenia |
+| `sylius_admin.dashboard.index.content` | wyłączono statistics + latest_statistics, dodano watra_metrics | WATRA dashboard |
+| `sylius_admin.product.show.content.header.title_block.actions` | dodano watra_attendees | link "Lista uczestników" |
+| `sylius_shop.account.order.index.content.main` | wyłączono grid, dodano watra_orders | stylowane karty rezerwacji |
+| `sylius_shop.base.offcanvas.cart.body.items` | wyłączono item | bugfix Sylius (empty slug) |
+
+### Security (Phase 6) — `config/packages/security.yaml`
+
+- Dodano `access_control` dla admin API (`is_granted('event:edit')` itp.)
+- `App\Security\AdminRoutePermissionMap` + `AdminRoutePermissionSubscriber` — custom RBAC na warstwie routingu (zamiast `access_control` per-route)
+- `PermissionVoter` — custom voter sprawdzający `AdministrationRole.permissions`
+
+### Messenger (Phase 10) — `config/packages/messenger.yaml`
+
+- Routing: `Symfony\Component\Mailer\Messenger\SendEmailMessage` → transport `async` (`doctrine://default`)
+- Renderowanie Twig maili nadal synchroniczne, tylko SMTP send async
+
+### API (Phase 12)
+
+- Custom route `/api/v2/shop/events` — własny Symfony controller zamiast API Platform resource
+- `App\EventSubscriber\CorsSubscriber` — CORS headers (`Access-Control-Allow-Origin: *`) dla `/api/v2/`
+- Istniejące Sylius API Platform routes **nie zmienione** (brak override'ów)
+
+### Sylius Mailer (Phase 10) — `config/packages/sylius_mailer.yaml`
+
+- Sender name/address: WATRA / kontakt@watra.pl (zamiast "Example.com")
+- Dodano email type: `booking_cancelled`
