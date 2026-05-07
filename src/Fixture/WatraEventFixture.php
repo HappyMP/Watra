@@ -134,10 +134,71 @@ final class WatraEventFixture extends AbstractFixture
                     ['name' => '10 sierpnia 2026 — Online', 'code' => 'WATRA-DOCKER-ONLINE-0810', 'onHand' => 100, 'startsAt' => '2026-08-10 09:00:00', 'endsAt' => '2026-08-10 17:00:00'],
                 ],
             ],
+            [
+                'name' => 'Warsztaty TypeScript — od zera do bohatera',
+                'code' => 'WATRA-TS-01',
+                'slug' => 'warsztaty-typescript-od-zera',
+                'description' => 'Jeden dzień intensywnych warsztatów z TypeScript: typy zaawansowane, generics, utility types, dekoratory. Dla programistów JavaScript gotowych na następny poziom.',
+                'shortDescription' => 'Praktyczne warsztaty TypeScript dla JS developerów.',
+                'taxon' => 'WATRA_WARSZTATY',
+                'eventType' => EventType::WORKSHOP,
+                'eventStatus' => EventStatus::PUBLISHED,
+                'isOnline' => false,
+                'city' => 'Wrocław',
+                'variants' => [
+                    ['name' => '12 lipca 2026 — Wrocław', 'code' => 'WATRA-TS-WRO-0712', 'onHand' => 18, 'startsAt' => '2026-07-12 09:00:00', 'endsAt' => '2026-07-12 17:00:00'],
+                ],
+            ],
+            [
+                'name' => 'Open Source Day Wrocław 2026',
+                'code' => 'WATRA-OSS-WRO',
+                'slug' => 'open-source-day-wroclaw-2026',
+                'description' => 'Jednodniowa konferencja poświęcona projektom open source. Warsztaty z kontrybutorstwa, prezentacje maintainerów popularnych bibliotek PHP, Lightning Talks.',
+                'shortDescription' => 'Konferencja open source dla deweloperów z Wrocławia.',
+                'taxon' => 'WATRA_KONFERENCJE',
+                'eventType' => EventType::CONFERENCE,
+                'eventStatus' => EventStatus::PUBLISHED,
+                'isOnline' => false,
+                'city' => 'Wrocław',
+                'variants' => [
+                    ['name' => '5 września 2026 — Wrocław', 'code' => 'WATRA-OSS-WRO-0905', 'onHand' => 150, 'startsAt' => '2026-09-05 09:00:00', 'endsAt' => '2026-09-05 18:00:00'],
+                ],
+            ],
+            [
+                'name' => 'Security Meetup — OWASP Top 10 w PHP',
+                'code' => 'WATRA-SEC-01',
+                'slug' => 'security-meetup-owasp-php',
+                'description' => 'Meetup online poświęcony bezpieczeństwu aplikacji PHP: SQL Injection, XSS, CSRF, insecure deserialization. Live demos i dobre praktyki.',
+                'shortDescription' => 'Online meetup o bezpieczeństwie PHP.',
+                'taxon' => 'WATRA_MEETUPY',
+                'eventType' => EventType::MEETUP,
+                'eventStatus' => EventStatus::PUBLISHED,
+                'isOnline' => true,
+                'city' => null,
+                'variants' => [
+                    ['name' => '25 czerwca 2026 — Online', 'code' => 'WATRA-SEC-ONLINE-0625', 'onHand' => 200, 'startsAt' => '2026-06-25 19:00:00', 'endsAt' => '2026-06-25 21:30:00'],
+                ],
+            ],
+            [
+                'name' => 'Dev After Party — Kraków Edition',
+                'code' => 'WATRA-PARTY-KRK',
+                'slug' => 'dev-after-party-krakow',
+                'description' => 'Nieformalne spotkanie krakowskiej społeczności developerskiej po sezonie konferencji. Dobra muzyka, networking i rozmowy o kodzie (opcjonalnie).',
+                'shortDescription' => 'Afterparty dla krakowskich deweloperów.',
+                'taxon' => 'WATRA_ROOT',
+                'eventType' => EventType::PARTY,
+                'eventStatus' => EventStatus::PUBLISHED,
+                'isOnline' => false,
+                'city' => 'Kraków',
+                'variants' => [
+                    ['name' => '10 października 2026 — Kraków', 'code' => 'WATRA-PARTY-KRK-1010', 'onHand' => 120, 'startsAt' => '2026-10-10 20:00:00', 'endsAt' => '2026-10-11 00:00:00'],
+                ],
+            ],
         ];
 
         foreach ($events as $eventData) {
-            $city = $cityByName[$eventData['city']] ?? null;
+            $cityName = $eventData['city'];
+            $city = ($cityName !== null) ? ($cityByName[$cityName] ?? null) : null;
             $this->createEvent($eventData, $channel, $taxCategory, $city);
         }
 
