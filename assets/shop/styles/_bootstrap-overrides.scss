@@ -1,1 +1,28 @@
-// bootstrap overrides — filled in Task 2
+// assets/shop/styles/_bootstrap-overrides.scss
+// Loaded after Sylius's Bootstrap — overrides via CSS custom properties
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap');
+
+:root {
+  // Typography
+  --bs-body-font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+
+  // Colors
+  --bs-primary:          #{$watra-purple-500};
+  --bs-primary-rgb:      124, 58, 237;
+  --bs-body-bg:          #{$watra-bg-base};
+  --bs-body-color:       #{$watra-text-primary};
+  --bs-border-color:     #{$watra-border-base};
+  --bs-link-color:       #{$watra-purple-300};
+  --bs-link-hover-color: #{$watra-purple-200};
+
+  // Form controls on dark background
+  --bs-form-control-bg:          #{$watra-bg-surface};
+  --bs-form-control-color:       #{$watra-text-primary};
+  --bs-form-control-border-color: #{$watra-border-base};
+}
+
+body {
+  background-color: $watra-bg-base;
+  color: $watra-text-primary;
+}
