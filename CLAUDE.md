@@ -9,10 +9,6 @@ Polish is allowed only in:
 - UI strings in Twig templates (`{% trans %}`, `{{ 'key'|trans }}`)
 - Fixture data (proper nouns: city names, event names, etc.)
 
-Examples:
-- ✅ `$eventName`, `findByCity()`, `BookingRepository`, `getStartDate()`
-- ❌ `$nazwaWydarzenia`, `znajdzPoMiescie()`, `Repozytorium`
-
 ## Git commits
 
 Do not add `Co-Authored-By` lines to commit messages.
@@ -28,17 +24,7 @@ Do not add `Co-Authored-By` lines to commit messages.
 
 - `Product` = event, `ProductVariant` = date/occurrence, `Order` = booking, `Customer` = attendee
 - Admin menu uses KNP Menu via event `sylius.menu.admin.main` — NOT Twig Hooks
-- Hiding menu items: EventListener on `sylius.menu.admin.main`, call `removeChild()`
-- See `docs/SYLIUS_OVERRIDES.md` for verified Sylius 2.x conventions
-
-## Task workflow
-
-After completing each task:
-1. Mark the task as `[x]` in `docs/TASKS.md` (with notes if needed)
-2. Push changes to remote: `git push`
-3. Continue to the next task
-
-This applies to all remaining phases (3–14).
+- See `docs/ARCHITECTURE.md` for full architecture and `docs/SYLIUS_OVERRIDES.md` for Sylius 2.x conventions
 
 ## Dev commands
 
@@ -46,6 +32,7 @@ This applies to all remaining phases (3–14).
 sudo docker compose -f compose.yaml up -d --build   # start stack
 sudo docker compose -f compose.yaml exec php bash    # PHP shell
 sudo docker compose -f compose.yaml exec php bin/console <cmd>
+sudo docker compose -f compose.yaml exec php bash bin/ci.sh  # full CI
 ```
 
 Or via Makefile: `make up`, `make bash`, `make migrate`, `make fixtures`
