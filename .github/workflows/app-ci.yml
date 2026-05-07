@@ -1,0 +1,148 @@
+name: WATRA CI
+
+on:
+    push:
+        branches: [ main ]
+    pull_request:
+        branches: [ main ]
+
+permissions:
+    contents: read
+
+jobs:
+    ci:
+        name: PHPStan + ECS + PHPUnit + Behat
+        runs-on: ubuntu-latest
+
+        services:
+            postgres:
+                image: postgres:16
+                env:
+                    POSTGRES_USER: sylius
+                    POSTGRES_PASSWORD: sylius
+                    POSTGRES_DB: sylius
+                options: >-
+                    --health-cmd pg_isready
+                    --health-interval 10s
+                    --health-timeout 5s
+                    --health-retries 5
+                ports:
+                    - 5432:5432
+
+        env:
+            APP_ENV: test
+            DATABASE_URL: postgresql://sylius:sylius@127.0.0.1:5432/sylius?serverVersion=16&charset=utf8
+            MAILER_DSN: null://null
+
+        steps:
+            -   name: Checkout
+                uses: actions/checkout@v4
+
+            -   name: Setup PHP 8.3
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: '8.3'
+                    extensions: pdo_pgsql, intl, gd, zip, mbstring, xml, bcmath, sockets, apcu, exif
+                    coverage: none
+
+            -   name: Cache Composer
+                uses: actions/cache@v4
+                with:
+                    path: ~/.composer/cache
+                    key: composer-${{ hashFiles('composer.lock') }}
+                    restore-keys: composer-
+
+            -   name: Install PHP dependencies
+                run: composer install --no-interaction --no-progress --prefer-dist
+
+            -   name: Setup Node 20
+                uses: actions/setup-node@v4
+                with:
+                    node-version: '20'
+
+            -   name: Install JS dependencies and build assets
+                run: npm install && npm run build
+
+            -   name: Create test database and migrate
+                run: |
+                    bin/console doctrine:database:create --env=test --if-not-exists
+                    bin/console doctrine:migrations:migrate --env=test --no-interaction
+
+            -   name: Load test fixtures
+                run: |
+                    bin/console sylius:fixtures:load default --env=test --no-interaction
+                    bin/console sylius:fixtures:load watra --env=test --no-interaction
+
+            -   name: Clear test router cache
+                run: php -d memory_limit=1G bin/console cache:clear --env=test
+
+            -   name: PHPStan
+                run: vendor/bin/phpstan analyse
+
+            -   name: ECS
+                run: vendor/bin/ecs check
+
+            -   name: PHPUnit
+                run: vendor/bin/phpunit
+
+            -   name: Behat
+                run: vendor/bin/behat --colors
+
+    lint:
+        name: Symfony linters
+        runs-on: ubuntu-latest
+
+        services:
+            postgres:
+                image: postgres:16
+                env:
+                    POSTGRES_USER: sylius
+                    POSTGRES_PASSWORD: sylius
+                    POSTGRES_DB: sylius
+                options: >-
+                    --health-cmd pg_isready
+                    --health-interval 10s
+                    --health-timeout 5s
+                    --health-retries 5
+                ports:
+                    - 5432:5432
+
+        env:
+            APP_ENV: dev
+            DATABASE_URL: postgresql://sylius:sylius@127.0.0.1:5432/sylius?serverVersion=16&charset=utf8
+
+        steps:
+            -   name: Checkout
+                uses: actions/checkout@v4
+
+            -   name: Setup PHP 8.3
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: '8.3'
+                    extensions: pdo_pgsql, intl, gd, zip, mbstring, xml, bcmath, sockets, apcu, exif
+                    coverage: none
+
+            -   name: Cache Composer
+                uses: actions/cache@v4
+                with:
+                    path: ~/.composer/cache
+                    key: composer-${{ hashFiles('composer.lock') }}
+                    restore-keys: composer-
+
+            -   name: Install PHP dependencies
+                run: composer install --no-interaction --no-progress --prefer-dist
+
+            -   name: Lint Twig
+                run: bin/console lint:twig src templates
+
+            -   name: Lint YAML
+                run: bin/console lint:yaml config translations
+
+            -   name: Lint DI container
+                run: bin/console lint:container
+
+            -   name: Schema validate
+                run: |
+                    bin/console doctrine:database:create --if-not-exists
+                    bin/console doctrine:migrations:migrate --no-interaction
+                    bin/console doctrine:schema:validate
